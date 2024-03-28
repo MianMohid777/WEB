@@ -1,8 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import React from "react";
+import React, { useState } from "react";
 
-function userSlice() {
-  return <></>;
-}
+const initialState = {
+  users: [{ name: "test", email: "test@gmail.com", password: "test1234" }],
+};
 
-export default userSlice;
+// export const user = createSlice({
+//   name: "users",
+//   initialState,
+//   reducers: {},
+// });

@@ -12,20 +12,24 @@ import Home from "./Tourist/Home";
 import About from "./Tourist/About";
 import User from "./Tourist/User";
 import Profile from "./Tourist/Profile";
+import { Provider } from "react-redux";
+import { store } from "./Redux/Store/store";
+import SignIn from "./Tourist/SignIn";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
-      <Route path="home" element={<Home />} />
-      <Route path="about" element={<About />} />
-      <Route path="/users/:userId" element={<User />} />
-      <Route path="home/profile" element={<Profile />} />
-    </Route>
+    // <Route path="/" element={<Layout />}>
+    //   <Route path="home" element={<Home />} />
+    //   <Route path="about" element={<About />} />
+    //   <Route path="/users/:userId" element={<User />} />
+    //   <Route path="home/profile" element={<Profile />} />
+    // </Route>
+    <Route path="/" element={<SignIn />} />
   )
 );
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  // <Provider >
+  <RouterProvider router={router} />
+  // </Provider>
 );
