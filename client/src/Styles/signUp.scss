@@ -56,33 +56,3 @@
   color: #000000;
   font-weight: normal;
 }
-
-.account {
-  margin-top: 30px;
-  font-size: 14px;
-  color: #000000;
-  font-weight: normal;
-
-  & .register {
-    font-weight: bold;
-    cursor: pointer;
-
-    &:hover {
-      color: #009ee2;
-    }
-  }
-}
-.mahal {
-  position: relative;
-  right: 145px;
-  bottom: 45px;
-}
-.tower {
-  position: relative;
-  left: 160px;
-  bottom: 50px;
-}
-
-.google {
-  margin-top: 20px;
-}
