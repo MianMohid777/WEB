@@ -1,0 +1,504 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Laila:wght@300;400;500;600;700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.image-container {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2)), url('../assets/stefan-stefancik-6whwCHgsMiA-unsplash\ 1.jpg');
+  background-size: cover;
+  height: 1177px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  background-position: bottom;
+}
+
+.image-container header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 80%;
+  height: 100px;
+}
+
+.image-container header .links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30%;
+  height: 27px;
+  margin-top: 58px;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 27px;
+}
+
+.image-container header .links a {
+  color: white;
+  text-decoration: none;
+}
+
+.image-container header .links a:hover {
+  border-bottom: 2px solid white;
+}
+
+.image-container header .logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+
+  font-family: 'Laila';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 25px;
+  text-align: center;
+
+  color: #FFFFFF;
+
+  margin-top: 50px;
+
+}
+
+.image-container header .logo p{
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.image-container header .profile {
+  margin-top: 48px;
+}
+
+.image-container section{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}
+
+.image-container .heading1
+{
+width: 779px;
+height: 204px;
+
+margin-bottom: 0;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 800;
+font-size: 75px;
+line-height: 102px;
+text-align: center;
+
+color: #FFFFFF;
+
+}
+
+.image-container .paragraph1{
+width: 568px;
+height: 44px;
+
+margin-top: 57px;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 22px;
+text-align: center;
+
+color: #FFFFFF;
+
+
+}
+
+.image-container section{
+  margin-top: 200px;
+}
+
+.image-container section a{
+  background-color: #00A651;
+  margin-top: 39px;
+  width: 214px;
+  height: 60px;
+  border-radius: 10px;
+  text-decoration: none; 
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-container section a:hover{
+  background-color: white;
+}
+
+.image-container section a:hover p{
+  color: #00A651;
+}
+
+.image-container section a p{
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 33px;
+
+color: #FFFFFF;
+
+}
+
+.services{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0px;
+}
+
+.services #heading{
+
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 40px;
+line-height: 54px;
+text-align: center;
+
+color: #000000;
+
+}
+
+.services .service_cards{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 80%;
+      margin-bottom: 30px;
+
+}
+
+.services .service_cards .card1{
+  display: flex;
+  flex-direction: column;
+  width: 416px;
+  height: 232px;
+  background: #F9F9F9;
+  border-radius: 15px;
+}
+
+.services .service_cards .card2{
+  
+width: 416px;
+height: 232px;
+
+background: #FFFFFF;
+box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.15);
+border-radius: 15px;
+
+}
+
+.services .service_cards img{
+margin-top: 44px;
+margin-left: 38px;
+margin-right: 332px;  
+}
+
+.services .service_cards .text1{
+
+margin-left: 35px;
+margin-right: 204px;
+margin-bottom: 0;
+
+width: 177px;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 33px;
+/* identical to box height */
+text-align: center;
+
+color: #000000;
+
+
+}
+
+.services .service_cards .text2{
+
+width: 328px;
+height: 44px;
+
+margin-left: 38px;
+margin-right: 50px;
+margin-bottom: 20px;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 22px;
+
+color: #000000;
+
+
+}
+
+
+.stats{
+  width: 100%;
+  height: 733px;
+  margin-top: 20px;
+  background: rgba(0, 88, 83, 0.05);
+  background-image: url('../assets/world_map.svg');
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stats .heading{
+    
+width: 518px;
+height: 108px;
+
+margin-top: 81px;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 40px;
+line-height: 54px;
+text-align: center;
+
+color: #000000;
+
+}
+
+.stats .text{
+
+width: 495px;
+height: 44px;
+
+margin-top: 19px;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 22px;
+text-align: center;
+
+color: #000000;
+
+
+}
+
+.stats .cards{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 118px;
+  margin-bottom: 113px;
+  width: 80%;
+}
+
+.stats .cards .card{
+
+width: 250px;
+height: 250px;
+
+background: #FFFFFF;
+border-radius: 15px;
+
+display: flex;
+flex-direction: column;
+align-items: center;
+
+}
+
+.stats .cards .card img{
+  margin-top: 43px;
+}
+
+.stats .cards .card .figure{
+
+margin-top: 29px;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 36px;
+line-height: 49px;
+
+color: #000000;
+
+
+}
+
+.stats .cards .card .description{
+
+margin-top: -30px;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 27px;
+text-align: center;
+
+color: #000000;
+
+
+  
+  }
+
+  .destinations .heading{
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 40px;
+line-height: 54px;
+text-align: center;
+
+color: #000000;
+
+margin-bottom: 71px;
+
+
+  
+  }
+
+  .destinations section{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 800px;
+    margin-bottom: 30px;
+
+  }
+
+  .destinations section .map{
+    width: 50%;
+    background-image: url('../assets/world_map_PNG28 2.svg');
+    background-size: cover;
+    background-position: center;
+    height: 772px;
+  }
+
+  .destinations section #elipse1{
+    position: relative;
+    margin-top: 30%;
+    margin-left: 50%;
+  }
+
+  .destinations section #elipse2{
+    position: relative;
+    margin-top: 35%;
+    margin-left: 70%;
+  }
+
+  .destinations section #elipse3{
+    position: relative;
+    margin-left: 80%;
+  }
+
+  .destinations section .cards{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    margin-left: 187px;
+  }
+
+  .destinations section .cards .card {
+    width: 659px;
+    height: 223px;
+    background: #FFFFFF;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.08);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+    transition: box-shadow 0.3s ease; /* Add a transition for smooth effect */
+  }
+  
+  /* Deepen shadow on hover */
+  .destinations section .cards .card:hover {
+    box-shadow: 5px 5px 20px 5px rgba(0, 0, 0, 0.2); /* Spread radius increased */
+  }
+
+  .destinations section .cards .card #image1{
+   background-image: url('../assets/Rectangle\ 15.jpg');
+   width: 223px;
+   height: 100%;
+  }
+
+  .destinations section .cards .card #image2{
+    background-image: url('../assets/Rectangle\ 16.jpg');
+    width: 223px;
+    height: 100%;
+   }
+
+
+  .destinations section .cards .card #image3{
+    background-image: url('../assets/Rectangle\ 17.jpg');
+    width: 223px;
+    height: 100%;
+   }
+
+
+  .destinations section .cards .card .country{
+   
+  width: 84px;
+  height: 27px;
+  margin-left: 49px;
+
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 27px;
+  text-align: center;
+
+  color: #000000;
+
+
+  }
+ 
+
+  .destinations section .cards .card .decr{
+    
+width: 93px;
+height: 54px;
+
+margin-left: 49px;
+
+font-family: 'Open Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 27px;
+
+color: #000000;
+
+
+  }
+
+  .destinations section .cards .card img{
+  
+width: 33px;
+height: 33px;
+margin-left: 96px;
+
+  }
+

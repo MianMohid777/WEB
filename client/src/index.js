@@ -24,7 +24,8 @@ const router = createBrowserRouter(
     //   <Route path="/users/:userId" element={<User />} />
     //   <Route path="home/profile" element={<Profile />} />
     // </Route>
-    <Route path="/" element={<SignIn />} />
+    <Route path="/" element={<Home />} />
+
   )
 );
 const root = ReactDOM.createRoot(document.getElementById("root"));
