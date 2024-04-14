@@ -1,4 +1,4 @@
-  import React from "react";
+  import React, { useState } from 'react';
   import "../Styles/home.css";
   import icon1 from "../assets/icon1.svg";
   import icon2 from "../assets/cil_paper-plane.svg";
@@ -10,11 +10,60 @@
   import worldMap from "../assets/world_map_PNG28 2.svg";
   import elipse from "../assets/Ellipse 13.svg";
   import arrow from "../assets/ic_round-navigate-next.svg";
- 
-
+  import rectangle25 from "../assets/Rectangle 25.jpg";
+  import locationIcon from "../assets/ep_location.svg";
+  import rectangle26 from "../assets/Rectangle 26.jpg";
+  import rectangle27 from "../assets/Rectangle 27.jpg";
+  import group7 from "../assets/Group 7.svg";
+  import group12 from "../assets/Group 12.svg";
+  import rectangle22 from "../assets/Group 11.svg";
+  import greece from "../assets/Rectangle 17 (1).jpg";
+  import options from "../assets/OPTIONS.svg";
+ import building from "../assets/building 1.svg";
+ import heart from "../assets/heart (6) 1.svg";
+ import mosque from "../assets/Mask Group.jpg";
+ import slider from "../assets/Group 3.svg";
+ import testimonialBackground from "../assets/image 22.jpg";
+ import profileImg from "../assets/person.jpg";
+import Carousel from 'react-material-ui-carousel';
+import sideimage from "../assets/image 30 (1).jpg";
+import sideimage2 from "../assets/image 29.jpg";
+import bird from "../assets/Vector.svg";
+import icons from "../assets/Group 5.svg";
+import socialLink1 from "../assets/Social.svg";
+import socialLink2 from "../assets/icons8-pinterest.svg";
+import googlePlay from "../assets/Google Play.svg";
+import playStore from "../assets/Play Store.svg";
   function Home() {
     
+    const [activeButton, setActiveButton] = useState(null);
+
+    const clickButton = (button) => {
+      if (activeButton) {
+        activeButton.classList.remove('clickedButton');
+      }
+      button.classList.add('clickedButton');
+      setActiveButton(button);
+    };
  
+    const testimonials = [
+      {
+          profileImg: profileImg,
+          text: "I've been using this product for a few weeks now, and I'm blown away by the results. It's exceeded all my expectations! Highly recommended.",
+          name: "John Smith"
+      },
+      {
+          profileImg: profileImg,
+          text: "I was skeptical at first, but after trying this service, I'm a believer! It's incredibly user-friendly and has saved me so much time and hassle.",
+          name: "Emily Johnson"
+      },
+      {
+          profileImg: profileImg,
+          text: "As a small business owner, I'm always looking for tools to streamline my workflow. This product has been a game-changer for me. Thank you!",
+          name: "Michael Brown"
+      }
+  ];
+  
 
     return (
       <>
@@ -174,10 +223,206 @@
               </div>
 
 
+              <div class="best_packages">
+              <p>Best Packages for you</p>
+
+              <div className="options">
+                <button onClick={(e) => clickButton(e.target)}>Hot Deals</button>
+                <button onClick={(e) => clickButton(e.target)}>Backpack</button>
+                <button onClick={(e) => clickButton(e.target)}>South Asia</button>
+                <button onClick={(e) => clickButton(e.target)}>Honeymoon</button>
+                <button onClick={(e) => clickButton(e.target)}>Europe</button>
+                <button onClick={(e) => clickButton(e.target)}>More</button>
+              </div>
+
+              <div class="packages">
+                  <div class="package">
+                      <img src={rectangle25} />
+                      <div class="description">
+                          <p class="text1">3 Days, 2 Nights</p>
+                          <p class="text2">$500 / Person</p>
+                          <p class="text3">Explore the Beauty of the island for 3 days and 2 nights with our travel agency</p>
+                          <img src={locationIcon} />
+                          <p class="text4">Indonesia</p>
+                          <a href="#">Know More</a>
+                      </div>
+                  </div>
+
+                  <div class="package">
+                      <img src={rectangle26} />
+                      <div class="description">
+                          <p class="text1">3 Days, 2 Nights</p>
+                          <p class="text2">$800 / Person</p>
+                          <p class="text3">Enjoy the Shrimes and blossoms here in this beautiful country</p>
+                          <img src={locationIcon} />
+                          <p class="text4">Japan</p>
+                          <a href="#">Know More</a>
+                      </div>
+                  </div>
+
+                  <div class="package">
+                      <img src={rectangle27} />
+                      <div class="description">
+                          <p class="text1">3 Days, 2 Nights</p>
+                          <p class="text2">$600 / Person</p>
+                          <p class="text3">Explore the majestic mountains and landscapes day and nights</p>
+                          <img src={locationIcon} />
+                          <p class="text4">Mountains</p>
+                          <a href="#">Know More</a>
+                      </div>
+                  </div>
+                
+              </div>
+
+              <a class="discover" href="#"><p>Discover More</p></a>
+
+              </div>
+
+              <div class="steps">
+                <p class="heading">Book Your Next Trip in 3 Easy Steps</p>
+                <p class="note">Easy and Fast</p>
+                <section>
+                  <div class="steps_cards">
+                      <div class="card">
+                            <img src={group7} />
+                            <p class="title">Choose Destination</p>
+                            <p class="text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna, tortor tempus. </p>
+                      </div>
+                      <div class="card">
+                            <img src={group12} />
+                            <p class="title">Make Payment</p>
+                            <p class="text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna, tortor tempus. </p>
+                      </div>
+                      <div class="card">
+                            <img src={rectangle22} />
+                            <p class="title">Reach Airport on Date</p>
+                            <p class="text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna, tortor tempus. </p>
+                      </div>
+                  </div>
+
+                  <div class="container">
+                    
+                      <div class="card">
+                          <img class="poster" src={greece} />
+                          <p class="title">Trip To Greece</p>
+                          <p class="text">14-29 June | by Robbin joseph</p>
+                          <img class="options" src={options} />
+                          <img class="building" src={building} />
+                          <p class="text1">24 people going</p>
+                         <img class="heart" src={heart} />
+                      </div>
+
+                      <div class="small-card">
+                        <img class="poster" src={mosque} />
+                        <p class="text">Ongoing</p>
+                        <p class="text1">Trip to rome</p>
+                        <p class="text2">40% completed</p>
+                        <img class="slider" src={slider} />
+                      </div>
+
+                  </div>
+                </section>
+              </div>
+
+              <div class="testimonials">
+                    
+                    <p class="heading">What People Say About Us</p>
+                    
+                    <img class="sideimage" src={sideimage} />
+                    <img class="sideimage2" src={sideimage2}/>
+                    <img class="bird" src={bird} />
+                   
+                   <Carousel indicators={true} navButtonsAlwaysInvisible duration={50} slider >
+
+                   {testimonials.map((testimonial, index) => (
+
+                    <div key={index} class="testimonial">
+                       
+                        <img src={testimonialBackground} />
+                        
+                          <div class="small-container">
+
+                            <div class="card">
+                                <img src={testimonial.profileImg} />
+                                <p class="text">{testimonial.text}</p>
+                                <p class="name">-{testimonial.name}</p>
+                            </div>
+
+                          </div>
+                    </div>
+
+                   ))}
+                    </Carousel>
+                 
+
+              </div>
+
+              <div class="subscription">
+                  <div class="container">
+                      <img src={icons} />
+                      <p class="heading">Subscribe to get information, latest news and other interesting offers about Cobham</p>
+                      <input type="text" placeholder='Enter your email'/>
+                      <button><p>Subscribe</p></button>
+                    
+
+                  </div>
+              </div>
+
+              <footer>
+
+                    <div class="container">
+                      <div class="container1">
+                          <p class="text">Travel</p>
+                          <p class="text">Goo</p>
+                          <p class="text2">Book your trip in minute, get full Control for much longer.</p>
+                      </div>
+                      
+                      <div class="container2">
+                          <p class="heading">Company</p>
+                          <p class="text2">About</p>
+                          <p class="text2">Careers</p>
+                          <p class="text2">Mobile</p>
+                      </div>
+
+                      <div class="container2">
+                          <p class="heading">Contact</p>
+                          <p class="text2">Help/FAQ</p>
+                          <p class="text2">Press</p>
+                          <p class="text2">Affilates</p>
+                      </div>
+
+
+                      <div class="container2">
+                          <p class="heading">More</p>
+                          <p class="text2">Airlinefees</p>
+                          <p class="text2">Airline</p>
+                          <p class="text2">Low fare tips</p>
+                      </div>
+
+                      <div class="container2">
+                    <div class="row">
+                    <img src={socialLink1} />
+                    <img src={socialLink2} />
+                    </div>
+                    <div class="row">
+                    <p class="text2">Discover our app</p>
+                    </div>
+                    <div class="row">
+                    <img src={googlePlay} />
+                    <img src={playStore} style={{ marginLeft: '10px' }} />
+                    </div>
+                      </div>
+                      </div>
+
+                   <p class="footnote">All rights reserved@travelgoo.com</p>
+
+              </footer>
 
 
       </>
     );
   }
+
+ 
 
   export default Home;
