@@ -352,7 +352,7 @@
 
 .destinations section .map {
   width: 50%;
-  background-image: url("../assets/world_map_PNG28 2.svg");
+  background-image: url("../Assets/world_map_PNG28 2.svg");
   background-size: cover;
   background-position: center;
   height: 772px;
@@ -404,19 +404,19 @@
 }
 
 .destinations section .cards .card #image1 {
-  background-image: url("../assets/Rectangle\ 15.jpg");
+  background-image: url("../Assets/Rectangle\ 15.jpg");
   width: 223px;
   height: 100%;
 }
 
 .destinations section .cards .card #image2 {
-  background-image: url("../assets/Rectangle\ 16.jpg");
+  background-image: url("../Assets/Rectangle\ 16.jpg");
   width: 223px;
   height: 100%;
 }
 
 .destinations section .cards .card #image3 {
-  background-image: url("../assets/Rectangle\ 17.jpg");
+  background-image: url("../Assets/Rectangle\ 17.jpg");
   width: 223px;
   height: 100%;
 }

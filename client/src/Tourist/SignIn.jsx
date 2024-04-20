@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { useLoginMutation } from "../Services/Login/loginAPI";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import React from "react";
 import Rectangle from "../Assets/Rectangle.svg";
@@ -44,6 +45,7 @@ function SignIn() {
 
   const [login, { isLoading, isSuccess }] = useLoginMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -61,33 +63,30 @@ function SignIn() {
   if (isLoading) return <Loader />;
 
   const handleSubmit = async () => {
+    if (!email.includes("@") || email.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        emailError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        emailError: false,
+      }));
+    }
+
+    if (password.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        passwordError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        passwordError: false,
+      }));
+    }
     try {
-      console.log(email, password);
-      console.log(isLoading);
-
-      if (!email.includes("@") || email.length === 0) {
-        setError((prevError) => ({
-          ...prevError,
-          emailError: true,
-        }));
-      } else {
-        setError((prevError) => ({
-          ...prevError,
-          emailError: false,
-        }));
-      }
-
-      if (password.length === 0) {
-        setError((prevError) => ({
-          ...prevError,
-          passwordError: true,
-        }));
-      } else {
-        setError((prevError) => ({
-          ...prevError,
-          passwordError: false,
-        }));
-      }
       if (!error.emailError && !error.passwordError) {
         const response = await login({
           emailAddress: email,
@@ -96,16 +95,14 @@ function SignIn() {
 
         console.log(response);
 
-        if (isSuccess) {
-          console.log("Success");
-          dispatch(
-            addAuthUser({
-              email: email,
-              access_token: response.accessToken,
-              refresh_token: response.refreshToken,
-            })
-          );
-        }
+        dispatch(
+          addAuthUser({
+            email: email,
+            access_token: response.accessToken,
+            refresh_token: response.refreshToken,
+          })
+        );
+        navigate("/home");
       }
     } catch (err) {
       console.log(err);
