@@ -10,16 +10,20 @@ import {
   createTheme,
 } from "@mui/material";
 import { useState } from "react";
+import { useLoginMutation } from "../Services/Login/loginAPI";
+import { useDispatch } from "react-redux";
 
 import React from "react";
-import Rectangle from "../assets/Rectangle.svg";
-import mahal from "../assets/mahal.svg";
-import emailSvg from "../assets/email.svg";
-import lock from "../assets/lock.svg";
-import plane from "../assets/plane.svg";
-import google from "../assets/google.svg";
-import tower from "../assets/tower.svg";
-import google2 from "../assets/google-hover.svg";
+import Rectangle from "../Assets/Rectangle.svg";
+import mahal from "../Assets/mahal.svg";
+import emailSvg from "../Assets/email.svg";
+import lock from "../Assets/lock.svg";
+import plane from "../Assets/plane.svg";
+import google from "../Assets/google.svg";
+import tower from "../Assets/tower.svg";
+import google2 from "../Assets/google-hover.svg";
+import Loader from "../Utils/Loader";
+import { addAuthUser } from "../Redux/Features/userSlice";
 
 function SignIn() {
   const [svg, setSvg] = useState(google);
@@ -38,6 +42,9 @@ function SignIn() {
     passwordError: false,
   });
 
+  const [login, { isLoading, isSuccess }] = useLoginMutation();
+  const dispatch = useDispatch();
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -50,6 +57,61 @@ function SignIn() {
       fontFamily: "'Space Grotesk', sans-serif",
     },
   });
+
+  if (isLoading) return <Loader />;
+
+  const handleSubmit = async () => {
+    try {
+      console.log(email, password);
+      console.log(isLoading);
+
+      if (!email.includes("@") || email.length === 0) {
+        setError((prevError) => ({
+          ...prevError,
+          emailError: true,
+        }));
+      } else {
+        setError((prevError) => ({
+          ...prevError,
+          emailError: false,
+        }));
+      }
+
+      if (password.length === 0) {
+        setError((prevError) => ({
+          ...prevError,
+          passwordError: true,
+        }));
+      } else {
+        setError((prevError) => ({
+          ...prevError,
+          passwordError: false,
+        }));
+      }
+      if (!error.emailError && !error.passwordError) {
+        const response = await login({
+          emailAddress: email,
+          password: password,
+        }).unwrap();
+
+        console.log(response);
+
+        if (isSuccess) {
+          console.log("Success");
+          dispatch(
+            addAuthUser({
+              email: email,
+              access_token: response.accessToken,
+              refresh_token: response.refreshToken,
+            })
+          );
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Typography>
@@ -72,6 +134,7 @@ function SignIn() {
             sm={12}
             md={6}
             lg={6}
+            container
             display="flex"
             direction="column"
             alignItems="center"
@@ -170,36 +233,14 @@ function SignIn() {
 
             <Button
               variant="contained"
+              disabled={isLoading}
               sx={{
                 mt: 6,
                 bgcolor: "#009ee2",
                 width: "125px",
                 height: "48px",
               }}
-              onClick={() => {
-                console.log(email, password);
-
-                if (!email.includes("@") || email.length === 0) {
-                  setError((prevError) => ({ ...prevError, emailError: true }));
-                } else {
-                  setError((prevError) => ({
-                    ...prevError,
-                    emailError: false,
-                  }));
-                }
-
-                if (password.length === 0) {
-                  setError((prevError) => ({
-                    ...prevError,
-                    passwordError: true,
-                  }));
-                } else {
-                  setError((prevError) => ({
-                    ...prevError,
-                    passwordError: false,
-                  }));
-                }
-              }}
+              onClick={handleSubmit}
             >
               LOGIN
             </Button>

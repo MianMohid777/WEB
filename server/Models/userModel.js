@@ -2,6 +2,14 @@ const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema(
   {
+    firstName: {
+      type: String,
+      required: [true, "Provide First Name"],
+    },
+    lastName: {
+      type: String,
+      required: [true, "Provide Last Name"],
+    },
     emailAddress: {
       type: String,
       required: [true, "Provide email"],
@@ -10,6 +18,9 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, "Provide Password"],
+    },
+    refreshToken: {
+      type: String,
     },
   },
   { timestamps: true }
