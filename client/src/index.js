@@ -15,7 +15,7 @@ import Profile from "./Tourist/Profile";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store";
 import SignIn from "./Tourist/SignIn";
-
+import LoginAs from "./CommonUser/LoginAs"
 const router = createBrowserRouter(
   createRoutesFromElements(
     // <Route path="/" element={<Layout />}>
@@ -24,7 +24,8 @@ const router = createBrowserRouter(
     //   <Route path="/users/:userId" element={<User />} />
     //   <Route path="home/profile" element={<Profile />} />
     // </Route>
-    <Route path="/home" element={<Home />} />
+    //<Route path="/home" element={<Home />} />
+    <Route path="/login" element = {<LoginAs/>} />
 
   )
 );
