@@ -15,22 +15,20 @@ import Profile from "./Tourist/Profile";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store";
 import SignIn from "./Tourist/SignIn";
+import { ApiProvider } from "@reduxjs/toolkit/query/react";
+import { api } from "./Services/api";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    // <Route path="/" element={<Layout />}>
-    //   <Route path="home" element={<Home />} />
-    //   <Route path="about" element={<About />} />
-    //   <Route path="/users/:userId" element={<User />} />
-    //   <Route path="home/profile" element={<Profile />} />
-    // </Route>
-    <Route path="/home" element={<Home />} />
-
+    <Route>
+      <Route path="/" element={<SignIn />} />
+      <Route path="/home" element={<Home />} />
+    </Route>
   )
 );
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  // <Provider >
-  <RouterProvider router={router} />
-  // </Provider>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );
