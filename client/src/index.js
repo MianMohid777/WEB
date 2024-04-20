@@ -15,16 +15,16 @@ import Profile from "./Tourist/Profile";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store";
 import SignIn from "./Tourist/SignIn";
-import LoginAs from "./CommonUser/LoginAs"
+import LoginAs from "./CommonUser/LoginAs";
 import { ApiProvider } from "@reduxjs/toolkit/query/react";
 import { api } from "./Services/api";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<SignIn />} />
+      <Route path="/" element={<LoginAs />} />
       <Route path="/home" element={<Home />} />
-      <Route path="/login" element = {<LoginAs/>} />
+      <Route path="/login" element={<SignIn />} />
     </Route>
   )
 );
