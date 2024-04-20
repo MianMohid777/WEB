@@ -1,8 +1,8 @@
 import React from "react";
-import socialLink1 from "../Assets/Social.svg";
-import socialLink2 from "../Assets/icons8-pinterest.svg";
-import googlePlay from "../Assets/Google Play.svg";
-import playStore from "../Assets/Play Store.svg";
+import socialLink1 from "../assets/Social.svg";
+import socialLink2 from "../assets/icons8-pinterest.svg";
+import googlePlay from "../assets/Google Play.svg";
+import playStore from "../assets/Play Store.svg";
 import "../Styles/Footer.css";
 
 function Footer() {

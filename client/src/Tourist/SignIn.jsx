@@ -15,14 +15,14 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import React from "react";
-import Rectangle from "../Assets/Rectangle.svg";
-import mahal from "../Assets/mahal.svg";
-import emailSvg from "../Assets/email.svg";
-import lock from "../Assets/lock.svg";
-import plane from "../Assets/plane.svg";
-import google from "../Assets/google.svg";
-import tower from "../Assets/tower.svg";
-import google2 from "../Assets/google-hover.svg";
+import Rectangle from "../assets/Rectangle.svg";
+import mahal from "../assets/mahal.svg";
+import emailSvg from "../assets/email.svg";
+import lock from "../assets/lock.svg";
+import plane from "../assets/plane.svg";
+import google from "../assets/google.svg";
+import tower from "../assets/tower.svg";
+import google2 from "../assets/google-hover.svg";
 import Loader from "../Utils/Loader";
 import { addAuthUser } from "../Redux/Features/userSlice";
 

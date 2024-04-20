@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
 import React from "react";
 import "../Styles/loader.scss";
-import spinner from "../Assets/spinner.svg";
+import spinner from "../assets/spinner.svg";
 
 function Loader() {
   return (
