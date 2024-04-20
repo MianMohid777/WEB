@@ -205,214 +205,211 @@ function Home() {
         </div>
       </div>
 
+      <div class="destinations">
+        <p class="heading">Our Popular Destinations</p>
+
+        <section>
+          <div class="map">
+            <img src={elipse} id="elipse1" />
+            <img src={elipse} id="elipse2" />
+            <img src={elipse} id="elipse3" />
+          </div>
+
+          <div class="cards">
+            <a href="#" class="card">
+              <div id="image1"></div>
+
+              <p class="country">Thailand</p>
+              <p class="decr">20+ Spots 2D & 3N</p>
+
+              <img src={arrow} />
+            </a>
+
+            <a href="#" class="card">
+              <div id="image2"></div>
+
+              <p class="country">Indonesia</p>
+              <p class="decr">25+ Spots 3D & 3N</p>
+
+              <img src={arrow} />
+            </a>
+
+            <a href="#" class="card">
+              <div id="image3"></div>
+
+              <p class="country">New Zeland</p>
+              <p class="decr">20+ Spots 3D & 2N</p>
+
+              <img src={arrow} />
+            </a>
+          </div>
+        </section>
+      </div>
+
       <div class="best_packages">
         <p>Best Packages for you</p>
 
-        <div class="destinations">
-          <p class="heading">Our Popular Destinations</p>
-
-          <section>
-            <div class="map">
-              <img src={elipse} id="elipse1" />
-              <img src={elipse} id="elipse2" />
-              <img src={elipse} id="elipse3" />
-            </div>
-
-            <div class="cards">
-              <a href="#" class="card">
-                <div id="image1"></div>
-
-                <p class="country">Thailand</p>
-                <p class="decr">20+ Spots 2D & 3N</p>
-
-                <img src={arrow} />
-              </a>
-
-              <a href="#" class="card">
-                <div id="image2"></div>
-
-                <p class="country">Indonesia</p>
-                <p class="decr">25+ Spots 3D & 3N</p>
-
-                <img src={arrow} />
-              </a>
-
-              <a href="#" class="card">
-                <div id="image3"></div>
-
-                <p class="country">New Zeland</p>
-                <p class="decr">20+ Spots 3D & 2N</p>
-
-                <img src={arrow} />
-              </a>
-            </div>
-          </section>
+        <div className="options">
+          <button onClick={(e) => clickButton(e.target)}>Hot Deals</button>
+          <button onClick={(e) => clickButton(e.target)}>Backpack</button>
+          <button onClick={(e) => clickButton(e.target)}>South Asia</button>
+          <button onClick={(e) => clickButton(e.target)}>Honeymoon</button>
+          <button onClick={(e) => clickButton(e.target)}>Europe</button>
+          <button onClick={(e) => clickButton(e.target)}>More</button>
         </div>
 
-        <div class="best_packages">
-          <p>Best Packages for you</p>
-
-          <div className="options">
-            <button onClick={(e) => clickButton(e.target)}>Hot Deals</button>
-            <button onClick={(e) => clickButton(e.target)}>Backpack</button>
-            <button onClick={(e) => clickButton(e.target)}>South Asia</button>
-            <button onClick={(e) => clickButton(e.target)}>Honeymoon</button>
-            <button onClick={(e) => clickButton(e.target)}>Europe</button>
-            <button onClick={(e) => clickButton(e.target)}>More</button>
-          </div>
-
-          <div class="packages">
-            <div class="package">
-              <img src={rectangle25} />
-              <div class="description">
-                <p class="text1">3 Days, 2 Nights</p>
-                <p class="text2">$500 / Person</p>
-                <p class="text3">
-                  Explore the Beauty of the island for 3 days and 2 nights with
-                  our travel agency
-                </p>
-                <img src={locationIcon} />
-                <p class="text4">Indonesia</p>
-                <a href="#">Know More</a>
-              </div>
-            </div>
-
-            <div class="package">
-              <img src={rectangle26} />
-              <div class="description">
-                <p class="text1">3 Days, 2 Nights</p>
-                <p class="text2">$800 / Person</p>
-                <p class="text3">
-                  Enjoy the Shrimes and blossoms here in this beautiful country
-                </p>
-                <img src={locationIcon} />
-                <p class="text4">Japan</p>
-                <a href="#">Know More</a>
-              </div>
-            </div>
-
-            <div class="package">
-              <img src={rectangle27} />
-              <div class="description">
-                <p class="text1">3 Days, 2 Nights</p>
-                <p class="text2">$600 / Person</p>
-                <p class="text3">
-                  Explore the majestic mountains and landscapes day and nights
-                </p>
-                <img src={locationIcon} />
-                <p class="text4">Mountains</p>
-                <a href="#">Know More</a>
-              </div>
+        <div class="packages">
+          <div class="package">
+            <img src={rectangle25} />
+            <div class="description">
+              <p class="text1">3 Days, 2 Nights</p>
+              <p class="text2">$500 / Person</p>
+              <p class="text3">
+                Explore the Beauty of the island for 3 days and 2 nights with
+                our travel agency
+              </p>
+              <img src={locationIcon} />
+              <p class="text4">Indonesia</p>
+              <a href="#">Know More</a>
             </div>
           </div>
 
-          <a class="discover" href="#">
-            <p>Discover More</p>
-          </a>
+          <div class="package">
+            <img src={rectangle26} />
+            <div class="description">
+              <p class="text1">3 Days, 2 Nights</p>
+              <p class="text2">$800 / Person</p>
+              <p class="text3">
+                Enjoy the Shrimes and blossoms here in this beautiful country
+              </p>
+              <img src={locationIcon} />
+              <p class="text4">Japan</p>
+              <a href="#">Know More</a>
+            </div>
+          </div>
+
+          <div class="package">
+            <img src={rectangle27} />
+            <div class="description">
+              <p class="text1">3 Days, 2 Nights</p>
+              <p class="text2">$600 / Person</p>
+              <p class="text3">
+                Explore the majestic mountains and landscapes day and nights
+              </p>
+              <img src={locationIcon} />
+              <p class="text4">Mountains</p>
+              <a href="#">Know More</a>
+            </div>
+          </div>
         </div>
 
-        <div class="steps">
-          <p class="heading">Book Your Next Trip in 3 Easy Steps</p>
-          <p class="note">Easy and Fast</p>
-          <section>
-            <div class="steps_cards">
-              <div class="card">
-                <img src={group7} />
-                <p class="title">Choose Destination</p>
-                <p class="text">
-                  {" "}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                  tortor tempus.{" "}
-                </p>
-              </div>
-              <div class="card">
-                <img src={group12} />
-                <p class="title">Make Payment</p>
-                <p class="text">
-                  {" "}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                  tortor tempus.{" "}
-                </p>
-              </div>
-              <div class="card">
-                <img src={rectangle22} />
-                <p class="title">Reach Airport on Date</p>
-                <p class="text">
-                  {" "}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                  tortor tempus.{" "}
-                </p>
-              </div>
+        <a class="discover" href="#">
+          <p>Discover More</p>
+        </a>
+      </div>
+
+      <div class="steps">
+        <p class="heading">Book Your Next Trip in 3 Easy Steps</p>
+        <p class="note">Easy and Fast</p>
+        <section>
+          <div class="steps_cards">
+            <div class="card">
+              <img src={group7} />
+              <p class="title">Choose Destination</p>
+              <p class="text">
+                {" "}
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
+                tortor tempus.{" "}
+              </p>
+            </div>
+            <div class="card">
+              <img src={group12} />
+              <p class="title">Make Payment</p>
+              <p class="text">
+                {" "}
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
+                tortor tempus.{" "}
+              </p>
+            </div>
+            <div class="card">
+              <img src={rectangle22} />
+              <p class="title">Reach Airport on Date</p>
+              <p class="text">
+                {" "}
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
+                tortor tempus.{" "}
+              </p>
+            </div>
+          </div>
+
+          <div class="container">
+            <div class="card">
+              <img class="poster" src={greece} />
+              <p class="title">Trip To Greece</p>
+              <p class="text">14-29 June | by Robbin joseph</p>
+              <img class="options" src={options} />
+              <img class="building" src={building} />
+              <p class="text1">24 people going</p>
+              <img class="heart" src={heart} />
             </div>
 
-            <div class="container">
-              <div class="card">
-                <img class="poster" src={greece} />
-                <p class="title">Trip To Greece</p>
-                <p class="text">14-29 June | by Robbin joseph</p>
-                <img class="options" src={options} />
-                <img class="building" src={building} />
-                <p class="text1">24 people going</p>
-                <img class="heart" src={heart} />
-              </div>
-
-              <div class="small-card">
-                <img class="poster" src={mosque} />
-                <p class="text">Ongoing</p>
-                <p class="text1">Trip to rome</p>
-                <p class="text2">40% completed</p>
-                <img class="slider" src={slider} />
-              </div>
+            <div class="small-card">
+              <img class="poster" src={mosque} />
+              <p class="text">Ongoing</p>
+              <p class="text1">Trip to rome</p>
+              <p class="text2">40% completed</p>
+              <img class="slider" src={slider} />
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
+      </div>
 
-        <div class="testimonials">
-          <p class="heading">What People Say About Us</p>
+      <div class="testimonials">
+        <p class="heading">What People Say About Us</p>
 
-          <img class="sideimage" src={sideimage} />
-          <img class="sideimage2" src={sideimage2} />
-          <img class="bird" src={bird} />
+        <img class="sideimage" src={sideimage} />
+        <img class="sideimage2" src={sideimage2} />
+        <img class="bird" src={bird} />
 
-          <Carousel
-            indicators={true}
-            navButtonsAlwaysInvisible
-            duration={50}
-            slider
-          >
-            {testimonials.map((testimonial, index) => (
-              <div key={index} class="testimonial">
-                <img src={testimonialBackground} />
+        <Carousel
+          indicators={true}
+          navButtonsAlwaysInvisible
+          duration={50}
+          slider
+        >
+          {testimonials.map((testimonial, index) => (
+            <div key={index} class="testimonial">
+              <img src={testimonialBackground} />
 
-                <div class="small-container">
-                  <div class="card">
-                    <img src={testimonial.profileImg} />
-                    <p class="text">{testimonial.text}</p>
-                    <p class="name">-{testimonial.name}</p>
-                  </div>
+              <div class="small-container">
+                <div class="card">
+                  <img src={testimonial.profileImg} />
+                  <p class="text">{testimonial.text}</p>
+                  <p class="name">-{testimonial.name}</p>
                 </div>
               </div>
-            ))}
-          </Carousel>
-        </div>
-
-        <div class="subscription">
-          <div class="container">
-            <img src={icons} />
-            <p class="heading">
-              Subscribe to get information, latest news and other interesting
-              offers about Cobham
-            </p>
-            <input type="text" placeholder="Enter your email" />
-            <button>
-              <p>Subscribe</p>
-            </button>
-          </div>
-        </div>
-
-        <Footer />
+            </div>
+          ))}
+        </Carousel>
       </div>
+
+      <div class="subscription">
+        <div class="container">
+          <img src={icons} />
+          <p class="heading">
+            Subscribe to get information, latest news and other interesting
+            offers about Cobham
+          </p>
+          <input type="text" placeholder="Enter your email" />
+          <button>
+            <p>Subscribe</p>
+          </button>
+        </div>
+      </div>
+
+      <Footer />
     </>
   );
 }
+
 export default Home;

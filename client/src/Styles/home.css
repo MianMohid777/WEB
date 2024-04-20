@@ -12,67 +12,6 @@
   background-position: bottom;
 }
 
-.top-section header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 80%;
-  height: 100px;
-  position: absolute;
-  z-index: 2;
-  margin-left: 186px;
-}
-
-.top-section header .links {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 30%;
-  height: 27px;
-  margin-top: 58px;
-  font-family: "Open Sans";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 27px;
-}
-
-.top-section header .links a {
-  color: white;
-  text-decoration: none;
-}
-
-.top-section header .links a:hover {
-  border-bottom: 2px solid white;
-}
-
-.top-section header .logo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  font-family: "Laila";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 25px;
-  text-align: center;
-
-  color: #ffffff;
-
-  margin-top: 50px;
-}
-
-.top-section header .logo p {
-  margin-bottom: 0;
-  margin-top: 0;
-}
-
-.top-section header .profile {
-  margin-top: 48px;
-}
-
 .top-section section {
   display: flex;
   flex-direction: column;
