@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../Models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { response } = require("express");
 
 //@desc Get Tourist Email Address and Password for Verification
 //@route Post /api/tourists
@@ -10,12 +11,14 @@ const jwt = require("jsonwebtoken");
 const generateAccess_and_Refresh_Token = async (userId) => {
   const user = await User.findById({ _id: userId });
 
+  const name = `${user.firstName}  ${user.lastName}`;
   const accessToken = jwt.sign(
     {
       //Payload //
       user: {
         email: user.emailAddress,
         id: user._id,
+        name: name,
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
@@ -41,6 +44,15 @@ const generateAccess_and_Refresh_Token = async (userId) => {
   return { accessToken, refToken };
 };
 const loginTourist = asyncHandler(async (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      message: "Already Logged In Before",
+      email: req.user.email,
+      id: req.user.id,
+      name: req.user.name,
+    });
+    return;
+  }
   const { emailAddress, password } = req.body;
 
   if (!emailAddress || !password) {
@@ -69,11 +81,20 @@ const loginTourist = asyncHandler(async (req, res) => {
       secure: true,
     };
 
+    console.log("User Logged In");
+
+    const name = `${user.firstName}  ${user.lastName}`;
     res
       .status(200)
       .cookie("accessToken", accessToken, options)
       .cookie("refToken", refToken, options)
-      .json({ message: "Success", accessToken, refreshToken: refToken });
+      .json({
+        message: "Success",
+        accessToken,
+        refreshToken: refToken,
+        id: user._id,
+        name: name,
+      });
   } else {
     res.status(404);
     throw new Error("Invalid Username or Password");
@@ -107,4 +128,69 @@ const registerTourist = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "User created successfully", id: user._id });
 });
 
-module.exports = { loginTourist, registerTourist };
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const inRefreshToken = req.cookies.refToken || req.body.refreshToken;
+
+  if (!inRefreshToken) {
+    res.status(401);
+    throw new Error("Unauthorized access");
+  }
+  jwt.verify(
+    inRefreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    async (err, decodedToken) => {
+      if (err) {
+        res.status(401);
+        throw new Error("User is not Authorized || Invalid Refresh Token");
+      }
+
+      console.log(decodedToken.user.email);
+      const user = await User.findById(decodedToken?.user.id);
+
+      if (!user) {
+        res.status(401);
+        throw new Error("Invalid Refresh Token");
+      }
+      if (inRefreshToken !== user?.refreshToken) {
+        res.status(401);
+        throw new Error("Refresh Token Expired or Used");
+      }
+
+      const options = {
+        httpOnly: true,
+        secure: true,
+      };
+
+      const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
+        user._id
+      );
+
+      res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refToken", refToken, options)
+        .json({
+          message: "Access Token Refreshed",
+          accessToken,
+          refreshToken: refToken,
+        });
+    }
+  );
+});
+
+const currentTourist = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({
+    message: "Success",
+    id: user._id,
+    name: `${user.firstName}  ${user.lastName}`,
+    email: user.emailAddress,
+  });
+});
+module.exports = {
+  loginTourist,
+  registerTourist,
+  refreshAccessToken,
+  currentTourist,
+};

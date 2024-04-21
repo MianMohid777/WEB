@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
+const { loginTourist } = require("../Controller/touristController");
 
 const validateToken = asyncHandler(async (req, res, next) => {
   let token;
@@ -28,7 +29,7 @@ const validateToken = asyncHandler(async (req, res, next) => {
     });
   } catch (err) {
     res.status(401);
-    throw new Error("Invalid Access Token");
+    throw new Error("User is not Authorized || Invalid Access Token");
   }
 });
 module.exports = validateToken;

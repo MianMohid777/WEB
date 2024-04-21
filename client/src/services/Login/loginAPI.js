@@ -4,10 +4,14 @@ const loginAPI = api.injectEndpoints({
   endpoints: (builder) => {
     return {
       login: builder.mutation({
-        query: ({ emailAddress, password }) => ({
+        query: ({ emailAddress, password, accessToken }) => ({
           url: "tourists/login",
           method: "POST",
           body: { emailAddress, password },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
         }),
       }),
     };

@@ -9,7 +9,7 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoginMutation } from "../Services/Login/loginAPI";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,8 +25,34 @@ import tower from "../Assets/tower.svg";
 import google2 from "../Assets/google-hover.svg";
 import Loader from "../Utils/Loader";
 import { addAuthUser } from "../Redux/Features/userSlice";
+import { useLocalStorage } from "../Utils/useLocalStorage-Hook";
 
 function SignIn() {
+  const { setItem, getItem } = useLocalStorage("access_token");
+
+  const accessToken = getItem();
+
+  useEffect(() => {
+    const checkLogIn = async () => {
+      const res = await login({ accessToken: accessToken }).unwrap();
+
+      console.log(res);
+      if (res) {
+        dispatch(
+          addAuthUser({
+            email: res.email,
+            id: res.id,
+            name: res.name,
+            access_token: accessToken,
+          })
+        );
+        navigate("/home");
+      }
+    };
+
+    checkLogIn();
+  }, []);
+
   const [svg, setSvg] = useState(google);
 
   const handleMouseOver = () => {
@@ -43,7 +69,7 @@ function SignIn() {
     passwordError: false,
   });
 
-  const [login, { isLoading, isSuccess }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -93,22 +119,25 @@ function SignIn() {
           password: password,
         }).unwrap();
 
-        console.log(response);
+        //console.log(response);
 
         dispatch(
           addAuthUser({
             email: email,
+            id: response.id,
+            name: response.name,
             access_token: response.accessToken,
             refresh_token: response.refreshToken,
           })
         );
+
+        setItem(response.accessToken);
         navigate("/home");
       }
     } catch (err) {
       console.log(err);
     }
   };
-
   return (
     <ThemeProvider theme={theme}>
       <Typography>
