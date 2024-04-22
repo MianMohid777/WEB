@@ -34,19 +34,22 @@ function SignIn() {
 
   useEffect(() => {
     const checkLogIn = async () => {
-      const res = await login({ accessToken: accessToken }).unwrap();
-
-      console.log(res);
-      if (res) {
-        dispatch(
-          addAuthUser({
-            email: res.email,
-            id: res.id,
-            name: res.name,
-            access_token: accessToken,
-          })
-        );
-        navigate("/home");
+      try {
+        const res = await login({ accessToken: accessToken }).unwrap();
+        console.log(res);
+        if (res) {
+          dispatch(
+            addAuthUser({
+              email: res.email,
+              id: res.id,
+              name: res.name,
+              access_token: accessToken,
+            })
+          );
+          navigate("/home");
+        }
+      } catch (err) {
+        console.log(err);
       }
     };
 
