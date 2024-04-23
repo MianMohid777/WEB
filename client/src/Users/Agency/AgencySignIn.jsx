@@ -153,6 +153,7 @@ function TouristSignIn() {
                 alt=""
                 style={{
                   width: "100%",
+                  height:"100vh"
                 }}
               />
             </Box>
@@ -337,8 +338,8 @@ function TouristSignIn() {
                 width: "100%",
               }}
             >
-              <Box component="img" src={mahal} alt="" sx={{}} />
-              <Box component="img" src={tower} alt="" sx={{}} />
+              <Box component="img" marginLeft={"7px"} src={mahal} alt="" sx={{}} />
+              <Box component="img" marginRight={"7px"}src={tower} alt="" sx={{}} />
             </Box>
           </Grid>
         </Grid>

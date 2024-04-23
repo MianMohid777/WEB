@@ -13,9 +13,12 @@ import { useEffect, useState } from "react";
 import { useLoginMutation } from "../../Services/Login/loginAPI";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
 import React from "react";
-import Rectangle from "../../Assets/Rectangle.svg";
+import Loader from "../../Utils/Loader";
+import { addAuthUser } from "../../Redux/Features/userSlice";
+import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
+
+import Rectangle from "../../Assets/tourist-login.jpg";
 import mahal from "../../Assets/mahal.svg";
 import emailSvg from "../../Assets/email.svg";
 import lock from "../../Assets/lock.svg";
@@ -23,13 +26,9 @@ import plane from "../../Assets/plane.svg";
 import google from "../../Assets/google.svg";
 import tower from "../../Assets/tower.svg";
 import google2 from "../../Assets/google-hover.svg";
-import Loader from "../../Utils/Loader";
-import { addAuthUser } from "../../Redux/Features/userSlice";
-import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 function TouristSignIn() {
   const { setItem, getItem } = useLocalStorage("access_token");
-
   const accessToken = getItem();
 
   useEffect(() => {
@@ -122,8 +121,6 @@ function TouristSignIn() {
           password: password,
         }).unwrap();
 
-        //console.log(response);
-
         dispatch(
           addAuthUser({
             email: email,
@@ -141,6 +138,7 @@ function TouristSignIn() {
       console.log(err);
     }
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Typography>
@@ -153,6 +151,7 @@ function TouristSignIn() {
                 alt=""
                 style={{
                   width: "100%",
+                  height: "100vh"
                 }}
               />
             </Box>
@@ -178,7 +177,7 @@ function TouristSignIn() {
               <Box
                 sx={{
                   fontSize: "72px",
-                  color: "#009ee2",
+                  color: "#00a651",
                   fontWeight: "bolder",
                 }}
               >
@@ -214,7 +213,7 @@ function TouristSignIn() {
                   ),
                 }}
                 margin="dense"
-                color="primary"
+                color='success'
                 sx={{ width: "40ch" }}
                 focused
                 onChange={handleEmailChange}
@@ -234,7 +233,7 @@ function TouristSignIn() {
                   ),
                 }}
                 margin="dense"
-                color="primary"
+                color='success'
                 sx={{ mt: 5, width: "40ch" }}
                 focused
                 onChange={handlePasswordChange}
@@ -265,7 +264,7 @@ function TouristSignIn() {
               disabled={isLoading}
               sx={{
                 mt: 6,
-                bgcolor: "#009ee2",
+                bgcolor: "#00a651",
                 width: "125px",
                 height: "48px",
               }}
@@ -278,6 +277,8 @@ function TouristSignIn() {
               <Box component="div">
                 <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
               </Box>
+
+
               <Box
                 sx={{
                   fontSize: "14px",
@@ -337,8 +338,8 @@ function TouristSignIn() {
                 width: "100%",
               }}
             >
-              <Box component="img" src={mahal} alt="" sx={{}} />
-              <Box component="img" src={tower} alt="" sx={{}} />
+              <Box component="img" marginLeft={"7px"} src={mahal} alt="" sx={{}} />
+              <Box component="img" marginRight={"7px"} src={tower} alt="" sx={{}} />
             </Box>
           </Grid>
         </Grid>
