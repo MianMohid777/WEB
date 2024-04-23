@@ -6,6 +6,7 @@ const stayLoggedValidator = asyncHandler(async (req, res, next) => {
   let authHeader = req.headers.authorization;
 
   token = req.cookies?.accessToken; //Get from Cookies
+  console.log("Cookies mey sey mil giya Token");
 
   if (
     typeof token === "undefined" ||

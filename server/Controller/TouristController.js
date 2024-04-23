@@ -22,7 +22,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
-    { expiresIn: "15m" } // Expiry Duration
+    { expiresIn: "5m" } // Expiry Duration
   );
 
   const refToken = jwt.sign(
@@ -34,7 +34,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       },
     },
     process.env.REFRESH_TOKEN_SECRET, // Signature
-    { expiresIn: "2d" } // Expiry Duration
+    { expiresIn: "1d" } // Expiry Duration
   );
 
   user.refreshToken = refToken;
