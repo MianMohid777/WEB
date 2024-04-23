@@ -41,7 +41,7 @@ function LoginAsGroup() {
           }}
           endIcon={<ArrowForwardIcon sx={{ width: "30px" }} />}
           onClick={() => {
-            navigate("/login");
+            navigate("/tourist-login");
           }}
         >
           Login as Tourist
@@ -54,9 +54,12 @@ function LoginAsGroup() {
             fontSize: "18px",
             width: "100%",
           }}
-          endIcon={<ArrowForwardIcon />}
+          endIcon={<ArrowForwardIcon sx={{ width: "30px" }} />}
+          onClick={() => {
+            navigate("/agency-login");
+          }}
         >
-          Login as Tour Company
+          Login as Tour Agency
         </Button>
         <Button
           sx={{
@@ -66,7 +69,7 @@ function LoginAsGroup() {
             fontSize: "18px",
             width: "100%",
           }}
-          endIcon={<ArrowForwardIcon />}
+
         >
           Login as Tour Guide
         </Button>

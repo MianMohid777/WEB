@@ -7,15 +7,15 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Layout from "./Tourist/Layout";
-import Home from "./Tourist/Home";
-import About from "./Tourist/About";
-import User from "./Tourist/User";
-import Profile from "./Tourist/Profile";
+import Layout from "./Users/Tourist/Layout";
+import Home from "./Users/Tourist/Home";
+import About from "./Users/Tourist/About";
+import Profile from "./Users/Tourist/Profile";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store";
-import SignIn from "./Tourist/SignIn";
-import LoginAs from "./CommonUser/LoginAs";
+import TouristSignIn from "./Users/Tourist/TouristSignIn";
+import AgencySignIn from "./Users/Agency/AgencySignIn";
+import LoginAs from "./Users/Common/LoginAs";
 import { ApiProvider } from "@reduxjs/toolkit/query/react";
 import { api } from "./Services/api";
 
@@ -23,8 +23,9 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<LoginAs />} />
+      <Route path="/tourist-login" element={<TouristSignIn />} />
+      <Route path="/agency-login" element={<AgencySignIn />} />
       <Route path="/home" element={<Home />} />
-      <Route path="/login" element={<SignIn />} />
     </Route>
   )
 );
