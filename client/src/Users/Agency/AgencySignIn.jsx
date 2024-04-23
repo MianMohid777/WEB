@@ -10,24 +10,24 @@ import {
   createTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLoginMutation } from "../Services/Login/loginAPI";
+import { useLoginMutation } from "../../Services/Login/loginAPI";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import React from "react";
-import Rectangle from "../Assets/Rectangle.svg";
-import mahal from "../Assets/mahal.svg";
-import emailSvg from "../Assets/email.svg";
-import lock from "../Assets/lock.svg";
-import plane from "../Assets/plane.svg";
-import google from "../Assets/google.svg";
-import tower from "../Assets/tower.svg";
-import google2 from "../Assets/google-hover.svg";
-import Loader from "../Utils/Loader";
-import { addAuthUser } from "../Redux/Features/userSlice";
-import { useLocalStorage } from "../Utils/useLocalStorage-Hook";
+import Rectangle from "../../Assets/Rectangle.svg";
+import mahal from "../../Assets/mahal.svg";
+import emailSvg from "../../Assets/email.svg";
+import lock from "../../Assets/lock.svg";
+import plane from "../../Assets/plane.svg";
+import google from "../../Assets/google.svg";
+import tower from "../../Assets/tower.svg";
+import google2 from "../../Assets/google-hover.svg";
+import Loader from "../../Utils/Loader";
+import { addAuthUser } from "../../Redux/Features/userSlice";
+import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
-function SignIn() {
+function TouristSignIn() {
   const { setItem, getItem } = useLocalStorage("access_token");
 
   const accessToken = getItem();
@@ -347,4 +347,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default TouristSignIn;
