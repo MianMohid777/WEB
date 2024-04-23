@@ -385,28 +385,38 @@ function Home() {
         <img class="sideimage2" src={sideimage2} />
         <img class="bird" src={bird} />
 
-        <Carousel indicators={true} navButtonsAlwaysInvisible duration={50} slider >
+         {/* <img className='backgroundimg' src={testimonialBackground} /> */}
+         <div class='container'>
+         <div class="card">
+        <Carousel indicators={true} navButtonsAlwaysInvisible duration={50} slider 
+         indicatorContainerProps={{
+          style: {
+            marginTop: '20px'
+          }
+        }}
+        indicatorIconButtonProps={{
+          style: {
+           color: 'white'
+          }
+        }}
+        activeIndicatorIconButtonProps={{
+          style: {
+           color: 'black'
 
+          }
+        }}
+        >
           {testimonials.map((testimonial, index) => (
 
-            <div key={index} class="testimonial">
-
-              <img src={testimonialBackground} />
-
-              <div class="small-container">
-
-                <div class="card">
-                  <img src={testimonial.profileImg} />
+                <div key={index}>
                   <p class="text">{testimonial.text}</p>
                   <p class="name">-{testimonial.name}</p>
-                </div>
-
-              </div>
-            </div>
-
+                  </div>
           ))}
         </Carousel>
-
+        </div>
+        </div>
+          
 
       </div>
 
