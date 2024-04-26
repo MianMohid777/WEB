@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 const User = require("../Models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { response } = require("express");
 
 //@desc Get Tourist Email Address and Password for Verification
 //@route Post /api/tourists

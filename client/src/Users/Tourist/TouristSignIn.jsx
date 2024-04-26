@@ -200,7 +200,7 @@ function TouristSignIn() {
             >
               <TextField
                 id="email"
-                label="Email Id"
+                label="Email Address"
                 variant="outlined"
                 type="email"
                 required
