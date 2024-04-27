@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -25,6 +26,8 @@ import license from "../../Assets/license.svg";
 import location from "../../Assets/location.svg";
 import cnic from "../../Assets/cnic.svg";
 
+import { useAgencyRegMutation } from "../../Services/Register/agencyRegisterAPI.js";
+import Loader from "../../Utils/Loader";
 function AgencyRegister() {
   const theme = createTheme({
     typography: {
@@ -35,13 +38,16 @@ function AgencyRegister() {
   const [error, setError] = useState({
     emailError: false,
     passwordError: false,
-    nameError: false,
+    companyNameError: false,
+    adminNameError: false,
     phoneError: false,
     licenseError: false,
     locationError: false,
     cnicError: false,
     cityError: false,
     provinceError: false,
+    checkedError: false,
+    ntnError: false,
   });
 
   const [companyInfo, setCompanyInfo] = useState({
@@ -133,6 +139,9 @@ function AgencyRegister() {
 
   const cnicRef = useRef("");
 
+  const [agencyReg, { isLoading }] = useAgencyRegMutation();
+
+  const navigate = useNavigate();
   const provinces = [
     {
       label: "Punjab",
@@ -1263,6 +1272,195 @@ function AgencyRegister() {
       return [{ label: "Islamabad", code: 4400 }];
     }
   };
+
+  if (isLoading) return <Loader />;
+
+  const handleApply = async () => {
+    if (!companyInfo.email.includes("@") || companyInfo.email.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        emailError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        emailError: false,
+      }));
+    }
+
+    if (
+      companyInfo.password.length === 0 ||
+      companyInfo.password !== companyInfo.confirmPassword
+    ) {
+      setError((prevError) => ({
+        ...prevError,
+        passwordError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        passwordError: false,
+      }));
+    }
+
+    if (companyInfo.adminName.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        adminNameError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        adminNameError: false,
+      }));
+    }
+
+    if (companyInfo.companyName.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        companyNameError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        companyNameError: false,
+      }));
+    }
+
+    if (companyInfo.cnic.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        cnicError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        cnicError: false,
+      }));
+    }
+
+    if (companyInfo.ntn.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        ntnError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        ntnError: false,
+      }));
+    }
+
+    if (companyInfo.phone.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        phoneError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        phoneError: false,
+      }));
+    }
+
+    if (companyInfo.location.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        locationError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        locationError: false,
+      }));
+    }
+
+    if (companyInfo.city.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        cityError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        cityError: false,
+      }));
+    }
+
+    if (companyInfo.license.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        licenseError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        licenseError: false,
+      }));
+    }
+
+    if (companyInfo.province.length === 0) {
+      setError((prevError) => ({
+        ...prevError,
+        provinceError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        provinceError: false,
+      }));
+    }
+
+    if (!companyInfo.checked) {
+      setError((prevError) => ({
+        ...prevError,
+        checkedError: true,
+      }));
+    } else {
+      setError((prevError) => ({
+        ...prevError,
+        checkedError: false,
+      }));
+    }
+
+    try {
+      if (
+        !error.emailError &&
+        !error.passwordError &&
+        !error.adminNameError &&
+        !error.companyNameError &&
+        !error.cnicError &&
+        !error.cityError &&
+        !error.provinceError &&
+        !error.licenseError &&
+        !error.checkedError &&
+        !error.locationError &&
+        !error.ntnError &&
+        !error.phoneError
+      ) {
+        console.log(companyInfo);
+        const response = await agencyReg({
+          adminName: companyInfo.adminName,
+          companyName: companyInfo.companyName,
+          adminCNIC: companyInfo.cnic,
+          companyEmail: companyInfo.email,
+          companyNTN: companyInfo.ntn,
+          password: companyInfo.password,
+          license: companyInfo.license,
+          city: companyInfo.city,
+          province: companyInfo.province,
+          officeAddress: companyInfo.location,
+          contactNo: companyInfo.phone,
+        }).unwrap();
+
+        console.log(response);
+
+        navigate("/agency-login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -1336,7 +1534,7 @@ function AgencyRegister() {
                   type="text"
                   required
                   color="secondary"
-                  error={error.emailError}
+                  error={error.adminNameError}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -1372,7 +1570,7 @@ function AgencyRegister() {
                   type="text"
                   required
                   color="secondary"
-                  error={error.emailError}
+                  error={error.companyNameError}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -1523,7 +1721,7 @@ function AgencyRegister() {
                   type="text"
                   color="secondary"
                   required
-                  error={error.emailError}
+                  error={error.ntnError}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -1593,10 +1791,10 @@ function AgencyRegister() {
                   id="license"
                   label="Company's DTC License"
                   variant="outlined"
-                  type="file"
+                  type="text"
                   required
                   color="secondary"
-                  error={error.emailError}
+                  error={error.licenseError}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -1674,7 +1872,7 @@ function AgencyRegister() {
                   type="text"
                   required
                   color="secondary"
-                  error={error.emailError}
+                  error={error.locationError}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -1720,6 +1918,7 @@ function AgencyRegister() {
                     }}
                     color="secondary"
                     variant="outlined"
+                    error={error.provinceError}
                     onChange={(event) => {
                       const selectedProvince = provinces.find(
                         (province) => province.label === event.target.value
@@ -1769,6 +1968,7 @@ function AgencyRegister() {
                     labelId="city-select"
                     label="Select City"
                     value={cities.label}
+                    error={error.cityError}
                     sx={{
                       width: 250,
                       height: 50,
@@ -1812,6 +2012,7 @@ function AgencyRegister() {
                       color: "#A46285",
                     },
                   }}
+                  error={error.checkedError}
                   onChange={(e) => {
                     handleChange(e, "checked");
                   }}
@@ -1869,9 +2070,7 @@ function AgencyRegister() {
                       bgcolor: "#A46285",
                     },
                   }}
-                  onClick={() => {
-                    console.log(companyInfo);
-                  }}
+                  onClick={handleApply}
                 >
                   APPLY
                 </Button>
@@ -1917,6 +2116,7 @@ function AgencyRegister() {
                         color: "#A46285",
                       },
                     }}
+                    onClick={() => navigate("/agency-login")}
                   >
                     {" "}
                     Sign In

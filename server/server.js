@@ -6,6 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const touristRoutes = require("./Routes/touristRoutes");
 const agencyRoutes = require("./Routes/agencyRoutes");
+const multer = require("multer");
 
 connectDb();
 
@@ -14,7 +15,6 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-
 app.use(express.json()); // Middleware to parse the body from client
 app.use(cookieParser());
 

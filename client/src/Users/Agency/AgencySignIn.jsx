@@ -10,7 +10,7 @@ import {
   createTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLoginMutation } from "../../Services/Login/loginAPI";
+import { useAgencyLoginMutation } from "../../Services/Login/loginAPI";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +24,7 @@ import google from "../../Assets/google.svg";
 import tower from "../../Assets/tower.svg";
 import google2 from "../../Assets/google-hover.svg";
 import Loader from "../../Utils/Loader";
-import { addAuthUser } from "../../Redux/Features/userSlice";
+import { addAuthAgency } from "../../Redux/Features/agencySlice";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 function AgencySignIn() {
@@ -35,11 +35,11 @@ function AgencySignIn() {
   useEffect(() => {
     const checkLogIn = async () => {
       try {
-        const res = await login({ accessToken: accessToken }).unwrap();
+        const res = await loginAgency({ accessToken: accessToken }).unwrap();
         console.log(res);
         if (res) {
           dispatch(
-            addAuthUser({
+            addAuthAgency({
               email: res.email,
               id: res.id,
               name: res.name,
@@ -72,7 +72,7 @@ function AgencySignIn() {
     passwordError: false,
   });
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [loginAgency, { isLoading }] = useAgencyLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -117,15 +117,15 @@ function AgencySignIn() {
     }
     try {
       if (!error.emailError && !error.passwordError) {
-        const response = await login({
-          emailAddress: email,
+        const response = await loginAgency({
+          companyEmail: email,
           password: password,
         }).unwrap();
 
-        //console.log(response);
+        console.log(response);
 
         dispatch(
-          addAuthUser({
+          addAuthAgency({
             email: email,
             id: response.id,
             name: response.name,

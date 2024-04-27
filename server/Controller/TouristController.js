@@ -3,10 +3,6 @@ const User = require("../Models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-//@desc Get Tourist Email Address and Password for Verification
-//@route Post /api/tourists
-//@access public
-
 const generateAccess_and_Refresh_Token = async (userId) => {
   const user = await User.findById({ _id: userId });
 
@@ -42,6 +38,10 @@ const generateAccess_and_Refresh_Token = async (userId) => {
 
   return { accessToken, refToken };
 };
+
+//@desc Get Tourist Email Address and Password for Verification
+//@route Post /api/tourists
+//@access public
 const loginTourist = asyncHandler(async (req, res) => {
   if (req.user) {
     res.status(200).json({
@@ -100,6 +100,9 @@ const loginTourist = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Register a Tourist as User using email and password
+//@route Post /api/tourists
+//@access public
 const registerTourist = asyncHandler(async (req, res) => {
   const { firstName, lastName, emailAddress, password } = req.body;
 

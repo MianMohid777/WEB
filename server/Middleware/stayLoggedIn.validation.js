@@ -6,13 +6,13 @@ const stayLoggedValidator = asyncHandler(async (req, res, next) => {
   let authHeader = req.headers.authorization;
 
   token = req.cookies?.accessToken; //Get from Cookies
-  console.log("Cookies mey sey mil giya Token");
+  if (token) console.log("Cookies mey sey mil giya Token", token);
 
   if (
     typeof token === "undefined" ||
-    (!token && authHeader && authHeader.startsWith("Bearer"))
+    (!token && authHeader && authHeader?.startsWith("Bearer"))
   ) {
-    token = authHeader.split(" ")[1];
+    token = authHeader?.split(" ")[1];
   }
 
   if (typeof token === "undefined" || !token) {
