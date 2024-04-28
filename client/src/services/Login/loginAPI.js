@@ -36,5 +36,24 @@ const agencyLoginApi = api.injectEndpoints({
   },
 });
 
+const adminLoginApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      adminLogin: builder.mutation({
+        query: ({ email, password, accessToken }) => ({
+          url: "admin/login",
+          method: "POST",
+          body: { email, password },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      }),
+    };
+  },
+});
+
 export const { useLoginMutation } = loginAPI;
 export const { useAgencyLoginMutation } = agencyLoginApi;
+export const { useAdminLoginMutation } = adminLoginApi;

@@ -9,7 +9,7 @@ export const agencySlice = createSlice({
   initialState,
   reducers: {
     addAuthAgency: (state, action) => {
-      state.authUser = action.payload;
+      state.authAgency = action.payload;
     },
   },
 });

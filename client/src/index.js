@@ -7,18 +7,16 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Layout from "./Users/Tourist/Layout";
 import Home from "./Users/Tourist/Home";
-import About from "./Users/Tourist/About";
-import Profile from "./Users/Tourist/Profile";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store";
 import TouristSignIn from "./Users/Tourist/TouristSignIn";
 import AgencySignIn from "./Users/Agency/AgencySignIn";
 import LoginAs from "./Users/Common/LoginAs";
-import { ApiProvider } from "@reduxjs/toolkit/query/react";
-import { api } from "./Services/api";
 import AgencyRegister from "./Users/Agency/AgencyRegister";
+import AgencyHome from "./Users/Agency/AgencyHome";
+import AdminSignIn from "./Users/Admin/AdminSignIn";
+import AdminHome from "./Users/Admin/AdminHome";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,7 +25,10 @@ const router = createBrowserRouter(
       <Route path="/tourist-login" element={<TouristSignIn />} />
       <Route path="/agency-login" element={<AgencySignIn />} />
       <Route path="/agency-registeration" element={<AgencyRegister />} />
+      <Route path="/agency-home" element={<AgencyHome />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/admin-login" element={<AdminSignIn />} />
+      <Route path="/admin-dashboard" element={<AdminHome />} />
     </Route>
   )
 );

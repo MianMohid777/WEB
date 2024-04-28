@@ -1,7 +1,8 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
-  Divider,
   Grid,
   InputAdornment,
   TextField,
@@ -9,45 +10,29 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useAgencyLoginMutation } from "../../Services/Login/loginAPI";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
-import React from "react";
-import Rectangle from "../../Assets/Rectangle.svg";
-import mahal from "../../Assets/mahal copy.svg";
-import emailSvg from "../../Assets/email.svg";
-import lock from "../../Assets/lock.svg";
-import plane from "../../Assets/plane copy.svg";
-import google from "../../Assets/google.svg";
-import tower from "../../Assets/tower copy.svg";
-import google2 from "../../Assets/google-hover.svg";
+import { useAdminLoginMutation } from "../../Services/Login/loginAPI";
 import Loader from "../../Utils/Loader";
-import { addAuthAgency } from "../../Redux/Features/agencySlice";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
-function AgencySignIn() {
-  const { setItem, getItem } = useLocalStorage("access_token");
+import Rectangle from "../../Assets/Karakoram.jpg";
+import mahal from "../../Assets/mahal copy 2.svg";
+import emailSvg from "../../Assets/email.svg";
+import lock from "../../Assets/lock.svg";
+import plane from "../../Assets/plane copy 2.svg";
+import tower from "../../Assets/tower copy 2.svg";
 
+function AdminSignIn() {
+  const { setItem, getItem } = useLocalStorage("access_token");
   const accessToken = getItem();
 
   useEffect(() => {
     const checkLogIn = async () => {
       try {
-        const res = await loginAgency({ accessToken: accessToken }).unwrap();
+        const res = await adminLogin({ accessToken: accessToken }).unwrap();
         console.log(res);
-        if (res) {
-          dispatch(
-            addAuthAgency({
-              email: res.email,
-              id: res.id,
-              name: res.name,
-              access_token: accessToken,
-            })
-          );
-          navigate("/home");
-        }
+
+        if (res) navigate("/admin-dashboard");
       } catch (err) {
         console.log(err);
       }
@@ -56,15 +41,6 @@ function AgencySignIn() {
     checkLogIn();
   }, []);
 
-  const [svg, setSvg] = useState(google);
-
-  const handleMouseOver = () => {
-    svg === google ? setSvg(google2) : setSvg(google);
-  };
-  const handleMouseOut = () => {
-    svg === google2 ? setSvg(google) : setSvg(google2);
-  };
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({
@@ -72,8 +48,8 @@ function AgencySignIn() {
     passwordError: false,
   });
 
-  const [loginAgency, { isLoading }] = useAgencyLoginMutation();
-  const dispatch = useDispatch();
+  const [adminLogin, { isLoading }] = useAdminLoginMutation();
+
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -117,30 +93,19 @@ function AgencySignIn() {
     }
     try {
       if (!error.emailError && !error.passwordError) {
-        const response = await loginAgency({
-          companyEmail: email,
+        const response = await adminLogin({
+          email: email,
           password: password,
         }).unwrap();
 
-        console.log(response);
-
-        dispatch(
-          addAuthAgency({
-            email: email,
-            id: response.id,
-            name: response.name,
-            access_token: response.accessToken,
-            refresh_token: response.refreshToken,
-          })
-        );
-
         setItem(response.accessToken);
-        navigate("/home");
+        navigate("/admin-dashboard");
       }
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Typography>
@@ -179,7 +144,7 @@ function AgencySignIn() {
               <Box
                 sx={{
                   fontSize: "72px",
-                  color: "#009ee2",
+                  color: "#D04929",
                   fontWeight: "bolder",
                 }}
               >
@@ -202,7 +167,7 @@ function AgencySignIn() {
             >
               <TextField
                 id="email"
-                label="Email Id"
+                label="Email Address"
                 variant="outlined"
                 type="email"
                 required
@@ -215,7 +180,7 @@ function AgencySignIn() {
                   ),
                 }}
                 margin="dense"
-                color="primary"
+                color="warning"
                 sx={{ width: "40ch" }}
                 focused
                 onChange={handleEmailChange}
@@ -235,30 +200,11 @@ function AgencySignIn() {
                   ),
                 }}
                 margin="dense"
-                color="primary"
+                color="warning"
                 sx={{ mt: 5, width: "40ch" }}
                 focused
                 onChange={handlePasswordChange}
               />
-            </Box>
-
-            <Box
-              component="div"
-              sx={{
-                fontSize: "14px",
-                color: "#00000083",
-                fontWeight: "normal",
-                position: "relative",
-                left: "125px",
-                top: "20px",
-                cursor: "pointer",
-
-                "&:hover": {
-                  color: "#009ee2",
-                },
-              }}
-            >
-              Forgot your password?
             </Box>
 
             <Button
@@ -266,69 +212,18 @@ function AgencySignIn() {
               disabled={isLoading}
               sx={{
                 mt: 6,
-                bgcolor: "#009ee2",
+                bgcolor: "#D04929",
                 width: "125px",
                 height: "48px",
+                marginTop: "100px",
+                "&:hover": {
+                  bgcolor: "#831305",
+                },
               }}
               onClick={handleSubmit}
             >
               LOGIN
             </Button>
-
-            <Box sx={{ display: "flex", color: "#848383", gap: "5px", mt: 2 }}>
-              <Box component="div">
-                <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
-              </Box>
-              <Box
-                sx={{
-                  fontSize: "14px",
-                  color: "#000000",
-                  fontWeight: "normal",
-                }}
-              >
-                OR
-              </Box>
-
-              <Box component="div">
-                <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
-              </Box>
-            </Box>
-
-            <Box component="Box">
-              <Box
-                component="img"
-                src={svg}
-                alt=""
-                sx={{ mt: 2 }}
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
-              />
-            </Box>
-
-            <Box
-              component="Box"
-              sx={{
-                mt: 1,
-                fontSize: "14px",
-                color: "#000000",
-                fontWeight: "normal",
-              }}
-            >
-              Don't have account?
-              <Box
-                component="span"
-                sx={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  "&:hover": {
-                    color: "#009ee2",
-                  },
-                }}
-              >
-                {" "}
-                Register Now
-              </Box>
-            </Box>
 
             <Box
               component="Box"
@@ -343,14 +238,14 @@ function AgencySignIn() {
                 marginLeft={"7px"}
                 src={mahal}
                 alt=""
-                sx={{}}
+                sx={{ marginTop: "15%" }}
               />
               <Box
                 component="img"
                 marginRight={"7px"}
                 src={tower}
                 alt=""
-                sx={{}}
+                sx={{ marginTop: "15%" }}
               />
             </Box>
           </Grid>
@@ -360,4 +255,4 @@ function AgencySignIn() {
   );
 }
 
-export default AgencySignIn;
+export default AdminSignIn;

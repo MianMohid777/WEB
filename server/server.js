@@ -6,6 +6,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const touristRoutes = require("./Routes/touristRoutes");
 const agencyRoutes = require("./Routes/agencyRoutes");
+const adminRoutes = require("./Routes/adminRoutes");
 const multer = require("multer");
 
 connectDb();
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 app.use("/api/tourists", touristRoutes);
 app.use("/api/agencies", agencyRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(errorHandler);
 app.listen(port, () => console.log(`Server Running on Port N.O ${port} \n`));
