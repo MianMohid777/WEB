@@ -19,6 +19,7 @@ import LoginAs from "./Users/Common/LoginAs";
 import { ApiProvider } from "@reduxjs/toolkit/query/react";
 import { api } from "./Services/api";
 import AgencyRegister from "./Users/Agency/AgencyRegister";
+import AgencyProfile from "./Users/Agency/AgencyProfile";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,8 @@ const router = createBrowserRouter(
       <Route path="/agency-login" element={<AgencySignIn />} />
       <Route path="/agency-registeration" element={<AgencyRegister />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/profile" element={<AgencyProfile />} />
+
     </Route>
   )
 );
