@@ -124,7 +124,7 @@ const getAllApplications = asyncHandler(async (req, res) => {
 });
 
 //@desc Update the status of the application to True
-//@route /admin/current-admin/applications/approve:id
+//@route /admin/current-admin/applications/:id
 //@access private
 
 const approveApplication = asyncHandler(async (req, res) => {
@@ -148,6 +148,31 @@ const approveApplication = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc Update the status of the application to True
+//@route /admin/current-admin/applications/approve:id
+//@access private
+
+const deleteApplication = asyncHandler(async (req, res) => {
+  try {
+    const application = await agencyReg.findById({ _id: req.params.id });
+
+    if (!application) {
+      res.status(404);
+      throw new Error("Application Not Found");
+    }
+
+    if (application) {
+      await agencyReg.deleteOne({ _id: req.params.id });
+      res
+        .status(200)
+        .json({ message: "Application Deleted Successfully", application });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(404);
+    throw new Error("Application Not Found");
+  }
+});
 //@desc Log Out the Admin
 //@route /admin/current-admin/logout
 //@access private
@@ -166,4 +191,5 @@ module.exports = {
   getAllApplications,
   approveApplication,
   logOut,
+  deleteApplication,
 };

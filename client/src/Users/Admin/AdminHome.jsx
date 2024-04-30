@@ -21,6 +21,7 @@ import {
   useGetAllAgencyQuery,
   useGetAdminQuery,
   useLogoutMutation,
+  useDeleteApplicationMutation,
 } from "../../Services/Agency/agencyApi";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
@@ -94,6 +95,7 @@ function AdminHome() {
       console.log(err);
     }
   };
+
   //LOADER LOGIC
   if (isLoading || isAdminLoading || logoutLoading) return <Loader />;
 

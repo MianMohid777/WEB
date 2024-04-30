@@ -69,7 +69,26 @@ const logoutApi = api.injectEndpoints({
     };
   },
 });
+
+const deleteApplicationApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      deleteApplication: builder.mutation({
+        query: ({ id, accessToken }) => ({
+          url: `admin/current-admin/applications/${id}`,
+          method: "DELETE",
+          body: {},
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      }),
+    };
+  },
+});
 export const { useGetAllAgencyQuery } = agencyGetAllApi;
 export const { useGetAdminQuery } = getAdminApi;
 export const { useUpdateStatusMutation } = updateStatusApi;
 export const { useLogoutMutation } = logoutApi;
+export const { useDeleteApplicationMutation } = deleteApplicationApi;

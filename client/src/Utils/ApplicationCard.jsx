@@ -14,11 +14,15 @@ import {
   CardActionArea,
 } from "@mui/material";
 
-import { useUpdateStatusMutation } from "../Services/Agency/agencyApi";
+import {
+  useDeleteApplicationMutation,
+  useUpdateStatusMutation,
+} from "../Services/Agency/agencyApi";
 import { useLocalStorage } from "./useLocalStorage-Hook";
 import Loader from "./Loader";
 
 function ApplicationCard(props) {
+  //THEME
   const theme = createTheme({
     typography: {
       fontFamily: "'Space Grotesk', sans-serif",
@@ -27,10 +31,18 @@ function ApplicationCard(props) {
     },
   });
 
-  const [updateUser, { isLoading }] = useUpdateStatusMutation();
+  //Hooks
   const { setItem, getItem } = useLocalStorage("access_token");
-
   const accessToken = getItem();
+
+  // QUERY // MUTATION
+  const [updateUser, { isLoading }] = useUpdateStatusMutation();
+  const [
+    deleteApplication,
+    { isLoading: deleteApplicationLoading, isError: deleteApplicationError },
+  ] = useDeleteApplicationMutation({ accessToken: accessToken });
+
+  // HANDLERS
 
   const handleApprove = async (id) => {
     try {
@@ -52,11 +64,23 @@ function ApplicationCard(props) {
     }
   };
 
-  const handleReject = (id) => {
-    console.log("rejected");
+  const handleDeleteApplication = async (id) => {
+    try {
+      const response = await deleteApplication({
+        id: id,
+        accessToken: accessToken,
+      }).unwrap();
+
+      if (response) {
+        console.log(response);
+        props.setState(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading || deleteApplicationLoading) return <Loader />;
 
   return (
     <ThemeProvider theme={theme}>
@@ -152,7 +176,12 @@ function ApplicationCard(props) {
               >
                 Approve
               </Button>
-              <Button sx={{ fontSize: "24px", width: "50px", color: "red" }}>
+              <Button
+                sx={{ fontSize: "24px", width: "50px", color: "red" }}
+                onClick={() => {
+                  handleDeleteApplication(props.id);
+                }}
+              >
                 Reject
               </Button>
             </CardActions>
