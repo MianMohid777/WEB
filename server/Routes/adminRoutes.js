@@ -6,6 +6,9 @@ const {
   loginAdmin,
   refreshAccessToken,
   currentAdmin,
+  getAllApplications,
+  approveApplication,
+  logOut,
 } = require("../Controller/adminController");
 
 const stayLoggedValidator = require("../Middleware/stayLoggedIn.validation");
@@ -16,6 +19,14 @@ router.route("/login").post(stayLoggedValidator, loginAdmin);
 // Protected Routes //
 
 //router.route("/refresh-token").post(refreshAccessToken);
-//router.route("/current-Admin").get(validateToken, currentAdmin);
+router.route("/current-admin").get(validateToken, currentAdmin);
+router
+  .route("/current-admin/applications")
+  .get(validateToken, getAllApplications);
 
+router
+  .route("/current-admin/applications/:id")
+  .put(validateToken, approveApplication);
+
+router.route("/current-admin/logout").post(validateToken, logOut);
 module.exports = router;

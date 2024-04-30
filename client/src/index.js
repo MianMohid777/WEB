@@ -18,6 +18,7 @@ import AgencyHome from "./Users/Agency/AgencyHome";
 import AdminSignIn from "./Users/Admin/AdminSignIn";
 import AdminHome from "./Users/Admin/AdminHome";
 import AgencyProfile from "./Users/Agency/AgencyProfile";
+import Analytics from "./Users/Admin/Analytics";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
       <Route path="/home" element={<Home />} />
       <Route path="/admin-login" element={<AdminSignIn />} />
       <Route path="/admin-dashboard" element={<AdminHome />} />
+      <Route path="/admin-dashboard/analytics" element={<Analytics />} />
       <Route path="/profile" element={<AgencyProfile />} />
     </Route>
   )

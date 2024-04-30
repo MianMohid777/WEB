@@ -8,15 +8,16 @@ const validateToken = asyncHandler(async (req, res, next) => {
 
   token = req.cookies?.accessToken; //Get from Cookies
 
-  if (!token && authHeader && authHeader.startsWith("Bearer")) {
-    token = authHeader.split(" ")[1];
-  }
+  if (!token || typeof token !== "string") {
+    if (authHeader && authHeader.startsWith("Bearer")) {
+      token = authHeader.split(" ")[1];
+    } else {
+      console.log("hello");
+      res.status(401);
 
-  if (!token) {
-    res.status(401);
-    throw new Error("User is not Authorized or Token is missing");
+      throw new Error("User is not Authorized or Token is missing");
+    }
   }
-
   try {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) {
@@ -29,7 +30,7 @@ const validateToken = asyncHandler(async (req, res, next) => {
     });
   } catch (err) {
     res.status(401);
-    throw new Error("User is not Authorized || Invalid Access Token");
+    throw new Error("User is not Authorized || Invalid Access Token || Error");
   }
 });
 module.exports = validateToken;
