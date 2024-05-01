@@ -3,7 +3,6 @@ const admin = require("../Models/admin-model");
 const agencyReg = require("../Models/agency-RegModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { response } = require("express");
 
 // ACCESS TOKEN GENERATOR
 const generateAccess_and_Refresh_Token = async (userId) => {
@@ -15,6 +14,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.email,
         id: user._id,
+        role: "admin",
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
@@ -45,11 +45,12 @@ const generateAccess_and_Refresh_Token = async (userId) => {
 //@access public
 
 const loginAdmin = asyncHandler(async (req, res) => {
-  if (req.user) {
+  if (req.user && req.user.role === "admin") {
     res.status(200).json({
       message: "Already Logged In Before",
       email: req.user.email,
       id: req.user.id,
+      role: req.user.role,
     });
     return;
   }
@@ -178,12 +179,54 @@ const deleteApplication = asyncHandler(async (req, res) => {
 //@access private
 
 const logOut = asyncHandler(async (req, res) => {
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
   if (req.user) req.user = {};
   res
     .status(200)
-    .clearCookie("access_token")
-    .clearCookie("refresh_token")
+    .clearCookie("access_token", options)
+    .clearCookie("refresh_token", options)
     .json({ message: "Logged Out" });
+});
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  try {
+    const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
+    const user = await admin.findById(req?.user.id);
+
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid Refresh Token");
+    }
+    if (inRefreshToken !== user?.refreshToken) {
+      res.status(401);
+      throw new Error("Refresh Token Expired or Used");
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
+      user._id
+    );
+
+    res
+      .status(200)
+      .cookie("access_token", accessToken, options)
+      .cookie("refresh_token", refToken, options)
+      .json({
+        message: "Access Token Refreshed",
+        accessToken,
+        refreshToken: refToken,
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ message: err.message });
+  }
 });
 module.exports = {
   loginAdmin,
@@ -192,4 +235,5 @@ module.exports = {
   approveApplication,
   logOut,
   deleteApplication,
+  refreshAccessToken,
 };

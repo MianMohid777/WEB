@@ -14,12 +14,13 @@ const {
 
 const stayLoggedValidator = require("../Middleware/stayLoggedIn.validation");
 const validateToken = require("../Middleware/validateToken");
+const refreshTokenValidator = require("../Middleware/refreshToken.validator");
 
 router.route("/login").post(stayLoggedValidator, loginAdmin);
 
 // Protected Routes //
 
-//router.route("/refresh-token").post(refreshAccessToken);
+router.route("/refresh-token").post(refreshTokenValidator, refreshAccessToken);
 router.route("/current-admin").get(validateToken, currentAdmin);
 router
   .route("/current-admin/applications")

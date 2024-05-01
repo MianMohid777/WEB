@@ -14,6 +14,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
         email: user.emailAddress,
         id: user._id,
         name: name,
+        role: "tourist",
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
@@ -43,12 +44,13 @@ const generateAccess_and_Refresh_Token = async (userId) => {
 //@route Post /api/tourists
 //@access public
 const loginTourist = asyncHandler(async (req, res) => {
-  if (req.user) {
+  if (req.user && req.user.role === "tourist") {
     res.status(200).json({
       message: "Already Logged In Before",
       email: req.user.email,
       id: req.user.id,
       name: req.user.name,
+      role: req.user.role,
     });
     return;
   }
@@ -180,6 +182,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   );
 });
 
+//@desc GET LOGGED IN Tourist
+//@route Post /api/tourists/current-tourist
+//@access private
 const currentTourist = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
 

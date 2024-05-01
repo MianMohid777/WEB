@@ -10,9 +10,12 @@ import {
   createTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLoginMutation } from "../../Services/Login/loginAPI";
+import {
+  useGoogleSignInMutation,
+  useLoginMutation,
+} from "../../Services/Login/loginAPI";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
 import Loader from "../../Utils/Loader";
 import { addAuthUser } from "../../Redux/Features/userSlice";
@@ -28,8 +31,43 @@ import tower from "../../Assets/tower.svg";
 import google2 from "../../Assets/google-hover.svg";
 
 function TouristSignIn() {
+  //HOOKS
   const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem } = useLocalStorage("refresh_token");
   const accessToken = getItem();
+  const location = useLocation();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState({
+    emailError: false,
+    passwordError: false,
+  });
+  const [svg, setSvg] = useState(google);
+  const [gsi, setGsi] = useState(false);
+
+  const [login, { isLoading }] = useLoginMutation();
+  const [googleSignIn, { isLoading: googleLoading }] =
+    useGoogleSignInMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const message = searchParams.get("message");
+    const accessToken = searchParams.get("accessToken");
+    const refreshToken = searchParams.get("refreshToken");
+
+    console.log("Message:", message);
+    console.log("Access Token:", accessToken);
+    console.log("Refresh Token:", refreshToken);
+
+    if (accessToken && refreshToken) {
+      setItem(accessToken);
+      setRefItem(refreshToken);
+      setGsi(true);
+    }
+  }, []);
 
   useEffect(() => {
     const checkLogIn = async () => {
@@ -53,9 +91,9 @@ function TouristSignIn() {
     };
 
     checkLogIn();
-  }, []);
+  }, [gsi]);
 
-  const [svg, setSvg] = useState(google);
+  // HANDLERS //////
 
   const handleMouseOver = () => {
     svg === google ? setSvg(google2) : setSvg(google);
@@ -64,31 +102,12 @@ function TouristSignIn() {
     svg === google2 ? setSvg(google) : setSvg(google2);
   };
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState({
-    emailError: false,
-    passwordError: false,
-  });
-
-  const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-
-  const theme = createTheme({
-    typography: {
-      fontFamily: "'Space Grotesk', sans-serif",
-    },
-  });
-
-  if (isLoading) return <Loader />;
 
   const handleSubmit = async () => {
     if (!email.includes("@") || email.length === 0) {
@@ -132,12 +151,34 @@ function TouristSignIn() {
         );
 
         setItem(response.accessToken);
+        setRefItem(response.refreshToken);
         navigate("/home");
       }
     } catch (err) {
       console.log(err);
     }
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const gsi_url = await googleSignIn().unwrap();
+
+      if (gsi_url) {
+        window.location.href = gsi_url.url;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  //THEME
+  const theme = createTheme({
+    typography: {
+      fontFamily: "'Space Grotesk', sans-serif",
+    },
+  });
+
+  //LOADER
+  if (isLoading || googleLoading) return <Loader />;
 
   return (
     <ThemeProvider theme={theme}>
@@ -301,6 +342,7 @@ function TouristSignIn() {
                 sx={{ mt: 2 }}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
+                onClick={handleGoogleSignIn}
               />
             </Box>
 
@@ -322,6 +364,9 @@ function TouristSignIn() {
                   "&:hover": {
                     color: "#009ee2",
                   },
+                }}
+                onClick={() => {
+                  navigate("/tourist-signup", { replace: true });
                 }}
               >
                 {" "}

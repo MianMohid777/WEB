@@ -13,6 +13,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
         email: user.companyEmail,
         id: user._id,
         name: user.compnayName,
+        role: "agency",
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
@@ -112,12 +113,13 @@ const registerAgency = asyncHandler(async (req, res) => {
 //@access public
 
 const loginAgency = asyncHandler(async (req, res) => {
-  if (req.user) {
+  if (req.user && req.user.role === "agency") {
     res.status(200).json({
       message: "Already Logged In Before",
       email: req.user.email,
       id: req.user.id,
       name: req.user.name,
+      role: req.user.role,
     });
     return;
   }

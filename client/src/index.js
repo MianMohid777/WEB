@@ -19,12 +19,14 @@ import AdminSignIn from "./Users/Admin/AdminSignIn";
 import AdminHome from "./Users/Admin/AdminHome";
 import AgencyProfile from "./Users/Agency/AgencyProfile";
 import Analytics from "./Users/Admin/Analytics";
+import SignUp from "./Users/Tourist/SignUp";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<LoginAs />} />
       <Route path="/tourist-login" element={<TouristSignIn />} />
+      <Route path="/tourist-signup" element={<SignUp />} />
       <Route path="/agency-login" element={<AgencySignIn />} />
       <Route path="/agency-registeration" element={<AgencyRegister />} />
       <Route path="/agency-home" element={<AgencyHome />} />

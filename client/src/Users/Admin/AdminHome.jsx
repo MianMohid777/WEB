@@ -36,6 +36,8 @@ import ApplicationCard from "../../Utils/ApplicationCard";
 function AdminHome() {
   //Hooks
   const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
   const [dataState, setDataState] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const navigate = useNavigate();
@@ -88,6 +90,7 @@ function AdminHome() {
 
       if (response) {
         setItem("");
+        setRefItem("");
         console.log("Logged out");
         navigate("/admin-login", { replace: true });
       }

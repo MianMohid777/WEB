@@ -22,6 +22,12 @@ const userSchema = mongoose.Schema(
     refreshToken: {
       type: String,
     },
+    accountType: {
+      type: String,
+    },
+    displayPic: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
