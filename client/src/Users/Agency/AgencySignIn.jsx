@@ -275,7 +275,7 @@ function AgencySignIn() {
               LOGIN
             </Button>
 
-            <Box sx={{ display: "flex", color: "#848383", gap: "5px", mt: 2 }}>
+            {/* <Box sx={{ display: "flex", color: "#848383", gap: "5px", mt: 2 }}>
               <Box component="div">
                 <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
               </Box>
@@ -292,9 +292,9 @@ function AgencySignIn() {
               <Box component="div">
                 <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
               </Box>
-            </Box>
+            </Box> */}
 
-            <Box component="Box">
+            {/* <Box component="Box">
               <Box
                 component="img"
                 src={svg}
@@ -303,7 +303,7 @@ function AgencySignIn() {
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
               />
-            </Box>
+            </Box> */}
 
             <Box
               component="Box"

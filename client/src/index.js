@@ -20,6 +20,7 @@ import AdminHome from "./Users/Admin/AdminHome";
 import AgencyProfile from "./Users/Agency/AgencyProfile";
 import Analytics from "./Users/Admin/Analytics";
 import SignUp from "./Users/Tourist/SignUp";
+import ToastMessage from "./Utils/Toast-Message";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
       <Route path="/admin-dashboard" element={<AdminHome />} />
       <Route path="/admin-dashboard/analytics" element={<Analytics />} />
       <Route path="/profile" element={<AgencyProfile />} />
+      <Route path="/test" element={<ToastMessage />} />
     </Route>
   )
 );

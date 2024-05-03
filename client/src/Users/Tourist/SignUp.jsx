@@ -10,7 +10,10 @@ import {
   createTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLoginMutation } from "../../Services/Login/loginAPI";
+import {
+  useGoogleSignInMutation,
+  useLoginMutation,
+} from "../../Services/Login/loginAPI";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import React from "react";
@@ -30,6 +33,10 @@ import google2 from "../../Assets/google-hover.svg";
 function SignUp() {
   const { setItem, getItem } = useLocalStorage("access_token");
   const accessToken = getItem();
+
+  const [googleSignIn, { isLoading: googleLoading }] =
+    useGoogleSignInMutation();
+  const [gsi, setGsi] = useState(false);
 
   useEffect(() => {
     const checkLogIn = async () => {
@@ -139,6 +146,17 @@ function SignUp() {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const gsi_url = await googleSignIn().unwrap();
+
+      if (gsi_url) {
+        window.location.href = gsi_url.url;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <ThemeProvider theme={theme}>
       <Typography>
@@ -199,8 +217,8 @@ function SignUp() {
               sx={{ display: "flex", flexDirection: "column", mt: 3 }}
             >
               <Box
-              compomnent="div"
-              sx={{ display: "flex", flexDirection: "row", mt: 1}}
+                compomnent="div"
+                sx={{ display: "flex", flexDirection: "row", mt: 1 }}
               >
                 <TextField
                   id="firstName"
@@ -244,8 +262,13 @@ function SignUp() {
                 />
               </Box>
               <Box
-              compomnent="div"
-              sx={{ display: "flex", flexDirection: "row", mt: 1, justifyContent: "center" }}
+                compomnent="div"
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  mt: 1,
+                  justifyContent: "center",
+                }}
               >
                 <TextField
                   id="email"
@@ -269,8 +292,8 @@ function SignUp() {
                 />
               </Box>
               <Box
-              compomnent="div"
-              sx={{ display: "flex", flexDirection: "row", mt: 2 }}
+                compomnent="div"
+                sx={{ display: "flex", flexDirection: "row", mt: 2 }}
               >
                 <TextField
                   id="password"
@@ -288,7 +311,7 @@ function SignUp() {
                   }}
                   margin="dense"
                   color="success"
-                  sx={{width: "30ch", marginRight: "3ch" }}
+                  sx={{ width: "30ch", marginRight: "3ch" }}
                   focused
                   onChange={handlePasswordChange}
                 />
@@ -308,7 +331,7 @@ function SignUp() {
                   }}
                   margin="dense"
                   color="success"
-                  sx={{width: "30ch" }}
+                  sx={{ width: "30ch" }}
                   focused
                   onChange={handlePasswordChange}
                 />
@@ -349,7 +372,7 @@ function SignUp() {
               </Box>
             </Box>
 
-            <Box component="Box">
+            <Box component="div">
               <Box
                 component="img"
                 src={svg}
@@ -361,7 +384,7 @@ function SignUp() {
             </Box>
 
             <Box
-              component="Box"
+              component="div"
               sx={{
                 mt: 1,
                 fontSize: "14px",
@@ -379,6 +402,7 @@ function SignUp() {
                     color: "#009ee2",
                   },
                 }}
+                onClick={() => navigate("/tourist-login")}
               >
                 {" "}
                 Login Now
@@ -391,8 +415,8 @@ function SignUp() {
                 display: "flex",
                 justifyContent: "space-between",
                 width: "100%",
-                top: "50ch",
-                marginTop: "-12ch"
+
+                marginTop: "10ch",
               }}
             >
               <Box
