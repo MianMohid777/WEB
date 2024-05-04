@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 
 import {
   Box,
@@ -10,6 +11,7 @@ import {
 } from "@mui/material";
 
 import error from "../Assets/error.svg";
+import success from "../Assets/success.svg";
 function ToastMessage(props) {
   //THEME
   const theme = createTheme({
@@ -18,13 +20,15 @@ function ToastMessage(props) {
       fontSize: 14,
     },
   });
+  const [color] = useState(props.type === "Success" ? "#40C057" : "#EB5757");
+
   return (
     <ThemeProvider theme={theme}>
       <Typography>
         <Box
           component="div"
           sx={{
-            backgroundColor: "#EB5757",
+            backgroundColor: color,
             minWidth: "300px",
             maxWidth: "300px",
             color: "white",
@@ -42,14 +46,19 @@ function ToastMessage(props) {
             }}
           >
             <Box component="div" display="flex" gap="5px">
-              <Box component="img" src={error} />
+              {props.type === "Success" ? (
+                <Box component="img" src={success} />
+              ) : (
+                <Box component="img" src={error} />
+              )}
+
               <Box component="div" sx={{ fontSize: "18px" }}>
-                Error !
+                {props.type}
               </Box>
               <Box
                 component="div"
                 sx={{
-                  marginLeft: "65%",
+                  marginLeft: "62%",
                   fontSize: "18px",
                   "&:hover": {
                     cursor: "pointer",

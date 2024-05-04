@@ -30,6 +30,7 @@ import plane from "../../Assets/plane.svg";
 import google from "../../Assets/google.svg";
 import tower from "../../Assets/tower.svg";
 import google2 from "../../Assets/google-hover.svg";
+
 import ToastMessage from "../../Utils/Toast-Message";
 
 function TouristSignIn() {
@@ -49,6 +50,7 @@ function TouristSignIn() {
   const [gsi, setGsi] = useState(false);
   const [toast, setToast] = useState(false);
   const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState("");
 
   const [login, { isLoading }] = useLoginMutation();
   const [googleSignIn, { isLoading: googleLoading }] =
@@ -158,18 +160,23 @@ function TouristSignIn() {
             refresh_token: response.refreshToken,
           })
         );
-
+        setToastMsg("Successfully Logged in!");
+        setToastType("Success");
+        setToast(true);
+        handleToast();
         setItem(response.accessToken);
         setRefItem(response.refreshToken);
         navigate("/home");
       } else {
         setToastMsg(errorMesssage.INVALID_CREDENTIALS);
+        setToastType("Error!");
         setToast(true);
         handleToast();
       }
     } catch (err) {
       console.log(err);
       setToastMsg(errorMesssage.INVALID_CREDENTIALS);
+      setToastType("Error!");
       setToast(true);
       handleToast();
     }
@@ -434,7 +441,11 @@ function TouristSignIn() {
                 }}
               >
                 {toast && (
-                  <ToastMessage message={toastMsg} setToast={setToast} />
+                  <ToastMessage
+                    message={toastMsg}
+                    setToast={setToast}
+                    type={toastType}
+                  />
                 )}
               </Box>
             </Box>
