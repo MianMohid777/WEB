@@ -7,9 +7,13 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Home from "./Users/Tourist/Home";
+
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+
+import Home from "./Users/Tourist/Home";
 import TouristSignIn from "./Users/Tourist/TouristSignIn";
 import AgencySignIn from "./Users/Agency/AgencySignIn";
 import LoginAs from "./Users/Common/LoginAs";
@@ -35,7 +39,7 @@ const router = createBrowserRouter(
       <Route path="/admin-login" element={<AdminSignIn />} />
       <Route path="/admin-dashboard" element={<AdminHome />} />
       <Route path="/admin-dashboard/analytics" element={<Analytics />} />
-      <Route path="/profile" element={<AgencyProfile />} />
+      <Route path="/agency-profile" element={<AgencyProfile />} />
       <Route path="/test" element={<ToastMessage />} />
     </Route>
   )
@@ -43,6 +47,8 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <PersistGate loading={null} persistor={persistStore(store)}>
+      <RouterProvider router={router} />
+    </PersistGate>
   </Provider>
 );
