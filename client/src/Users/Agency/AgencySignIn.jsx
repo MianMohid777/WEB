@@ -43,10 +43,14 @@ function AgencySignIn() {
               email: res.email,
               id: res.id,
               name: res.name,
+              adminName: res.adminName,
+              ntn: res.ntn,
+              license: res.license,
+              address: res.address,
               access_token: accessToken,
             })
           );
-          navigate("/home");
+          navigate("/agency-home");
         }
       } catch (err) {
         console.log(err);
@@ -55,15 +59,6 @@ function AgencySignIn() {
 
     checkLogIn();
   }, []);
-
-  const [svg, setSvg] = useState(google);
-
-  const handleMouseOver = () => {
-    svg === google ? setSvg(google2) : setSvg(google);
-  };
-  const handleMouseOut = () => {
-    svg === google2 ? setSvg(google) : setSvg(google2);
-  };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -129,13 +124,17 @@ function AgencySignIn() {
             email: email,
             id: response.id,
             name: response.name,
+            adminName: response.adminName,
+            ntn: response.ntn,
+            license: response.license,
+            address: response.address,
             access_token: response.accessToken,
             refresh_token: response.refreshToken,
           })
         );
 
         setItem(response.accessToken);
-        navigate("/home");
+        navigate("/agency-home");
       }
     } catch (err) {
       console.log(err);
@@ -274,36 +273,6 @@ function AgencySignIn() {
             >
               LOGIN
             </Button>
-
-            {/* <Box sx={{ display: "flex", color: "#848383", gap: "5px", mt: 2 }}>
-              <Box component="div">
-                <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
-              </Box>
-              <Box
-                sx={{
-                  fontSize: "14px",
-                  color: "#000000",
-                  fontWeight: "normal",
-                }}
-              >
-                OR
-              </Box>
-
-              <Box component="div">
-                <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
-              </Box>
-            </Box> */}
-
-            {/* <Box component="Box">
-              <Box
-                component="img"
-                src={svg}
-                alt=""
-                sx={{ mt: 2 }}
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
-              />
-            </Box> */}
 
             <Box
               component="Box"

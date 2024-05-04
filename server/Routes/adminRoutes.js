@@ -10,6 +10,7 @@ const {
   approveApplication,
   logOut,
   deleteApplication,
+  createProfile,
 } = require("../Controller/adminController");
 
 const stayLoggedValidator = require("../Middleware/stayLoggedIn.validation");
@@ -29,8 +30,12 @@ router
 router
   .route("/current-admin/applications/:id")
   .put(validateToken, approveApplication)
-  .delete(validateToken, deleteApplication);
+  .delete(validateToken, deleteApplication)
+  .post();
 
 router.route("/current-admin/logout").post(validateToken, logOut);
+router
+  .route("/current-admin/applications/init-profile/:id")
+  .post(validateToken, createProfile);
 
 module.exports = router;

@@ -12,7 +12,11 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.companyEmail,
         id: user._id,
-        name: user.compnayName,
+        name: user.companyName,
+        adminName: user.adminName,
+        ntn: user.companyNTN,
+        license: user.license,
+        address: `${user.officeAddress}, ${user.city}, ${user.province}, Pakistan`,
         role: "agency",
       },
     },
@@ -119,7 +123,11 @@ const loginAgency = asyncHandler(async (req, res) => {
       email: req.user.email,
       id: req.user.id,
       name: req.user.name,
-      role: req.user.role,
+      adminName: req.user.adminName,
+      ntn: req.user.ntn,
+      license: req.user.license,
+      address: req.user.address,
+      role: "agency",
     });
     return;
   }
@@ -161,12 +169,18 @@ const loginAgency = asyncHandler(async (req, res) => {
         message: "Success",
         accessToken: accessToken,
         refreshToken: refToken,
+        email: agency.companyEmail,
         id: agency._id,
         name: agency.companyName,
+        adminName: agency.adminName,
+        ntn: agency.companyNTN,
+        license: agency.license,
+        address: `${agency.officeAddress}, ${agency.city}, ${agency.province}, Pakistan`,
       });
   } else {
     res.status(404);
     throw new Error("Invalid Username or Password");
   }
 });
+
 module.exports = { registerAgency, loginAgency };
