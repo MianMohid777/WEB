@@ -59,7 +59,14 @@ const CreateTour = () => {
     })
 
     console.log(tourInfo);
-    const response = await tourPublish({tourInfo}).unwrap();
+    const response = await tourPublish({tourAgencyName: agencyName,
+      tourLocationName: locationName,
+      tourLocationImage: locationImage,
+      tourstartDate: startDate,
+      tourendDate: endDate,
+      tourRegistrationEndDate: registrationEndDate,
+      tourInformation: information,
+      tourStatus: status}).unwrap();
 
     console.log("RESPONSE", response);
       

@@ -193,6 +193,7 @@ const loginAgency = asyncHandler(async (req, res) => {
 //@access public
 const publishTour = asyncHandler(async (req, res) => {
 
+  console.log("In controller, req.body is ", req.body)
   const {
     tourName,
     tourDescription,
