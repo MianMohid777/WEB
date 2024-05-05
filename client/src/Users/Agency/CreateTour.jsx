@@ -21,10 +21,9 @@ const CreateTour = () => {
   const [information, setInformation] = useState("");
   const [status, setStatus] = useState("");
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Logic to handle form submission, e.g., send data to backend API
+      
   };
 
   // Function to handle image upload

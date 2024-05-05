@@ -1,7 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const agencyReg = require("../Models/agency-RegModel");
+const tour = require("../Models/tourModel")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 
 const generateAccess_and_Refresh_Token = async (userId) => {
   const user = await agencyReg.findById({ _id: userId });
