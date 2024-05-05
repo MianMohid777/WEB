@@ -11,7 +11,10 @@ import {
   createTheme,
 } from "@mui/material";
 
-import { useAdminLoginMutation } from "../../Services/Login/loginAPI";
+import {
+  useAdminLoginMutation,
+  useAdminRefreshTokenMutation,
+} from "../../Services/Login/loginAPI";
 import Loader from "../../Utils/Loader";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
@@ -24,7 +27,10 @@ import tower from "../../Assets/tower copy 2.svg";
 
 function AdminSignIn() {
   const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
   const accessToken = getItem();
+  const refreshToken = getRefItem();
 
   useEffect(() => {
     const checkLogIn = async () => {
@@ -35,6 +41,22 @@ function AdminSignIn() {
         if (res) navigate("/admin-dashboard");
       } catch (err) {
         console.log(err);
+        console.log("Going for Token Refresh");
+
+        try {
+          const response = await adminRefreshToken({
+            refreshToken: refreshToken,
+          }).unwrap();
+
+          console.log(response);
+          if (response) {
+            setItem(response.accessToken);
+            setRefItem(response.refreshToken);
+            navigate("/admin-dashboard");
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
     };
 
@@ -49,6 +71,8 @@ function AdminSignIn() {
   });
 
   const [adminLogin, { isLoading }] = useAdminLoginMutation();
+  const [adminRefreshToken, { isLoading: refLoading }] =
+    useAdminRefreshTokenMutation();
 
   const navigate = useNavigate();
 
@@ -65,7 +89,7 @@ function AdminSignIn() {
     },
   });
 
-  if (isLoading) return <Loader />;
+  if (isLoading || refLoading) return <Loader />;
 
   const handleSubmit = async () => {
     if (!email.includes("@") || email.length === 0) {
@@ -99,6 +123,7 @@ function AdminSignIn() {
         }).unwrap();
 
         setItem(response.accessToken);
+        setRefItem(response.refreshToken);
         navigate("/admin-dashboard");
       }
     } catch (err) {

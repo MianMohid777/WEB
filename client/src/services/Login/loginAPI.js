@@ -7,6 +7,7 @@ const loginAPI = api.injectEndpoints({
         query: ({ emailAddress, password, accessToken }) => ({
           url: "tourists/login",
           method: "POST",
+          // credentials: "include",
           body: { emailAddress, password },
           headers: {
             "Content-Type": "application/json",
@@ -25,6 +26,7 @@ const agencyLoginApi = api.injectEndpoints({
         query: ({ companyEmail, password, accessToken }) => ({
           url: "agencies/login",
           method: "POST",
+          // credentials: "include",
           body: { companyEmail, password },
           headers: {
             "Content-Type": "application/json",
@@ -43,6 +45,7 @@ const adminLoginApi = api.injectEndpoints({
         query: ({ email, password, accessToken }) => ({
           url: "admin/login",
           method: "POST",
+          // credentials: "include",
           body: { email, password },
           headers: {
             "Content-Type": "application/json",
@@ -54,6 +57,43 @@ const adminLoginApi = api.injectEndpoints({
   },
 });
 
+const adminRefreshTokenApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      adminRefreshToken: builder.mutation({
+        query: ({ refreshToken }) => ({
+          url: "admin/refresh-token",
+          method: "POST",
+          // credentials: "include",
+          body: { refreshToken },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      }),
+    };
+  },
+});
+
+const googleSignInApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      googleSignIn: builder.mutation({
+        query: () => ({
+          url: "request",
+          method: "POST",
+          // credentials: "include",
+          body: {},
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      }),
+    };
+  },
+});
 export const { useLoginMutation } = loginAPI;
 export const { useAgencyLoginMutation } = agencyLoginApi;
 export const { useAdminLoginMutation } = adminLoginApi;
+export const { useAdminRefreshTokenMutation } = adminRefreshTokenApi;
+export const { useGoogleSignInMutation } = googleSignInApi;

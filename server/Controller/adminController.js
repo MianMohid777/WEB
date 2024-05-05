@@ -1,9 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const admin = require("../Models/admin-model");
 const agencyReg = require("../Models/agency-RegModel");
-const bcrypt = require("bcrypt");
+const agency = require("../Models/agencyModel");
 const jwt = require("jsonwebtoken");
-const { response } = require("express");
 
 // ACCESS TOKEN GENERATOR
 const generateAccess_and_Refresh_Token = async (userId) => {
@@ -15,6 +14,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.email,
         id: user._id,
+        role: "admin",
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
@@ -45,11 +45,12 @@ const generateAccess_and_Refresh_Token = async (userId) => {
 //@access public
 
 const loginAdmin = asyncHandler(async (req, res) => {
-  if (req.user) {
+  if (req.user && req.user.role === "admin") {
     res.status(200).json({
       message: "Already Logged In Before",
       email: req.user.email,
       id: req.user.id,
+      role: req.user.role,
     });
     return;
   }
@@ -95,13 +96,14 @@ const loginAdmin = asyncHandler(async (req, res) => {
 //@desc Current Admin
 //@route /admin/current-admin
 //@access private
-
 const currentAdmin = asyncHandler(async (req, res) => {
-  if (req.user) {
+  if (req.user && req.user.role === "admin") {
     res
       .status(200)
       .json({ message: "Admin Logged In", status: res.statusCode });
+    return;
   }
+  res.status(401).json({ message: "Unauthorized Access" });
 });
 
 //@desc Get All Non Active Applicants
@@ -178,12 +180,93 @@ const deleteApplication = asyncHandler(async (req, res) => {
 //@access private
 
 const logOut = asyncHandler(async (req, res) => {
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
   if (req.user) req.user = {};
   res
     .status(200)
-    .clearCookie("access_token")
-    .clearCookie("refresh_token")
+    .clearCookie("access_token", options)
+    .clearCookie("refresh_token", options)
     .json({ message: "Logged Out" });
+});
+
+//@desc Create Initial Profile for Approved Agency
+//@route Post /api/admin/applications/init-profile:id
+//@access private
+const createProfile = asyncHandler(async (req, res) => {
+  const { companyName, description } = req.body;
+
+  if (!companyName || !description) {
+    res.status(400);
+    throw new Error("All Fields are Mandatory");
+  }
+
+  const exAgency = await agencyReg.findOne({ _id: req.params.id });
+
+  if (!exAgency) {
+    res.status(400);
+    throw new Error("Agency Not Found");
+  }
+  const company = await agency.findOne({ agencyId: req.params.id });
+
+  if (company) {
+    res.status(400);
+    throw new Error("Profile Already Created");
+  }
+
+  const profile = await agency.create({
+    name: companyName,
+    description,
+    agencyId: req.params.id,
+  });
+
+  res.status(201).json({
+    message: "Profile Created Successfully",
+    profile,
+  });
+});
+
+//@desc Refresh Access Token Using Refresh Token
+//@route Post /api/admin/refresh-token
+//@access private
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  try {
+    const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
+    const user = await admin.findById(req?.user.id);
+
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid Refresh Token");
+    }
+    if (inRefreshToken !== user?.refreshToken) {
+      res.status(401);
+      throw new Error("Refresh Token Expired or Used");
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
+      user._id
+    );
+
+    res
+      .status(200)
+      .cookie("access_token", accessToken, options)
+      .cookie("refresh_token", refToken, options)
+      .json({
+        message: "Access Token Refreshed",
+        accessToken,
+        refreshToken: refToken,
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ message: err.message });
+  }
 });
 module.exports = {
   loginAdmin,
@@ -192,4 +275,6 @@ module.exports = {
   approveApplication,
   logOut,
   deleteApplication,
+  refreshAccessToken,
+  createProfile,
 };

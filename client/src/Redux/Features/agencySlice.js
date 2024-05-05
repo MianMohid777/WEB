@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   authAgency: {},
+  profile: {},
 };
 
 export const agencySlice = createSlice({
@@ -9,10 +10,19 @@ export const agencySlice = createSlice({
   initialState,
   reducers: {
     addAuthAgency: (state, action) => {
-      state.authAgency = action.payload;
+      return {
+        ...state,
+        authAgency: action.payload,
+      };
+    },
+    addProfile: (state, action) => {
+      return {
+        ...state,
+        profile: action.payload,
+      };
     },
   },
 });
 
-export const { addAuthAgency } = agencySlice.actions;
+export const { addAuthAgency, addProfile } = agencySlice.actions;
 export default agencySlice.reducer;

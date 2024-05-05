@@ -7,9 +7,13 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Home from "./Users/Tourist/Home";
+
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+
+import Home from "./Users/Tourist/Home";
 import TouristSignIn from "./Users/Tourist/TouristSignIn";
 import AgencySignIn from "./Users/Agency/AgencySignIn";
 import LoginAs from "./Users/Common/LoginAs";
@@ -20,6 +24,8 @@ import AdminHome from "./Users/Admin/AdminHome";
 import AgencyProfile from "./Users/Agency/AgencyProfile";
 import CreateTour from "./Users/Agency/CreateTour";
 import Analytics from "./Users/Admin/Analytics";
+import SignUp from "./Users/Tourist/SignUp";
+import ToastMessage from "./Utils/Toast-Message";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,8 +33,10 @@ const router = createBrowserRouter(
 
       {/* Tourist Routes */}
       <Route path="/" element={<LoginAs />} />
-      <Route path="/tourist-login" element={<TouristSignIn />} />   
       <Route path="/home" element={<Home />} />
+      <Route path="/tourist-login" element={<TouristSignIn />} />   
+      <Route path="/tourist-signup" element={<SignUp />} />
+
 
       {/* Admin Routes */}
       <Route path="/admin-login" element={<AdminSignIn />} />
@@ -41,13 +49,16 @@ const router = createBrowserRouter(
       <Route path="/agency-registeration" element={<AgencyRegister />} />
       <Route path="/agencyid/profile" element={<AgencyProfile />} />
       <Route path="/agencyid/create-tour" element={<CreateTour />} />
-
+      <Route path="/test" element={<ToastMessage />} />
+      <Route path="/agency-profile" element={<AgencyProfile />} />
     </Route>
   )
 );
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <PersistGate loading={null} persistor={persistStore(store)}>
+      <RouterProvider router={router} />
+    </PersistGate>
   </Provider>
 );

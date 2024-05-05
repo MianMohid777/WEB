@@ -36,6 +36,8 @@ import ApplicationCard from "../../Utils/ApplicationCard";
 function AdminHome() {
   //Hooks
   const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
   const [dataState, setDataState] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const navigate = useNavigate();
@@ -88,6 +90,7 @@ function AdminHome() {
 
       if (response) {
         setItem("");
+        setRefItem("");
         console.log("Logged out");
         navigate("/admin-login", { replace: true });
       }
@@ -199,41 +202,47 @@ function AdminHome() {
               minHeight: "100vh",
             }}
           >
-            <Box sx={{ fontWeight: "bolder", fontSize: "50px" }}>
-              Agency Applications
-            </Box>
+            {isLoading || isAdminLoading || logoutLoading ? (
+              <Loader />
+            ) : (
+              <>
+                <Box sx={{ fontWeight: "bolder", fontSize: "50px" }}>
+                  Agency Applications
+                </Box>
 
-            <Box component="div" sx={{ marginTop: "30px" }}>
-              {data && Array.isArray(data) ? (
-                data?.map((agency) => {
-                  return (
-                    <ApplicationCard
-                      key={agency._id}
-                      companyName={agency.companyName}
-                      adminName={agency.adminName}
-                      email={agency.companyEmail}
-                      phone={agency.contactNo}
-                      cnic={agency.adminCNIC}
-                      license={agency.license}
-                      ntn={agency.companyNTN}
-                      address={agency.officeAddress}
-                      city={agency.city}
-                      province={agency.province}
-                      id={agency._id}
-                      setState={setDataState}
+                <Box component="div" sx={{ marginTop: "30px" }}>
+                  {data && Array.isArray(data) ? (
+                    data?.map((agency) => {
+                      return (
+                        <ApplicationCard
+                          key={agency._id}
+                          companyName={agency.companyName}
+                          adminName={agency.adminName}
+                          email={agency.companyEmail}
+                          phone={agency.contactNo}
+                          cnic={agency.adminCNIC}
+                          license={agency.license}
+                          ntn={agency.companyNTN}
+                          address={agency.officeAddress}
+                          city={agency.city}
+                          province={agency.province}
+                          id={agency._id}
+                          setState={setDataState}
+                        />
+                      );
+                    })
+                  ) : (
+                    <Box
+                      component="img"
+                      src={error}
+                      sx={{
+                        marginTop: "50%",
+                      }}
                     />
-                  );
-                })
-              ) : (
-                <Box
-                  component="img"
-                  src={error}
-                  sx={{
-                    marginTop: "50%",
-                  }}
-                />
-              )}
-            </Box>
+                  )}
+                </Box>
+              </>
+            )}
           </Grid>
         </Grid>
       </Typography>
