@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ThemeProvider, createTheme } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import AgencyHeader from './AgencyHeader.jsx';
@@ -12,7 +12,10 @@ const theme = createTheme({
 });
 
 const CreateTour = () => {
+  console.log("Opened creat Tour page")
+
   // State variables to store form data
+  const [agencyName, setAgencyName] = useState("")
   const [locationName, setLocationName] = useState("");
   const [locationImage, setLocationImage] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -21,8 +24,38 @@ const CreateTour = () => {
   const [information, setInformation] = useState("");
   const [status, setStatus] = useState("");
 
+  const [tourInfo, setTourInfo] = useState({
+    tourAgencyName: "",
+    tourLocationName: "",
+    tourLocationImage: "",
+    tourstartDate: "",
+    tourendDate: "",
+    tourRegistrationEndDate: "",
+    tourInformation: "",
+    tourStatus: "Upcoming"
+
+  })
+
+
+  useEffect(() => {
+    console.log("Tour info", tourInfo);
+  }, [tourInfo]);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setTourInfo({
+      tourAgencyName: agencyName,
+      tourLocationName: locationName,
+      tourLocationImage: locationImage,
+      tourstartDate: startDate,
+      tourendDate: endDate,
+      tourRegistrationEndDate: registrationEndDate,
+      tourInformation: information,
+      tourStatus: status
+    });
+
+    console.log(tourInfo);
       
   };
 
@@ -84,7 +117,7 @@ const CreateTour = () => {
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   fullWidth
-                  required
+                  required                 
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -138,7 +171,7 @@ const CreateTour = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" onClick={handleSubmit} variant="contained" color="primary">
                   Create Tour
                 </Button>
               </Grid>

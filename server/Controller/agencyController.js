@@ -185,4 +185,18 @@ const loginAgency = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerAgency, loginAgency };
+
+
+
+//@desc Create and publish a tour
+//@route 
+//@access Agency
+const publishTour = asyncHandler(async (req, res) => {
+
+});
+
+
+
+
+
+module.exports = { registerAgency, loginAgency, publishTour};
