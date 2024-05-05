@@ -100,7 +100,7 @@ function AdminHome() {
   };
 
   //LOADER LOGIC
-  if (isLoading || isAdminLoading || logoutLoading) return <Loader />;
+  // if (isLoading || isAdminLoading || logoutLoading) return <Loader />;
 
   return (
     <ThemeProvider theme={theme}>

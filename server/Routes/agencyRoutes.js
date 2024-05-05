@@ -17,7 +17,7 @@ router.route("/register").post(registerAgency);
 
 // Protected Routes //
 
-//router.route("/refresh-token").post(refreshAccessToken);
+router.route("/refresh-token").post(refreshAccessToken);
 //router.route("/current-agency").get(validateToken, currentAgency);
 
 module.exports = router;

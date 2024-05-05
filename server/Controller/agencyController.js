@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const agencyReg = require("../Models/agency-RegModel");
+const agency = require("../Models/agencyModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -183,4 +184,44 @@ const loginAgency = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerAgency, loginAgency };
+//@desc Refresh Access Token Using Refresh Token
+//@route Post /api/admin/refresh-token
+//@access private
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  try {
+    const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
+    const user = await agencyReg.findById(req?.user.id);
+
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid Refresh Token");
+    }
+    if (inRefreshToken !== user?.refreshToken) {
+      res.status(401);
+      throw new Error("Refresh Token Expired or Used");
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
+      user._id
+    );
+
+    res
+      .status(200)
+      .cookie("access_token", accessToken, options)
+      .cookie("refresh_token", refToken, options)
+      .json({
+        message: "Access Token Refreshed",
+        accessToken,
+        refreshToken: refToken,
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ message: err.message });
+  }
+});
+module.exports = { registerAgency, loginAgency, refreshAccessToken };

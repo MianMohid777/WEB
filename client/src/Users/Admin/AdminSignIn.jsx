@@ -35,27 +35,32 @@ function AdminSignIn() {
   useEffect(() => {
     const checkLogIn = async () => {
       try {
-        const res = await adminLogin({ accessToken: accessToken }).unwrap();
-        console.log(res);
+        if (accessToken) {
+          const res = await adminLogin({ accessToken: accessToken }).unwrap();
+          console.log(res);
 
-        if (res) navigate("/admin-dashboard");
+          if (res) navigate("/admin-dashboard");
+        }
       } catch (err) {
         console.log(err);
-        console.log("Going for Token Refresh");
 
-        try {
-          const response = await adminRefreshToken({
-            refreshToken: refreshToken,
-          }).unwrap();
+        if (err.status === 401) {
+          console.log("Going for Token Refresh");
 
-          console.log(response);
-          if (response) {
-            setItem(response.accessToken);
-            setRefItem(response.refreshToken);
-            navigate("/admin-dashboard");
+          try {
+            const response = await adminRefreshToken({
+              refreshToken: refreshToken,
+            }).unwrap();
+
+            console.log(response);
+            if (response) {
+              setItem(response.accessToken);
+              setRefItem(response.refreshToken);
+              navigate("/admin-dashboard");
+            }
+          } catch (err) {
+            console.log(err);
           }
-        } catch (err) {
-          console.log(err);
         }
       }
     };
@@ -116,7 +121,12 @@ function AdminSignIn() {
       }));
     }
     try {
-      if (!error.emailError && !error.passwordError) {
+      if (
+        !error.emailError &&
+        !error.passwordError &&
+        email.length > 0 &&
+        password.length > 0
+      ) {
         const response = await adminLogin({
           email: email,
           password: password,

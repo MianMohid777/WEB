@@ -7,7 +7,6 @@ import calender from "../../Assets/calender.svg";
 import antChart from "../../Assets/ant-design_bar-chart-outlined.svg";
 import carbonMap from "../../Assets/carbon_map.svg";
 import gridIcons from "../../Assets/gridicons_history.svg";
-import worldMap from "../../Assets/world_map_PNG28 2.svg";
 import elipse from "../../Assets/Ellipse 13.svg";
 import arrow from "../../Assets/ic_round-navigate-next.svg";
 import rectangle25 from "../../Assets/Rectangle 25.jpg";

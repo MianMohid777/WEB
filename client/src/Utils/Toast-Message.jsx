@@ -1,14 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-import {
-  Box,
-  Button,
-  Divider,
-  ThemeProvider,
-  Typography,
-  createTheme,
-} from "@mui/material";
+import { Box, ThemeProvider, Typography, createTheme } from "@mui/material";
 
 import error from "../Assets/error.svg";
 import success from "../Assets/success.svg";
