@@ -22,6 +22,7 @@ import AgencyHome from "./Users/Agency/AgencyHome";
 import AdminSignIn from "./Users/Admin/AdminSignIn";
 import AdminHome from "./Users/Admin/AdminHome";
 import AgencyProfile from "./Users/Agency/AgencyProfile";
+import CreateTour from "./Users/Agency/CreateTour";
 import Analytics from "./Users/Admin/Analytics";
 import SignUp from "./Users/Tourist/SignUp";
 import ToastMessage from "./Utils/Toast-Message";
@@ -29,18 +30,27 @@ import ToastMessage from "./Utils/Toast-Message";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
+
+      {/* Tourist Routes */}
       <Route path="/" element={<LoginAs />} />
-      <Route path="/tourist-login" element={<TouristSignIn />} />
-      <Route path="/tourist-signup" element={<SignUp />} />
-      <Route path="/agency-login" element={<AgencySignIn />} />
-      <Route path="/agency-registeration" element={<AgencyRegister />} />
-      <Route path="/agency-home" element={<AgencyHome />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/tourist-login" element={<TouristSignIn />} />   
+      <Route path="/tourist-signup" element={<SignUp />} />
+
+
+      {/* Admin Routes */}
       <Route path="/admin-login" element={<AdminSignIn />} />
       <Route path="/admin-dashboard" element={<AdminHome />} />
       <Route path="/admin-dashboard/analytics" element={<Analytics />} />
-      <Route path="/agency-profile" element={<AgencyProfile />} />
+
+      {/* Agency Routes */}
+      <Route path="/agency-home" element={<AgencyHome />} />
+      <Route path="/agency-login" element={<AgencySignIn />} />
+      <Route path="/agency-registeration" element={<AgencyRegister />} />
+      <Route path="/agencyid/profile" element={<AgencyProfile />} />
+      <Route path="/agencyid/create-tour" element={<CreateTour />} />
       <Route path="/test" element={<ToastMessage />} />
+      <Route path="/agency-profile" element={<AgencyProfile />} />
     </Route>
   )
 );
