@@ -189,8 +189,8 @@ const loginAgency = asyncHandler(async (req, res) => {
 
 
 //@desc Create and publish a tour
-//@route 
-//@access Agency
+//@route POST /api/tours/publish
+//@access public
 const publishTour = asyncHandler(async (req, res) => {
 
   const {
