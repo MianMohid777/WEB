@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ThemeProvider, createTheme } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import AgencyHeader from './AgencyHeader.jsx';
+import Loader from "../../Utils/Loader";
+import { useTourPublishMutation } from "../../Services/Agency/publishTour.js";
 
 
 // Create the custom theme
@@ -12,7 +14,7 @@ const theme = createTheme({
 });
 
 const CreateTour = () => {
-  console.log("Opened creat Tour page")
+  console.log("Opened create Tour page")
 
   // State variables to store form data
   const [agencyName, setAgencyName] = useState("")
@@ -23,6 +25,8 @@ const CreateTour = () => {
   const [registrationEndDate, setRegistrationEndDate] = useState("");
   const [information, setInformation] = useState("");
   const [status, setStatus] = useState("");
+
+  const [tourPublish, { isLoading }] = useTourPublishMutation();
 
   const [tourInfo, setTourInfo] = useState({
     tourAgencyName: "",
@@ -37,10 +41,9 @@ const CreateTour = () => {
   })
 
 
-  useEffect(() => {
-    console.log("Tour info", tourInfo);
-  }, [tourInfo]);
 
+
+  if (isLoading) return <Loader />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,9 +56,12 @@ const CreateTour = () => {
       tourRegistrationEndDate: registrationEndDate,
       tourInformation: information,
       tourStatus: status
-    });
+    })
 
     console.log(tourInfo);
+    const response = await tourPublish({tourInfo}).unwrap();
+
+    console.log("RESPONSE", response);
       
   };
 

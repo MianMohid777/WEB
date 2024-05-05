@@ -193,6 +193,38 @@ const loginAgency = asyncHandler(async (req, res) => {
 //@access Agency
 const publishTour = asyncHandler(async (req, res) => {
 
+  const {
+    tourName,
+    tourDescription,
+    tourLocation,
+    tourStartDate,
+    tourEndDate,
+
+  } = req.body;
+
+
+  if (!tourName || !tourDescription || !tourLocation || !tourStartDate || !tourEndDate) {
+    res.status(400);
+    throw new Error("All tour details are mandatory");
+  }
+
+  // Create the tour in the database
+  const newTour = await tour.create({
+
+    name: tourName,
+    description: tourDescription,
+    location: tourLocation,
+    startDate: tourStartDate,
+    endDate: tourEndDate,
+
+  });
+  console.log(newTour)
+
+
+  res.status(200).json({
+    message: "Tour created and published successfully",
+    tour: newTour,
+  });
 });
 
 
