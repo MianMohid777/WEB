@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ThemeProvider, createTheme } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Grid,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
-import AgencyHeader from './AgencyHeader.jsx';
-
+import AgencyHeader from "./AgencyHeader.jsx";
 
 // Create the custom theme
 const theme = createTheme({
@@ -23,7 +34,6 @@ const CreateTour = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      
   };
 
   // Function to handle image upload
@@ -42,9 +52,17 @@ const CreateTour = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <>
+      <Typography>
         <AgencyHeader />
-        <Box maxWidth={800} mx="auto" mt={4} p={3} boxShadow={3} borderRadius={8} bgcolor="white">
+        <Box
+          maxWidth={800}
+          mx="auto"
+          mt={4}
+          p={3}
+          boxShadow={3}
+          borderRadius={8}
+          bgcolor="white"
+        >
           <Typography variant="h4" gutterBottom>
             Create Tour
           </Typography>
@@ -119,7 +137,10 @@ const CreateTour = () => {
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
                   <InputLabel>Status</InputLabel>
-                  <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+                  <Select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
                     <MenuItem value="Upcoming">Upcoming</MenuItem>
                     <MenuItem value="Ended">Ended</MenuItem>
                     <MenuItem value="Cancelled">Cancelled</MenuItem>
@@ -145,7 +166,7 @@ const CreateTour = () => {
             </Grid>
           </form>
         </Box>
-      </>
+      </Typography>
     </ThemeProvider>
   );
 };
