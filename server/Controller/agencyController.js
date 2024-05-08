@@ -186,7 +186,7 @@ const loginAgency = asyncHandler(async (req, res) => {
 });
 
 //@desc Refresh Access Token Using Refresh Token
-//@route Post /api/admin/refresh-token
+//@route Post /api/agencies/refresh-token
 //@access private
 const refreshAccessToken = asyncHandler(async (req, res) => {
   try {
@@ -225,4 +225,59 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     res.status(401).json({ message: err.message });
   }
 });
-module.exports = { registerAgency, loginAgency, refreshAccessToken };
+
+//@desc Get Currently Logged In User
+//@route Post /api/agencies/current-agency
+//@access private
+const getCurrentAgency = asyncHandler(async (req, res) => {
+  if (req.user && req.user.role === "agency") {
+    res
+      .status(200)
+      .json({ message: "Agency Logged In", status: res.statusCode });
+    return;
+  }
+  res.status(401).json({ message: "Unauthorized Access" });
+});
+
+//@desc Get All Active Ads
+//@route Post /api/agencies/current-agency/tours:id
+//@access private
+
+const getAllTours = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    console.log(userId.toString());
+    if (userId !== req.user.id) {
+      res.status(401);
+      throw new Error("Unauthorized Access");
+    }
+
+    const agency = await agencyReg.findById({ _id: userId });
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    const tours = await tour.findById({ agencyId: userId });
+
+    console.log(tours);
+
+    res.status(200).json({
+      message: "Success",
+      tours,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+
+module.exports = {
+  registerAgency,
+  loginAgency,
+  refreshAccessToken,
+  getCurrentAgency,
+  getAllTours,
+};

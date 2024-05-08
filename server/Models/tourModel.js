@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 
 const tourSchema = mongoose.Schema(
   {
+    agencyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "agencyReg",
+    },
     agencyName: {
       type: String,
-      required: [true, "Provide Company Name"]
+      required: [true, "Provide Company Name"],
     },
     locationName: {
       type: String,
@@ -32,12 +36,15 @@ const tourSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Upcoming', 'Ended', 'Cancelled'],
+      enum: ["Upcoming", "Ended", "Cancelled"],
       required: [true, "Provide Status"],
+    },
+    price: {
+      type: String,
+      required: [true, "Provide Price"],
     },
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model("Tour", tourSchema);
-
