@@ -6,15 +6,15 @@ const tourSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "agencyReg",
     },
-    agencyName: {
+    tourAgencyName: {
       type: String,
       required: [true, "Provide Company Name"],
     },
-    locationName: {
+    tourLocationName: {
       type: String,
       required: [true, "Provide Location Name"],
     },
-    locationImage: {
+    tourLocationImage: {
       type: String,
       required: [true, "Provide Location Image URL"],
     },
@@ -34,17 +34,17 @@ const tourSchema = mongoose.Schema(
       default: "2024-06-30T23:59:59.999Z", // Using ISO 8601 string
       required: [true, "Provide Registration End Date"],
     },
-    information: {
+    tourInformation: {
       type: String,
       required: [true, "Provide Information"],
     },
-    status: {
+    tourStatus: {
       type: String,
       enum: ['Upcoming', 'RegistrationsOpened'],
 
       required: [true, "Provide Status"],
     },
-    price: {
+    tourPrice: {
       type: String,
       required: [true, "Provide Price"],
     },

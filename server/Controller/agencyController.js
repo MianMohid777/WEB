@@ -279,21 +279,21 @@ const publishTour = asyncHandler(async (req, res) => {
   const agencyId = req.params.id;
   console.log(agencyId);
   const {
-    agencyName,
+    tourAgencyName,
     tourStartDate,
     tourEndDate,
-    locationName,
-    locationImage,
-    registrationEndDate,
-    information,
-    status,
-    price,
+    tourLocationName,
+    tourLocationImage,
+    tourRegistrationEndDate,
+    tourInformation,
+    tourStatus,
+    tourPrice,
 
   } = req.body;
 
+  
+
   console.log("REQ BODY", req.body);
-
-
   if (!tourStartDate) {
     console.log("REQ.BODY.STARTDATE: ", tourStartDate);
     res.status(400);
@@ -305,55 +305,55 @@ const publishTour = asyncHandler(async (req, res) => {
     throw new Error("Tour end date is mandatory");
   }
 
-  if (!agencyName) {
+  if (!tourAgencyName) {
     res.status(400);
     throw new Error("Tour agency name is mandatory");
   }
 
-  if (!locationName) {
+  if (!tourLocationName) {
     res.status(400);
     throw new Error("Tour location name is mandatory");
   }
 
-  if (!locationImage) {
+  if (!tourLocationImage) {
     res.status(400);
     throw new Error("Tour location image is mandatory");
   }
 
-  if (!registrationEndDate) {
+  if (!tourRegistrationEndDate) {
     res.status(400);
     throw new Error("Tour registration end date is mandatory");
   }
 
-  if (!information) {
+  if (!tourInformation) {
     res.status(400);
     throw new Error("Tour information is mandatory");
   }
 
-  if (!status) {
+  if (!tourStatus) {
     res.status(400);
     throw new Error("Tour status is mandatory");
   }
 
-  if (!price) {
+  if (!tourPrice) {
     res.status(400);
     throw new Error("Tour Price is mandatory");
   }
 
-
+  
 
   // Create the tour in the database
   const newTour = await tour.create({
     agencyId,
-    agencyName,
+    tourAgencyName,
     tourStartDate,
     tourEndDate,
-    locationName,
-    locationImage,
-    registrationEndDate,
-    information,
-    status,
-    price,
+    tourLocationName,
+    tourLocationImage,
+    tourRegistrationEndDate,
+    tourInformation,
+    tourStatus,
+    tourPrice,
   });
 
 
