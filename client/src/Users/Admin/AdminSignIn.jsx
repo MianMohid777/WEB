@@ -14,7 +14,7 @@ import {
 import {
   useAdminLoginMutation,
   useAdminRefreshTokenMutation,
-} from "../../services/Login/loginAPI";
+} from "../../Services/Login/loginAPI";
 import Loader from "../../Utils/Loader";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
