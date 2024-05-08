@@ -17,24 +17,24 @@ const CreateTour = () => {
   console.log("Opened create Tour page")
 
   // State variables to store form data
-  const [agencyName, setAgencyName] = useState("")
+  const [agencyName, setAgencyName] = useState("Amazing Adventure")
   const [locationName, setLocationName] = useState("");
-  const [locationImage, setLocationImage] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [registrationEndDate, setRegistrationEndDate] = useState("");
+  const [locationImage, setLocationImage] = useState("image");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [registrationEndDate, setRegistrationEndDate] = useState(new Date());
   const [information, setInformation] = useState("");
   const [status, setStatus] = useState("");
 
   const [tourPublish, { isLoading }] = useTourPublishMutation();
 
   const [tourInfo, setTourInfo] = useState({
-    tourAgencyName: "",
+    tourAgencyName: "Amazing Adventure",
     tourLocationName: "",
-    tourLocationImage: "",
-    tourstartDate: "",
-    tourendDate: "",
-    tourRegistrationEndDate: "",
+    tourLocationImage: "image",
+    tourStartDate: new Date().toLocaleDateString(),
+    tourEndDate: new Date().toLocaleDateString(),
+    tourRegistrationEndDate: new Date().toLocaleDateString(),
     tourInformation: "",
     tourStatus: "Upcoming"
 
@@ -47,29 +47,32 @@ const CreateTour = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setTourInfo({
-      tourAgencyName: agencyName,
+    // // Format the dates before setting them in the state
+    // const formattedStartDate = startDate ? new Date(startDate).toISOString().split('T')[0] : '';
+    // const formattedEndDate = endDate ? new Date(endDate).toISOString().split('T')[0] : '';
+    // const formattedRegistrationEndDate = registrationEndDate ? new Date(registrationEndDate).toISOString().split('T')[0] : '';
+    
+    setAgencyName("Amazing Adventures")
+    const newTourInfo = {
+      tourAgencyName: "Amazing Adventures",
+  
       tourLocationName: locationName,
       tourLocationImage: locationImage,
-      tourstartDate: startDate,
-      tourendDate: endDate,
+      tourStartDate:  startDate,
+      tourEndDate: endDate,
       tourRegistrationEndDate: registrationEndDate,
       tourInformation: information,
       tourStatus: status
-    })
+    };
 
-    console.log(tourInfo);
-    const response = await tourPublish({tourAgencyName: agencyName,
-      tourLocationName: locationName,
-      tourLocationImage: locationImage,
-      tourstartDate: startDate,
-      tourendDate: endDate,
-      tourRegistrationEndDate: registrationEndDate,
-      tourInformation: information,
-      tourStatus: status}).unwrap();
+    console.log("TOUR INFO", newTourInfo);
+    setTourInfo(tourInfo)
+
+    
+    const response = await tourPublish(newTourInfo).unwrap();
 
     console.log("RESPONSE", response);
-      
+
   };
 
   // Function to handle image upload
@@ -130,7 +133,7 @@ const CreateTour = () => {
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   fullWidth
-                  required                 
+                  required
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -167,8 +170,7 @@ const CreateTour = () => {
                   <InputLabel>Status</InputLabel>
                   <Select value={status} onChange={(e) => setStatus(e.target.value)}>
                     <MenuItem value="Upcoming">Upcoming</MenuItem>
-                    <MenuItem value="Ended">Ended</MenuItem>
-                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+                    <MenuItem value="RegistrationsOpened">Registrations Open</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>

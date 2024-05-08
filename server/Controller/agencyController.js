@@ -188,45 +188,85 @@ const loginAgency = asyncHandler(async (req, res) => {
 
 
 
-//@desc Create and publish a tour
-//@route POST /api/tours/publish
-//@access public
 const publishTour = asyncHandler(async (req, res) => {
-
-  console.log("In controller, req.body is ", req.body)
   const {
-    tourName,
-    tourDescription,
-    tourLocation,
+
     tourStartDate,
     tourEndDate,
-
+    tourAgencyName, 
+    tourLocationName, 
+    tourLocationImage,
+    tourRegistrationEndDate,
+    tourInformation, 
+    tourStatus 
   } = req.body;
 
+  console.log("REQ BODY", req.body);
 
-  if (!tourName || !tourDescription || !tourLocation || !tourStartDate || !tourEndDate) {
+
+  
+  if (!req.body.tourStartDate) {
+    console.log(req.body.tourStartDate)
     res.status(400);
-    throw new Error("All tour details are mandatory");
+    throw new Error("Tour start date is mandatory");
   }
+  
+  if (!req.body.tourEndDate) {
+    res.status(400);
+    throw new Error("Tour end date is mandatory");
+  }
+  
+  if (!req.body.tourAgencyName) {
+    res.status(400);
+    throw new Error("Tour agency name is mandatory");
+  }
+  
+  if (!req.body.tourLocationName) {
+    res.status(400);
+    throw new Error("Tour location name is mandatory");
+  }
+  
+  if (!req.body.tourLocationImage) {
+    res.status(400);
+    throw new Error("Tour location image is mandatory");
+  }
+  
+  if (!req.body.tourRegistrationEndDate) {
+    res.status(400);
+    throw new Error("Tour registration end date is mandatory");
+  }
+  
+  if (!req.body.tourInformation) {
+    res.status(400);
+    throw new Error("Tour information is mandatory");
+  }
+  
+  if (!req.body.tourStatus) {
+    res.status(400);
+    throw new Error("Tour status is mandatory");
+  }
+  
 
   // Create the tour in the database
   const newTour = await tour.create({
-
-    name: tourName,
-    description: tourDescription,
-    location: tourLocation,
-    startDate: tourStartDate,
-    endDate: tourEndDate,
-
+    startDate: new Date(tourStartDate),
+    endDate: new Date(tourEndDate),
+    agencyName: tourAgencyName,
+    locationName: tourLocationName,
+    locationImage: tourLocationImage,
+    registrationEndDate: new Date(tourRegistrationEndDate),
+    information: tourInformation,
+    status: tourStatus
   });
-  console.log(newTour)
-
+  
+  console.log("DB NEW TOUR", newTour);
 
   res.status(200).json({
     message: "Tour created and published successfully",
     tour: newTour,
   });
 });
+
 
 
 

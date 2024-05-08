@@ -14,16 +14,16 @@ const tourSchema = mongoose.Schema(
       type: String,
       required: [true, "Provide Location Image URL"],
     },
-    startDate: {
-      type: Date,
-      required: [true, "Provide Start Date"],
+    tourStartDate: {
+      type: String,
+      required: [true,"Provide Start Date"],
     },
-    endDate: {
-      type: Date,
+    tourEndDate: {
+      type: String,
       required: [true, "Provide End Date"],
     },
-    registrationEndDate: {
-      type: Date,
+    tourRegistrationEndDate: {
+      type: String,
       required: [true, "Provide Registration End Date"],
     },
     information: {
@@ -32,7 +32,7 @@ const tourSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Upcoming', 'Ended', 'Cancelled'],
+      enum: ['Upcoming', 'RegistrationsOpened'],
       required: [true, "Provide Status"],
     },
   },
