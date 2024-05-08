@@ -5,7 +5,7 @@ const tourApi = api.injectEndpoints({
       return {
         tourPublish: builder.mutation({
           query: (tourInfo) => {
-            console.log("API tourInfo:", tourInfo); // Print tourInfo here
+            console.log("API tourInfo:", tourInfo);
             return {
               url: "/agencies/tours/publish",
               method: "POST",

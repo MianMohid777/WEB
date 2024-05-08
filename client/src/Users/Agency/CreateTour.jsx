@@ -38,6 +38,7 @@ const CreateTour = () => {
   const [registrationEndDate, setRegistrationEndDate] = useState(new Date());
   const [information, setInformation] = useState("");
   const [status, setStatus] = useState("");
+  const [price, setPrice] = useState(0);
 
   const [tourPublish, { isLoading }] = useTourPublishMutation();
 
@@ -49,6 +50,7 @@ const CreateTour = () => {
     tourEndDate: new Date().toLocaleDateString(),
     tourRegistrationEndDate: new Date().toLocaleDateString(),
     tourInformation: "",
+    tourPrice: 0.0,
     tourStatus: "Upcoming"
 
   })
@@ -60,24 +62,25 @@ const CreateTour = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     setAgencyName("Amazing Adventures")
     const newTourInfo = {
       tourAgencyName: "Amazing Adventures",
-  
+
       tourLocationName: locationName,
       tourLocationImage: locationImage,
-      tourStartDate:  startDate,
+      tourStartDate: startDate,
       tourEndDate: endDate,
       tourRegistrationEndDate: registrationEndDate,
       tourInformation: information,
-      tourStatus: status
+      tourStatus: status,
+      tourPrice: price
     };
 
     console.log("TOUR INFO", newTourInfo);
     setTourInfo(tourInfo)
 
-    
+
     const response = await tourPublish(newTourInfo).unwrap();
 
     console.log("RESPONSE", response);
@@ -205,12 +208,26 @@ const CreateTour = () => {
                   required
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Ticket Price"
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  fullWidth
+                  required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <Button type="submit" onClick={handleSubmit} variant="contained" color="primary">
                   Create Tour
                 </Button>
               </Grid>
             </Grid>
+
           </form>
         </Box>
       </Typography>
