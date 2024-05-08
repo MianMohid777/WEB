@@ -204,9 +204,9 @@ const publishTour = asyncHandler(async (req, res) => {
   console.log("REQ BODY", req.body);
 
 
-  
+
   if (!req.body.tourStartDate) {
-    console.log(req.body.tourStartDate)
+    console.log("REQ.BODY.STARTDATE: ", req.body.tourStartDate)
     res.status(400);
     throw new Error("Tour start date is mandatory");
   }
@@ -247,17 +247,21 @@ const publishTour = asyncHandler(async (req, res) => {
   }
   
 
+  
+  console.log("DB NEW TOUR",  new Date(req.body.tourStartDate));
+  
   // Create the tour in the database
   const newTour = await tour.create({
-    startDate: new Date(tourStartDate),
-    endDate: new Date(tourEndDate),
+    startDate: tourStartDate,
+    endDate: new Date(req.body.tourStartDate),
     agencyName: tourAgencyName,
     locationName: tourLocationName,
     locationImage: tourLocationImage,
-    registrationEndDate: new Date(tourRegistrationEndDate),
+    registrationEndDate: new Date(req.body.tourStartDate),
     information: tourInformation,
     status: tourStatus
   });
+  
   
   console.log("DB NEW TOUR", newTour);
 
