@@ -4,14 +4,15 @@ const tourApi = api.injectEndpoints({
     endpoints: (builder) => {
       return {
         tourPublish: builder.mutation({
-          query: (tourInfo) => {
+          query: (tourInfo, id, accessToken ) => {
             console.log("API tourInfo:", tourInfo);
             return {
-              url: "/agencies/tours/publish",
+              url: "agencies/current-agency/publish-tour/"+ id,
               method: "POST",
               body: tourInfo,
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
               },
             };
           },

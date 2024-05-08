@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const tourSchema = mongoose.Schema(
   {
-    agencyId: {
+    tourAgencyId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "agencyReg",
+      required: [true, "UNable to find Agency ID"],
     },
     tourAgencyName: {
       type: String,
@@ -21,17 +21,17 @@ const tourSchema = mongoose.Schema(
 
     tourStartDate: {
       type: Date,
-      default: new Date("2024-06-01T00:00:00.000Z"), // Using ISO 8601 string
+      default: new Date("2024-06-01T00:00:00.000Z"),
       required: [true, "Provide Start Date"],
     },
     tourEndDate: {
       type: Date,
-      default: new Date(), // Using Date object (current date and time)
+      default: new Date(),
       required: [true, "Provide End Date"],
     },
     tourRegistrationEndDate: {
       type: Date,
-      default: "2024-06-30T23:59:59.999Z", // Using ISO 8601 string
+      default: "2024-06-30T23:59:59.999Z", 
       required: [true, "Provide Registration End Date"],
     },
     tourInformation: {
@@ -40,7 +40,7 @@ const tourSchema = mongoose.Schema(
     },
     tourStatus: {
       type: String,
-      enum: ['Upcoming', 'RegistrationsOpened'],
+      enum: ['Upcoming', 'RegistrationsOpened', 'Finished', 'Cancelled'],
 
       required: [true, "Provide Status"],
     },

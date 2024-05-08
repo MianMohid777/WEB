@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import AgencyHeader from "./AgencyHeader.jsx";
+import { useSelector } from "react-redux";
 
 
 import Loader from "../../Utils/Loader";
@@ -27,10 +28,8 @@ const theme = createTheme({
 });
 
 const CreateTour = () => {
-  console.log("Opened create Tour page")
 
   // State variables to store form data
-  const [agencyName, setAgencyName] = useState("Amazing Adventure")
   const [locationName, setLocationName] = useState("");
   const [locationImage, setLocationImage] = useState("image");
   const [startDate, setStartDate] = useState(new Date());
@@ -41,6 +40,8 @@ const CreateTour = () => {
   const [price, setPrice] = useState(0);
 
   const [tourPublish, { isLoading }] = useTourPublishMutation();
+  const agency = useSelector((state) => state.agency);
+  console.log(agency);
 
   const [tourInfo, setTourInfo] = useState({
     tourAgencyName: "Amazing Adventure",
@@ -55,7 +56,10 @@ const CreateTour = () => {
 
   })
 
-
+  const isValidDate = (dateString) => {
+    const date = new Date(dateString);
+    return date instanceof Date && !isNaN(date);
+  };
 
 
   if (isLoading) return <Loader />;
@@ -63,10 +67,36 @@ const CreateTour = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setAgencyName("Amazing Adventures")
-    const newTourInfo = {
-      tourAgencyName: "Amazing Adventures",
+    if (!isValidDate(startDate) || !isValidDate(endDate) || !isValidDate(registrationEndDate)) {
+      alert('Please enter valid dates');
+      return;
+    }
 
+    // Check if start date is after end date
+    if (new Date(startDate) >= new Date(endDate)) {
+      alert('Start date must be before end date');
+      return;
+    }
+
+    // Check if registration end date is after end date
+    if (new Date(registrationEndDate) > new Date(endDate)) {
+      alert('Registration end date must be before or equal to end date');
+      return;
+    }
+    if (new Date(startDate) >= new Date(endDate)) {
+      alert('Start date must be before end date');
+      return;
+    }
+
+    // Check if registration end date is after end date
+    if (new Date(registrationEndDate) > new Date(endDate)) {
+      alert('Registration end date must be before or equal to end date');
+      return;
+    }
+
+    const newTourInfo = {
+      tourAgencyId: agency.authAgency.id,
+      tourAgencyName: agency.authAgency.name,
       tourLocationName: locationName,
       tourLocationImage: locationImage,
       tourStartDate: startDate,
@@ -87,19 +117,6 @@ const CreateTour = () => {
 
   };
 
-  // Function to handle image upload
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setLocationImage(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -116,7 +133,9 @@ const CreateTour = () => {
         >
           <Typography variant="h4" gutterBottom>
             Create Tour
+
           </Typography>
+          {agency.authAgency.name}
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
@@ -129,22 +148,15 @@ const CreateTour = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="image-upload"
-                  style={{ display: "none" }}
-                  onChange={handleImageUpload}
+                <TextField
+                  id="image-link"
+                  label="Image Link"
+                  placeholder="Enter image link"
+                  variant="outlined"
+                  fullWidth
+                  onChange={(e) => setLocationImage(e.target.value)}
                 />
-                <label htmlFor="image-upload">
-                  <Button
-                    variant="outlined"
-                    component="span"
-                    startIcon={<PhotoCamera />}
-                  >
-                    Upload Image
-                  </Button>
-                </label>
+              
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField

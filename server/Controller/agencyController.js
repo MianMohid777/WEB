@@ -276,9 +276,8 @@ const getAllTours = asyncHandler(async (req, res) => {
 });
 
 const publishTour = asyncHandler(async (req, res) => {
-  const agencyId = req.params.id;
-  console.log(agencyId);
   const {
+    tourAgencyId,
     tourAgencyName,
     tourStartDate,
     tourEndDate,
@@ -344,7 +343,7 @@ const publishTour = asyncHandler(async (req, res) => {
 
   // Create the tour in the database
   const newTour = await tour.create({
-    agencyId,
+    tourAgencyId,
     tourAgencyName,
     tourStartDate,
     tourEndDate,
