@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const agencyReg = require("../Models/agency-RegModel");
 const tour = require("../Models/tourModel");
-const agency = require("../Models/agencyModel");
+// const agency = require("../Models/agencyModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -23,7 +23,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
-    { expiresIn: "5m" } // Expiry Duration
+    { expiresIn: "50m" } // Expiry Duration
   );
 
   const refToken = jwt.sign(
@@ -248,19 +248,19 @@ const getAllTours = asyncHandler(async (req, res) => {
     const userId = req.params.id;
 
     console.log(userId.toString());
-    if (userId !== req.user.id) {
+    if (userId !== req.user.id.toString()) {
       res.status(401);
       throw new Error("Unauthorized Access");
     }
 
-    const agency = await agencyReg.findById({ _id: userId });
+    const agency = await agencyReg.findById(userId);
 
     if (!agency) {
       res.status(404);
       throw new Error("Agency Not Found");
     }
 
-    const tours = await tour.findById({ agencyId: userId });
+    const tours = await tour.find({ agencyId: userId });
 
     console.log(tours);
 
