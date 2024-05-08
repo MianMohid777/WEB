@@ -16,6 +16,7 @@ const validateToken = require("../Middleware/validateToken");
 
 router.route("/login").post(stayLoggedValidator, loginAgency);
 router.route("/register").post(registerAgency);
+router.route("/tours/publish").post(publishTour)
 
 router.route("/current-agency/publish-tour/:id").post(publishTour);
 

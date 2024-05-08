@@ -18,16 +18,20 @@ const tourSchema = mongoose.Schema(
       type: String,
       required: [true, "Provide Location Image URL"],
     },
+
     tourStartDate: {
       type: Date,
+      default: new Date("2024-06-01T00:00:00.000Z"), // Using ISO 8601 string
       required: [true, "Provide Start Date"],
     },
     tourEndDate: {
       type: Date,
+      default: new Date(), // Using Date object (current date and time)
       required: [true, "Provide End Date"],
     },
-    registrationEndDate: {
+    tourRegistrationEndDate: {
       type: Date,
+      default: "2024-06-30T23:59:59.999Z", // Using ISO 8601 string
       required: [true, "Provide Registration End Date"],
     },
     information: {
@@ -36,7 +40,8 @@ const tourSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Upcoming", "Ended", "Cancelled"],
+      enum: ['Upcoming', 'RegistrationsOpened'],
+
       required: [true, "Provide Status"],
     },
     price: {

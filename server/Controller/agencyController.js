@@ -185,6 +185,7 @@ const loginAgency = asyncHandler(async (req, res) => {
   }
 });
 
+
 //@desc Refresh Access Token Using Refresh Token
 //@route Post /api/agencies/refresh-token
 //@access private
@@ -287,9 +288,11 @@ const publishTour = asyncHandler(async (req, res) => {
     information,
     status,
     price,
+
   } = req.body;
 
   console.log("REQ BODY", req.body);
+
 
   if (!tourStartDate) {
     console.log("REQ.BODY.STARTDATE: ", tourStartDate);
@@ -353,6 +356,7 @@ const publishTour = asyncHandler(async (req, res) => {
     price,
   });
 
+
   console.log("DB NEW TOUR", newTour);
 
   res.status(200).json({
@@ -360,6 +364,7 @@ const publishTour = asyncHandler(async (req, res) => {
     tour: newTour,
   });
 });
+
 
 module.exports = {
   registerAgency,
@@ -369,3 +374,4 @@ module.exports = {
   getAllTours,
   publishTour,
 };
+

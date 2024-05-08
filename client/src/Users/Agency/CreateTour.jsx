@@ -15,6 +15,10 @@ import {
 import { PhotoCamera } from "@mui/icons-material";
 import AgencyHeader from "./AgencyHeader.jsx";
 
+
+import Loader from "../../Utils/Loader";
+import { useTourPublishMutation } from "../../Services/Agency/publishTour.js";
+
 // Create the custom theme
 const theme = createTheme({
   typography: {
@@ -23,17 +27,61 @@ const theme = createTheme({
 });
 
 const CreateTour = () => {
+  console.log("Opened create Tour page")
+
   // State variables to store form data
+  const [agencyName, setAgencyName] = useState("Amazing Adventure")
   const [locationName, setLocationName] = useState("");
-  const [locationImage, setLocationImage] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [registrationEndDate, setRegistrationEndDate] = useState("");
+  const [locationImage, setLocationImage] = useState("image");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [registrationEndDate, setRegistrationEndDate] = useState(new Date());
   const [information, setInformation] = useState("");
   const [status, setStatus] = useState("");
 
+  const [tourPublish, { isLoading }] = useTourPublishMutation();
+
+  const [tourInfo, setTourInfo] = useState({
+    tourAgencyName: "Amazing Adventure",
+    tourLocationName: "",
+    tourLocationImage: "image",
+    tourStartDate: new Date().toLocaleDateString(),
+    tourEndDate: new Date().toLocaleDateString(),
+    tourRegistrationEndDate: new Date().toLocaleDateString(),
+    tourInformation: "",
+    tourStatus: "Upcoming"
+
+  })
+
+
+
+
+  if (isLoading) return <Loader />;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    setAgencyName("Amazing Adventures")
+    const newTourInfo = {
+      tourAgencyName: "Amazing Adventures",
+  
+      tourLocationName: locationName,
+      tourLocationImage: locationImage,
+      tourStartDate:  startDate,
+      tourEndDate: endDate,
+      tourRegistrationEndDate: registrationEndDate,
+      tourInformation: information,
+      tourStatus: status
+    };
+
+    console.log("TOUR INFO", newTourInfo);
+    setTourInfo(tourInfo)
+
+    
+    const response = await tourPublish(newTourInfo).unwrap();
+
+    console.log("RESPONSE", response);
+
   };
 
   // Function to handle image upload
@@ -142,8 +190,7 @@ const CreateTour = () => {
                     onChange={(e) => setStatus(e.target.value)}
                   >
                     <MenuItem value="Upcoming">Upcoming</MenuItem>
-                    <MenuItem value="Ended">Ended</MenuItem>
-                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+                    <MenuItem value="RegistrationsOpened">Registrations Open</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -159,7 +206,7 @@ const CreateTour = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" onClick={handleSubmit} variant="contained" color="primary">
                   Create Tour
                 </Button>
               </Grid>

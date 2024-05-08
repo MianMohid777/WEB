@@ -49,6 +49,7 @@ const router = createBrowserRouter(
       <Route path="/current-agency/create-tour" element={<CreateTour />} />
       <Route path="/test" element={<ToastMessage />} />
       <Route path="/agency-profile" element={<AgencyProfile />} />
+
     </Route>
   )
 );
