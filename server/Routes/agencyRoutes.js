@@ -6,8 +6,9 @@ const {
   loginAgency,
   registerAgency,
   refreshAccessToken,
-  currentAgency,
-  publishTour
+  getCurrentAgency,
+  getAllTours,
+  publishTour,
 } = require("../Controller/agencyController");
 
 const stayLoggedValidator = require("../Middleware/stayLoggedIn.validation");
@@ -17,9 +18,12 @@ router.route("/login").post(stayLoggedValidator, loginAgency);
 router.route("/register").post(registerAgency);
 router.route("/tours/publish").post(publishTour)
 
+router.route("/current-agency/publish-tour/:id").post(publishTour);
+
 // Protected Routes //
 
-//router.route("/refresh-token").post(refreshAccessToken);
-//router.route("/current-agency").get(validateToken, currentAgency);
+router.route("/refresh-token").post(refreshAccessToken);
+router.route("/current-agency").get(validateToken, getCurrentAgency);
+router.route("/current-agency/tours/:id").get(validateToken, getAllTours);
 
 module.exports = router;

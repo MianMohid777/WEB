@@ -113,7 +113,7 @@ const getOauth = asyncHandler(async function (req, res, next) {
     const exUser = await User.findOne({ emailAddress: payload.email });
 
     console.log(exUser);
-    const newUser = "";
+    let newUser = "";
 
     if (exUser === null) {
       console.log("First Time Sign In using Google");

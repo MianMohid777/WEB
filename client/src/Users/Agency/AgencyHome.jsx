@@ -132,6 +132,9 @@ function AgencyHome() {
                       paddingLeft: "20px",
                       paddingRight: "20px",
                     }}
+                    onClick={() => {
+                      navigate("/current-agency/create-tour");
+                    }}
                   >
                     <CreatePost fontSize="large" sx={{ color: "#FF4E45" }} />
 

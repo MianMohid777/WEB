@@ -53,6 +53,9 @@ const loginAdmin = asyncHandler(async (req, res) => {
       role: req.user.role,
     });
     return;
+  } else if (req.user) {
+    res.status(401);
+    throw new Error("Unauthorized User Access");
   }
   const { email, password } = req.body;
 
@@ -116,7 +119,7 @@ const getAllApplications = asyncHandler(async (req, res) => {
     if (applications.length > 0) {
       res.status(200).json(applications);
     } else {
-      res.status(200).json({ message: "No applications found" });
+      res.status(202).json({ message: "No applications found" });
     }
   } catch (err) {
     console.log(err);

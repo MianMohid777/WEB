@@ -132,54 +132,45 @@ const registerTourist = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "User created successfully", id: user._id });
 });
 
+//@desc Refresh Access Token Using Refresh Token
+//@route Post /api/tourist/refresh-token
+//@access private
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const inRefreshToken = req.cookies.refToken || req.body.refreshToken;
+  try {
+    const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
+    const user = await User.findById(req?.user.id);
 
-  if (!inRefreshToken) {
-    res.status(401);
-    throw new Error("Unauthorized access");
-  }
-  jwt.verify(
-    inRefreshToken,
-    process.env.REFRESH_TOKEN_SECRET,
-    async (err, decodedToken) => {
-      if (err) {
-        res.status(401);
-        throw new Error("User is not Authorized || Invalid Refresh Token");
-      }
-
-      console.log(decodedToken.user.email);
-      const user = await User.findById(decodedToken?.user.id);
-
-      if (!user) {
-        res.status(401);
-        throw new Error("Invalid Refresh Token");
-      }
-      if (inRefreshToken !== user?.refreshToken) {
-        res.status(401);
-        throw new Error("Refresh Token Expired or Used");
-      }
-
-      const options = {
-        httpOnly: true,
-        secure: true,
-      };
-
-      const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
-        user._id
-      );
-
-      res
-        .status(200)
-        .cookie("accessToken", accessToken, options)
-        .cookie("refToken", refToken, options)
-        .json({
-          message: "Access Token Refreshed",
-          accessToken,
-          refreshToken: refToken,
-        });
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid Refresh Token");
     }
-  );
+    if (inRefreshToken !== user?.refreshToken) {
+      res.status(401);
+      throw new Error("Refresh Token Expired or Used");
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
+      user._id
+    );
+
+    res
+      .status(200)
+      .cookie("access_token", accessToken, options)
+      .cookie("refresh_token", refToken, options)
+      .json({
+        message: "Access Token Refreshed",
+        accessToken,
+        refreshToken: refToken,
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ message: err.message });
+  }
 });
 
 //@desc GET LOGGED IN Tourist
@@ -200,4 +191,5 @@ module.exports = {
   registerTourist,
   refreshAccessToken,
   currentTourist,
+  refreshAccessToken,
 };

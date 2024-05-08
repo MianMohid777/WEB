@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState } from 'react';
 import "../../Styles/home.css";
 import icon1 from "../../Assets/icon1.svg";
 import icon2 from "../../Assets/cil_paper-plane.svg";
@@ -25,11 +26,12 @@ import mosque from "../../Assets/Mask Group.jpg";
 import slider from "../../Assets/Group 3.svg";
 import testimonialBackground from "../../Assets/image 22.jpg";
 import profileImg from "../../Assets/person.jpg";
-import Carousel from "react-material-ui-carousel";
+import Carousel from 'react-material-ui-carousel';
 import sideimage from "../../Assets/image 30 (1).jpg";
 import sideimage2 from "../../Assets/image 29.jpg";
 import bird from "../../Assets/Vector.svg";
 import icons from "../../Assets/Group 5.svg";
+
 
 import background from "../../Assets/top-section-background.jpg";
 import background1 from "../../Assets/top-section-background-1.jpg";
@@ -37,18 +39,19 @@ import background2 from "../../Assets/top-section-background-2.jpg";
 import background3 from "../../Assets/top-section-background-3.jpg";
 
 import Header from "./Header.jsx";
-import Footer from "./Footer.jsx";
+import Footer from './Footer.jsx';
 
 const backgroundimages = [background, background1, background2, background3];
 
 function Home() {
+
   const [activeButton, setActiveButton] = useState(null);
 
   const clickButton = (button) => {
     if (activeButton) {
-      activeButton.classList.remove("clickedButton");
+      activeButton.classList.remove('clickedButton');
     }
-    button.classList.add("clickedButton");
+    button.classList.add('clickedButton');
     setActiveButton(button);
   };
 
@@ -56,129 +59,140 @@ function Home() {
     {
       profileImg: profileImg,
       text: "I've been using this product for a few weeks now, and I'm blown away by the results. It's exceeded all my expectations! Highly recommended.",
-      name: "John Smith",
+      name: "John Smith"
     },
     {
       profileImg: profileImg,
       text: "I was skeptical at first, but after trying this service, I'm a believer! It's incredibly user-friendly and has saved me so much time and hassle.",
-      name: "Emily Johnson",
+      name: "Emily Johnson"
     },
     {
       profileImg: profileImg,
       text: "As a small business owner, I'm always looking for tools to streamline my workflow. This product has been a game-changer for me. Thank you!",
-      name: "Michael Brown",
-    },
+      name: "Michael Brown"
+    }
   ];
+
 
   return (
     <>
+
       <div class="top-section">
-        <Header />
+
+      <Header />
 
         <section>
           <h1 class="heading1">Your imagination is only your limit</h1>
-          <p class="paragraph1">
-            We always try to make our customer Happy. We provide all kind of
-            facilities. Your Satisfaction is our main priority
-          </p>
+          <p class="paragraph1">We always try to make our customer Happy. We provide all kind of facilities.
+            Your Satisfaction is our main priority</p>
 
-          <a href="#">
-            <p>Discover More</p>
-          </a>
+          <a href="#"><p>Discover More</p></a>
+
         </section>
 
         <Carousel
+
           navButtonsAlwaysInvisible
           duration={500}
-          animation="slide"
-          IndicatorIcon={() => <div></div>}
+          animation='slide'
+
+
+          IndicatorIcon={() => (
+            <div>
+            </div>
+          )}
+
           indicatorIconButtonProps={{
             style: {
-              width: "31.25px",
-              height: "2.95px",
-              background: "#FFFFFF",
-              borderRadius: "39px",
-              margin: "7px",
-            },
+              width: '31.25px',
+              height: '2.95px',
+              background: '#FFFFFF',
+              borderRadius: '39px',
+              margin: '7px'
+            }
           }}
+
+
           activeIndicatorIconButtonProps={{
             style: {
-              width: "31.25px",
-              height: "2.95px",
-              background: "#DF6951",
-              borderRadius: "39px",
-            },
+              width: '31.25px',
+              height: '2.95px',
+              background: '#DF6951',
+              borderRadius: '39px'
+
+            }
           }}
+
           indicatorContainerProps={{
             style: {
-              position: "absolute",
-              top: "919px",
-              zIndex: "1",
-            },
-          }}
-        >
+              position: 'absolute',
+              top: '919px',
+              zIndex: '1'
+
+            }
+          }} >
+
           {backgroundimages.map((backgroundImage, index) => (
-            <div
-              class="image-container"
+
+            <div class="image-container"
               key={index}
               style={{
-                width: "100%",
-                height: "976px",
+                width: '100%',
+                height: '976px',
                 backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.33), rgba(0, 0, 0, 0.33)), url(${backgroundImage})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            ></div>
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }} >
+
+            </div>
           ))}
+
         </Carousel>
+
+
       </div>
 
       <div class="services">
         <p id="heading">Our Services</p>
 
         <div class="service_cards">
+
           <div class="card1">
+
             <img src={icon1} width={46} height={27.26} />
             <p class="text1">Ticket Booking</p>
-            <p class="text2">
-              {" "}
-              We book all kind of national or international ticket for your
-              destinaion.{" "}
-            </p>
+            <p class="text2">  We book all kind of national or international ticket for your destinaion. </p>
+
           </div>
 
           <div class="card2">
+
             <img src={icon3} width={46} height={27.26} />
             <p class="text1">Hotel Booking</p>
-            <p class="text2">
-              {" "}
-              You can easily book your according to your budget hotel by our
-              website.{" "}
-            </p>
+            <p class="text2">  You can easily book your according to your budget hotel by our website. </p>
+
           </div>
+
 
           <div class="card1">
             <img src={icon2} width={46} height={27.26} />
-            <p class="text1" style={{ marginLeft: "30px" }}>
-              {" "}
-              Tour Planning
-            </p>
-            <p class="text2">
-              {" "}
-              We provide you the best plan within a short time explore more.{" "}
-            </p>
+            <p class="text1" style={{ marginLeft: '30px' }}> Tour Planning</p>
+            <p class="text2">  We provide you the best plan within a short time explore more. </p>
           </div>
+
         </div>
+
+
+
       </div>
+
 
       <div class="stats">
         <p class="heading">We always try to give you the best service</p>
-        <p class="text">
-          We always try to make our customer Happy. We provide all kind of
-          facilities. Your Satisfaction is our main priority.
-        </p>
+        <p class="text">We always try to make our customer Happy. We provide all kind of facilities. Your Satisfaction is our main priority.</p>
 
         <div class="cards">
+
           <div class="card">
             <img src={calender} width={42} height={42} />
             <p class="figure">15+</p>
@@ -202,22 +216,30 @@ function Home() {
             <p class="figure">2k+</p>
             <p class="description">Travel History</p>
           </div>
+
         </div>
+
       </div>
+
 
       <div class="destinations">
         <p class="heading">Our Popular Destinations</p>
 
         <section>
           <div class="map">
+
             <img src={elipse} id="elipse1" />
             <img src={elipse} id="elipse2" />
             <img src={elipse} id="elipse3" />
+
           </div>
 
           <div class="cards">
+
             <a href="#" class="card">
-              <div id="image1"></div>
+              <div id="image1">
+
+              </div>
 
               <p class="country">Thailand</p>
               <p class="decr">20+ Spots 2D & 3N</p>
@@ -226,7 +248,9 @@ function Home() {
             </a>
 
             <a href="#" class="card">
-              <div id="image2"></div>
+              <div id="image2">
+
+              </div>
 
               <p class="country">Indonesia</p>
               <p class="decr">25+ Spots 3D & 3N</p>
@@ -235,16 +259,22 @@ function Home() {
             </a>
 
             <a href="#" class="card">
-              <div id="image3"></div>
+              <div id="image3">
+
+              </div>
 
               <p class="country">New Zeland</p>
               <p class="decr">20+ Spots 3D & 2N</p>
 
               <img src={arrow} />
             </a>
+
           </div>
+
         </section>
+
       </div>
+
 
       <div class="best_packages">
         <p>Best Packages for you</p>
@@ -264,10 +294,7 @@ function Home() {
             <div class="description">
               <p class="text1">3 Days, 2 Nights</p>
               <p class="text2">$500 / Person</p>
-              <p class="text3">
-                Explore the Beauty of the island for 3 days and 2 nights with
-                our travel agency
-              </p>
+              <p class="text3">Explore the Beauty of the island for 3 days and 2 nights with our travel agency</p>
               <img src={locationIcon} />
               <p class="text4">Indonesia</p>
               <a href="#">Know More</a>
@@ -279,9 +306,7 @@ function Home() {
             <div class="description">
               <p class="text1">3 Days, 2 Nights</p>
               <p class="text2">$800 / Person</p>
-              <p class="text3">
-                Enjoy the Shrimes and blossoms here in this beautiful country
-              </p>
+              <p class="text3">Enjoy the Shrimes and blossoms here in this beautiful country</p>
               <img src={locationIcon} />
               <p class="text4">Japan</p>
               <a href="#">Know More</a>
@@ -293,19 +318,17 @@ function Home() {
             <div class="description">
               <p class="text1">3 Days, 2 Nights</p>
               <p class="text2">$600 / Person</p>
-              <p class="text3">
-                Explore the majestic mountains and landscapes day and nights
-              </p>
+              <p class="text3">Explore the majestic mountains and landscapes day and nights</p>
               <img src={locationIcon} />
               <p class="text4">Mountains</p>
               <a href="#">Know More</a>
             </div>
           </div>
+
         </div>
 
-        <a class="discover" href="#">
-          <p>Discover More</p>
-        </a>
+        <a class="discover" href="#"><p>Discover More</p></a>
+
       </div>
 
       <div class="steps">
@@ -316,33 +339,22 @@ function Home() {
             <div class="card">
               <img src={group7} />
               <p class="title">Choose Destination</p>
-              <p class="text">
-                {" "}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                tortor tempus.{" "}
-              </p>
+              <p class="text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna, tortor tempus. </p>
             </div>
             <div class="card">
               <img src={group12} />
               <p class="title">Make Payment</p>
-              <p class="text">
-                {" "}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                tortor tempus.{" "}
-              </p>
+              <p class="text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna, tortor tempus. </p>
             </div>
             <div class="card">
               <img src={rectangle22} />
               <p class="title">Reach Airport on Date</p>
-              <p class="text">
-                {" "}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                tortor tempus.{" "}
-              </p>
+              <p class="text"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna, tortor tempus. </p>
             </div>
           </div>
 
           <div class="container">
+
             <div class="card">
               <img class="poster" src={greece} />
               <p class="title">Trip To Greece</p>
@@ -360,56 +372,71 @@ function Home() {
               <p class="text2">40% completed</p>
               <img class="slider" src={slider} />
             </div>
+
           </div>
         </section>
       </div>
 
       <div class="testimonials">
+
         <p class="heading">What People Say About Us</p>
 
         <img class="sideimage" src={sideimage} />
         <img class="sideimage2" src={sideimage2} />
         <img class="bird" src={bird} />
 
-        <Carousel
-          indicators={true}
-          navButtonsAlwaysInvisible
-          duration={50}
-          slider
+         {/* <img className='backgroundimg' src={testimonialBackground} /> */}
+         <div class='container'>
+         <div class="card">
+        <Carousel indicators={true} navButtonsAlwaysInvisible duration={50} slider 
+         indicatorContainerProps={{
+          style: {
+            marginTop: '20px'
+          }
+        }}
+        indicatorIconButtonProps={{
+          style: {
+           color: 'white'
+          }
+        }}
+        activeIndicatorIconButtonProps={{
+          style: {
+           color: 'black'
+
+          }
+        }}
         >
           {testimonials.map((testimonial, index) => (
-            <div key={index} class="testimonial">
-              <img src={testimonialBackground} />
 
-              <div class="small-container">
-                <div class="card">
-                  <img src={testimonial.profileImg} />
+                <div key={index}>
                   <p class="text">{testimonial.text}</p>
                   <p class="name">-{testimonial.name}</p>
-                </div>
-              </div>
-            </div>
+                  </div>
           ))}
         </Carousel>
+        </div>
+        </div>
+          
+
       </div>
 
       <div class="subscription">
         <div class="container">
           <img src={icons} />
-          <p class="heading">
-            Subscribe to get information, latest news and other interesting
-            offers about Cobham
-          </p>
-          <input type="text" placeholder="Enter your email" />
-          <button>
-            <p>Subscribe</p>
-          </button>
+          <p class="heading">Subscribe to get information, latest news and other interesting offers about Cobham</p>
+          <input type="text" placeholder='Enter your email' />
+          <button><p>Subscribe</p></button>
+
+
         </div>
       </div>
 
-      <Footer />
+     <Footer />
+
     </>
   );
 }
+
+
 
 export default Home;

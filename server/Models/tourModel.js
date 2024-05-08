@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 
 const tourSchema = mongoose.Schema(
   {
+    agencyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "agencyReg",
+    },
     agencyName: {
       type: String,
-      required: [true, "Provide Company Name"]
+      required: [true, "Provide Company Name"],
     },
     locationName: {
       type: String,
@@ -14,7 +18,7 @@ const tourSchema = mongoose.Schema(
       type: String,
       required: [true, "Provide Location Image URL"],
     },
-    // Hardcoded date values
+
     tourStartDate: {
       type: Date,
       default: new Date("2024-06-01T00:00:00.000Z"), // Using ISO 8601 string
@@ -37,7 +41,12 @@ const tourSchema = mongoose.Schema(
     status: {
       type: String,
       enum: ['Upcoming', 'RegistrationsOpened'],
+
       required: [true, "Provide Status"],
+    },
+    price: {
+      type: String,
+      required: [true, "Provide Price"],
     },
   },
   { timestamps: true }

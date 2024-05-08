@@ -30,13 +30,11 @@ import ToastMessage from "./Utils/Toast-Message";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-
       {/* Tourist Routes */}
       <Route path="/" element={<LoginAs />} />
       <Route path="/home" element={<Home />} />
-      <Route path="/tourist-login" element={<TouristSignIn />} />   
+      <Route path="/tourist-login" element={<TouristSignIn />} />
       <Route path="/tourist-signup" element={<SignUp />} />
-
 
       {/* Admin Routes */}
       <Route path="/admin-login" element={<AdminSignIn />} />
@@ -47,8 +45,8 @@ const router = createBrowserRouter(
       <Route path="/agency-home" element={<AgencyHome />} />
       <Route path="/agency-login" element={<AgencySignIn />} />
       <Route path="/agency-registeration" element={<AgencyRegister />} />
-      <Route path="/agencyid/profile" element={<AgencyProfile />} />
-      <Route path="/agencyid/create-tour" element={<CreateTour />} />
+      <Route path="/current-agency/profile" element={<AgencyProfile />} />
+      <Route path="/current-agency/create-tour" element={<CreateTour />} />
       <Route path="/test" element={<ToastMessage />} />
       <Route path="/agency-profile" element={<AgencyProfile />} />
 

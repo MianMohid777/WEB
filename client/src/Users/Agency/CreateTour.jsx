@@ -1,10 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, Grid, ThemeProvider, createTheme } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Grid,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
-import AgencyHeader from './AgencyHeader.jsx';
+import AgencyHeader from "./AgencyHeader.jsx";
+
+
 import Loader from "../../Utils/Loader";
 import { useTourPublishMutation } from "../../Services/Agency/publishTour.js";
-
 
 // Create the custom theme
 const theme = createTheme({
@@ -47,10 +60,6 @@ const CreateTour = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // // Format the dates before setting them in the state
-    // const formattedStartDate = startDate ? new Date(startDate).toISOString().split('T')[0] : '';
-    // const formattedEndDate = endDate ? new Date(endDate).toISOString().split('T')[0] : '';
-    // const formattedRegistrationEndDate = registrationEndDate ? new Date(registrationEndDate).toISOString().split('T')[0] : '';
     
     setAgencyName("Amazing Adventures")
     const newTourInfo = {
@@ -91,9 +100,17 @@ const CreateTour = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <>
+      <Typography>
         <AgencyHeader />
-        <Box maxWidth={800} mx="auto" mt={4} p={3} boxShadow={3} borderRadius={8} bgcolor="white">
+        <Box
+          maxWidth={800}
+          mx="auto"
+          mt={4}
+          p={3}
+          boxShadow={3}
+          borderRadius={8}
+          bgcolor="white"
+        >
           <Typography variant="h4" gutterBottom>
             Create Tour
           </Typography>
@@ -168,7 +185,10 @@ const CreateTour = () => {
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
                   <InputLabel>Status</InputLabel>
-                  <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+                  <Select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                  >
                     <MenuItem value="Upcoming">Upcoming</MenuItem>
                     <MenuItem value="RegistrationsOpened">Registrations Open</MenuItem>
                   </Select>
@@ -193,7 +213,7 @@ const CreateTour = () => {
             </Grid>
           </form>
         </Box>
-      </>
+      </Typography>
     </ThemeProvider>
   );
 };
