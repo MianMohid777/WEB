@@ -340,17 +340,17 @@ const publishTour = asyncHandler(async (req, res) => {
     throw new Error("Tour Price is mandatory");
   }
 
-  console.log("DB NEW TOUR", new Date(tourStartDate));
+
 
   // Create the tour in the database
   const newTour = await tour.create({
     agencyId,
     agencyName,
-    tourStartDate: new Date(tourStartDate),
-    tourEndDate: new Date(tourEndDate),
+    tourStartDate,
+    tourEndDate,
     locationName,
     locationImage,
-    registrationEndDate: new Date(registrationEndDate),
+    registrationEndDate,
     information,
     status,
     price,
