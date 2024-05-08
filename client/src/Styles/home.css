@@ -1,7 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Laila:wght@300;400;500;600;700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Laila:wght@300;400;500;600;700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 .top-section .image-container {
   background-size: cover;
@@ -12,12 +13,12 @@
   background-position: bottom;
 }
 
+
 .top-section section {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 5%;
   position: absolute;
   z-index: 2;
   margin-left: 30%;
@@ -30,34 +31,39 @@
 
   margin-bottom: 0;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 800;
   font-size: 75px;
   line-height: 102px;
   text-align: center;
 
-  color: #ffffff;
+  color: #FFFFFF;
+
 }
 
 .top-section .paragraph1 {
   width: 568px;
   height: 44px;
 
-  margin-top: 57px;
+  margin-top: 7%;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
   text-align: center;
 
-  color: #ffffff;
+  color: #FFFFFF;
+
+
 }
 
+
+
 .top-section section a {
-  background-color: #00a651;
+  background-color: #00A651;
   margin-top: 39px;
   width: 214px;
   height: 60px;
@@ -74,17 +80,19 @@
 }
 
 .top-section section a:hover p {
-  color: #00a651;
+  color: #00A651;
 }
 
 .top-section section a p {
-  font-family: "Open Sans";
+
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 24px;
   line-height: 33px;
 
-  color: #ffffff;
+  color: #FFFFFF;
+
 }
 
 .services {
@@ -96,7 +104,9 @@
 }
 
 .services #heading {
-  font-family: "Open Sans";
+
+
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 40px;
@@ -104,6 +114,7 @@
   text-align: center;
 
   color: #000000;
+
 }
 
 .services .service_cards {
@@ -112,6 +123,7 @@
   justify-content: space-between;
   width: 80%;
   margin-bottom: 30px;
+
 }
 
 .services .service_cards .card1 {
@@ -119,17 +131,19 @@
   flex-direction: column;
   width: 416px;
   height: 232px;
-  background: #f9f9f9;
+  background: #F9F9F9;
   border-radius: 15px;
 }
 
 .services .service_cards .card2 {
+
   width: 416px;
   height: 232px;
 
-  background: #ffffff;
+  background: #FFFFFF;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.15);
   border-radius: 15px;
+
 }
 
 .services .service_cards img {
@@ -139,13 +153,14 @@
 }
 
 .services .service_cards .text1 {
+
   margin-left: 35px;
   margin-right: 204px;
   margin-bottom: 0;
 
   width: 177px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
@@ -154,9 +169,12 @@
   text-align: center;
 
   color: #000000;
+
+
 }
 
 .services .service_cards .text2 {
+
   width: 328px;
   height: 44px;
 
@@ -164,21 +182,24 @@
   margin-right: 50px;
   margin-bottom: 20px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
 
   color: #000000;
+
+
 }
+
 
 .stats {
   width: 100%;
   height: 733px;
   margin-top: 20px;
   background: rgba(0, 88, 83, 0.05);
-  background-image: url("../Assets/world_map.svg");
+  background-image: url('../Assets/world_map.svg');
   background-position: center;
   background-size: cover;
   display: flex;
@@ -187,12 +208,13 @@
 }
 
 .stats .heading {
+
   width: 518px;
   height: 108px;
 
   margin-top: 81px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 40px;
@@ -200,15 +222,17 @@
   text-align: center;
 
   color: #000000;
+
 }
 
 .stats .text {
+
   width: 495px;
   height: 44px;
 
   margin-top: 19px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -216,6 +240,8 @@
   text-align: center;
 
   color: #000000;
+
+
 }
 
 .stats .cards {
@@ -228,15 +254,17 @@
 }
 
 .stats .cards .card {
+
   width: 250px;
   height: 250px;
 
-  background: #ffffff;
+  background: #FFFFFF;
   border-radius: 15px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
+
 }
 
 .stats .cards .card img {
@@ -244,21 +272,25 @@
 }
 
 .stats .cards .card .figure {
+
   margin-top: 29px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 36px;
   line-height: 49px;
 
   color: #000000;
+
+
 }
 
 .stats .cards .card .description {
+
   margin-top: -30px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -266,10 +298,14 @@
   text-align: center;
 
   color: #000000;
+
+
+
 }
 
 .destinations .heading {
-  font-family: "Open Sans";
+
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 40px;
@@ -279,6 +315,9 @@
   color: #000000;
 
   margin-bottom: 71px;
+
+
+
 }
 
 .destinations section {
@@ -287,11 +326,12 @@
   width: 100%;
   height: 800px;
   margin-bottom: 30px;
+
 }
 
 .destinations section .map {
   width: 50%;
-  background-image: url("../Assets/world_map_PNG28 2.svg");
+  background-image: url('../Assets/world_map_PNG28 2.svg');
   background-size: cover;
   background-position: center;
   height: 772px;
@@ -325,7 +365,7 @@
 .destinations section .cards .card {
   width: 659px;
   height: 223px;
-  background: #ffffff;
+  background: #FFFFFF;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.08);
   border-radius: 15px;
   display: flex;
@@ -343,29 +383,32 @@
 }
 
 .destinations section .cards .card #image1 {
-  background-image: url("../Assets/Rectangle\ 15.jpg");
+  background-image: url('../Assets/Rectangle\ 15.jpg');
   width: 223px;
   height: 100%;
 }
 
 .destinations section .cards .card #image2 {
-  background-image: url("../Assets/Rectangle\ 16.jpg");
+  background-image: url('../Assets/Rectangle\ 16.jpg');
   width: 223px;
   height: 100%;
 }
+
 
 .destinations section .cards .card #image3 {
-  background-image: url("../Assets/Rectangle\ 17.jpg");
+  background-image: url('../Assets/Rectangle\ 17.jpg');
   width: 223px;
   height: 100%;
 }
 
+
 .destinations section .cards .card .country {
+
   width: 84px;
   height: 27px;
   margin-left: 49px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -373,45 +416,56 @@
   text-align: center;
 
   color: #000000;
+
+
 }
 
+
 .destinations section .cards .card .decr {
+
   width: 93px;
   height: 54px;
 
   margin-left: 49px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
   line-height: 27px;
 
   color: #000000;
+
+
 }
 
 .destinations section .cards .card img {
+
   width: 33px;
   height: 33px;
   margin-left: 96px;
+
 }
+
 
 .best_packages {
   width: 100%;
   height: 1119px;
-  background: #ecf1f0;
+  background: #ECF1F0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
 }
 
 .best_packages p {
+
   width: 445px;
   height: 54px;
   margin-top: 59px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 40px;
@@ -419,6 +473,8 @@
   text-align: center;
 
   color: #000000;
+
+
 }
 
 .best_packages .options {
@@ -430,6 +486,7 @@
 }
 
 .best_packages .options button {
+
   width: 180px;
   height: 60px;
 
@@ -438,16 +495,19 @@
   text-decoration: none;
   border: none;
 
-  font-family: "Open Sans";
+
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 27px;
   text-align: center;
 
-  color: #ffffff;
+  color: #FFFFFF;
 
   cursor: pointer;
+
+
 }
 
 .best_packages .packages {
@@ -459,17 +519,18 @@
 }
 
 .best_packages .options button:hover {
-  background: #00a651;
+  background: #00A651;
 }
 
+
 .best_packages .options .clickedButton {
-  background: #00a651;
+  background: #00A651;
 }
 
 .best_packages .packages .package {
   width: 434px;
   height: 500px;
-  background: #ffffff;
+  background: #FFFFFF;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
@@ -487,17 +548,19 @@
   height: 176px;
   position: absolute;
 
-  background: #ffffff;
+  background: #FFFFFF;
   border-radius: 0px 0px 15px 15px;
+
 }
 
 .best_packages .packages .package .description .text1 {
+
   position: absolute;
 
   margin-left: -130px;
   margin-top: 10px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -505,13 +568,16 @@
   text-align: center;
 
   color: #000000;
+
+
 }
 
 .best_packages .packages .package .description .text2 {
+
   margin-top: 10px;
   margin-left: 130px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -519,9 +585,12 @@
   text-align: center;
 
   color: #000000;
+
+
 }
 
 .best_packages .packages .package .description .text3 {
+
   /* Explore the Beauty of the island for 3 days and 2 nights with our travel agency */
 
   margin-top: -30px;
@@ -532,13 +601,15 @@
   height: 44px;
 
   text-align: left;
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 22px;
 
   color: rgba(0, 0, 0, 0.81);
+
+
 }
 
 .best_packages .packages .package .description img {
@@ -550,11 +621,12 @@
 }
 
 .best_packages .packages .package .description .text4 {
+
   position: absolute;
   width: 95px;
   height: 27px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -564,7 +636,10 @@
   margin-left: 45px;
 
   color: #000000;
+
+
 }
+
 
 .best_packages .packages .package .description a {
   /* Know More */
@@ -575,7 +650,7 @@
   margin-left: 320px;
   margin-top: 32px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -584,6 +659,8 @@
   text-decoration-line: underline;
 
   color: #000000;
+
+
 }
 
 .best_packages .packages .package:hover {
@@ -591,12 +668,14 @@
 }
 
 .best_packages .discover {
+
+
   width: 300px;
   height: 70px;
 
   margin-top: 100px;
 
-  background: #00a651;
+  background: #00A651;
   border-radius: 10px;
 
   text-decoration: none;
@@ -605,31 +684,37 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
+
 }
 
 .best_packages .discover p {
+
+
   width: 231px;
   height: 30px;
 
   margin-top: 20px;
   margin-left: 10px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 24px;
   line-height: 33px;
   text-align: center;
 
-  color: #ffffff;
+  color: #FFFFFF;
+
 }
+
 
 .best_packages .discover:hover {
   background-color: white;
 }
 
 .best_packages .discover:hover p {
-  color: #00a651;
+  color: #00A651;
 }
 
 .steps {
@@ -640,10 +725,12 @@
 }
 
 .steps .heading {
+
   width: 703px;
   height: 54px;
 
-  font-family: "Open Sans";
+
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 40px;
@@ -652,15 +739,18 @@
 
   color: #000000;
   margin-bottom: 0;
+
+
 }
 
 .steps .note {
+
   width: 152px;
   height: 33px;
 
   margin-top: 0;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -669,9 +759,12 @@
   text-align: center;
 
   color: #000000;
+
+
 }
 
 .steps section {
+
   width: 1147px;
   height: 430px;
   display: flex;
@@ -688,30 +781,36 @@
 }
 
 .steps .steps_cards .card {
+
   width: 548px;
   height: 90.18px;
 
   display: flex;
   flex-direction: row;
+
 }
 
 .steps .steps_cards .card .title {
+
   width: 223.36px;
   height: 27.75px;
 
   margin-top: 10px;
   margin-left: 30px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 124.5%;
 
-  color: #5e6282;
+  color: #5E6282;
+
+
 }
 
 .steps .steps_cards .card .text {
+
   width: 453.66px;
   height: 55.49px;
 
@@ -720,20 +819,25 @@
   margin-top: 40px;
   margin-left: 95px;
 
-  font-family: "Open Sans";
+
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 124.5%;
 
-  color: #5e6282;
+  color: #5E6282;
+
+
 }
 
 .steps .container {
+
   width: 485px;
   height: 459px;
   margin-left: 230px;
   margin-top: 2%;
+
 }
 
 .steps .container .card {
@@ -746,6 +850,8 @@
   flex-direction: column;
 }
 
+
+
 .steps .container .card .poster {
   width: 321px;
   height: 161px;
@@ -755,12 +861,13 @@
 }
 
 .steps .container .card .title {
+
   width: 134px;
   height: 22px;
 
   margin-left: 25px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -770,9 +877,12 @@
 
   /* black */
   color: #080809;
+
+
 }
 
 .steps .container .card .text {
+
   width: 300px;
   height: 20px;
 
@@ -780,7 +890,7 @@
 
   margin-top: -5px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -789,7 +899,9 @@
   letter-spacing: -0.005em;
 
   /* text 2 */
-  color: #84829a;
+  color: #84829A;
+
+
 }
 
 .steps .container .card .options {
@@ -807,6 +919,7 @@
 }
 
 .steps .container .card .text1 {
+
   position: absolute;
   width: 126px;
   height: 20px;
@@ -814,7 +927,7 @@
   margin-top: 345px;
   margin-left: 66px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -823,7 +936,9 @@
   letter-spacing: -0.02em;
 
   /* text 2 */
-  color: #84829a;
+  color: #84829A;
+
+
 }
 
 .steps .container .card .heart {
@@ -836,6 +951,9 @@
   margin-left: 325px;
 
   cursor: pointer;
+
+
+
 }
 
 .steps .container .small-card {
@@ -850,7 +968,9 @@
   margin-left: 200px;
   background-color: white;
   opacity: 1;
+
 }
+
 
 .steps .container .small-card .poster {
   /* Mask Group */
@@ -860,6 +980,9 @@
   height: 50px;
   margin-top: 18px;
   margin-left: 20px;
+
+
+
 }
 
 .steps .container .small-card .text {
@@ -871,7 +994,7 @@
   margin-top: 16px;
   margin-left: 82px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -880,7 +1003,9 @@
   letter-spacing: -0.035em;
 
   /* text 2 */
-  color: #84829a;
+  color: #84829A;
+
+
 }
 
 .steps .container .small-card .text1 {
@@ -892,7 +1017,7 @@
   margin-top: 39px;
   margin-left: 81px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -902,16 +1027,19 @@
 
   /* black */
   color: #080809;
+
+
 }
 
 .steps .container .small-card .text2 {
+
   position: absolute;
   width: 101px;
   height: 17px;
   margin-top: 75px;
   margin-left: 80px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -920,10 +1048,12 @@
   letter-spacing: -0.055em;
 
   /* 1 */
-  color: #8a79df;
+  color: #8A79DF;
+
 }
 
 .steps .container .small-card .slider {
+
   position: absolute;
   width: 156px;
   height: 5px;
@@ -934,95 +1064,85 @@
 .testimonials {
   width: 100%;
   height: 935px;
-  background: #ecf1f0;
-  display: block;
+  background: #ECF1F0;
   padding-top: 5px;
 }
 
-.testimonials .testimonial {
-  margin-left: 350px;
-  width: 1228px;
-}
 
 .testimonials .heading {
-  width: 524px;
-  height: 54px;
-
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
   font-size: 40px;
   line-height: 54px;
   text-align: center;
 
-  margin-left: 700px;
-
   color: #000000;
-  margin-top: 69px;
+  margin-top: 5%;
   margin-bottom: 59px;
 }
 
-.testimonials .testimonial img {
+.testimonials .container{
   width: 1228px;
   height: 536px;
-  border-radius: 20px;
-}
-
-.testimonials .testimonial .small-container {
-  width: 100%;
-  height: 100px;
-}
-
-.testimonials .testimonial .small-container .card {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: url('../Assets/image 22.jpg');
+  margin-left: 18%;
+  border-radius: 20px;
+}
 
+
+.testimonials .card {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
   width: 738px;
   height: 200px;
-  position: absolute;
-  margin-top: -120px;
-  margin-left: 250px;
-  margin-bottom: 20px;
-
-  background: #ffffff;
   box-shadow: 0px 4px 59px 9px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+
+background: rgba(243, 243, 243, 0.6);
+backdrop-filter: blur(17.7606px);
+
+
+
 }
 
-.testimonials .testimonial .small-container .card img {
-  position: absolute;
-  width: 128px;
-  height: 128px;
-  border-radius: 50%;
-  margin-top: -250px;
-}
 
-.testimonials .testimonial .small-container .card .text {
+
+
+.testimonials .card .text {
+
   width: 541px;
   height: 94px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 30px;
   text-align: center;
-
-  margin-top: 60px;
+  margin-left: 15%;
 
   color: #000000;
+
 }
 
-.testimonials .testimonial .small-container .card .name {
+.testimonials .card .name {
+
   width: 193px;
   height: 33px;
-  margin-top: -10px;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 22px;
   line-height: 33px;
+  margin-left: 37%;
   color: #000000;
 }
 
@@ -1031,6 +1151,7 @@
   margin-left: 0px;
   position: absolute;
   border-radius: 20px;
+
 }
 
 .testimonials .sideimage2 {
@@ -1038,6 +1159,7 @@
   position: absolute;
   border-radius: 20px;
   margin-left: 1780px;
+
 }
 
 .testimonials .bird {
@@ -1048,6 +1170,8 @@
   margin-right: 10.21%;
   margin-top: 8.05%;
   margin-bottom: 21.74%;
+
+
 }
 
 .subscription {
@@ -1058,24 +1182,27 @@
 }
 
 .subscription .container {
+
   width: 1170px;
   height: 407px;
 
   margin-top: 150px;
   margin-bottom: 170px;
 
-  background: #9fffec;
+  background: #9FFFEC;
 
   border-radius: 20px 129px 20px 20px;
+
 }
 
 .subscription .container .heading {
+
   width: 819px;
   height: 108px;
   margin-top: 79px;
   margin-left: 176px;
 
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 33px;
@@ -1084,19 +1211,25 @@
   text-align: center;
 
   /* TEXT CLR */
-  color: #5e6282;
+  color: #5E6282;
+
+
 }
 
+
 .subscription .container img {
+
   position: absolute;
   width: 153px;
   height: 166px;
   margin-top: 320px;
   margin-left: 1100px;
   margin-right: 186px;
+
 }
 
 .subscription .container input {
+
   width: 421px;
   height: 68px;
   text-decoration: none;
@@ -1105,10 +1238,11 @@
   margin-left: 252px;
 
   /* white */
-  background: #ffffff;
+  background: #FFFFFF;
   border-radius: 10px;
 
-  font-family: "Montserrat";
+
+  font-family: 'Montserrat';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -1116,13 +1250,14 @@
   /* identical to box height */
 
   /* TEXT COLOR */
-  color: #39425d;
+  color: #39425D;
 
   padding-left: 20px;
+
 }
 
 .subscription .container input:focus {
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -1130,19 +1265,24 @@
   /* identical to box height */
 
   /* TEXT COLOR */
-  color: #39425d;
+  color: #39425D;
+
 }
 
 .subscription .container button {
+
   position: absolute;
   width: 180px;
   height: 68px;
 
-  background: #00a651;
+
+
+  background: #00A651;
   border-radius: 10px;
   border: none;
   cursor: pointer;
   margin-left: 20px;
+
 }
 
 .subscription .container button:hover,
@@ -1152,14 +1292,17 @@
 
 .subscription .container button:hover p,
 .subscription .container button:active p {
-  color: #00a651;
+  color: #00A651;
 }
 
+
 .subscription .container button p {
+
   width: 80px;
   height: 23px;
 
-  font-family: "Open Sans";
+
+  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
   font-size: 17px;
@@ -1167,7 +1310,9 @@
   text-align: center;
 
   /* white */
-  color: #ffffff;
+  color: #FFFFFF;
   margin-top: 22;
   margin-left: 45px;
+
+
 }

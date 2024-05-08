@@ -382,7 +382,6 @@ function Home() {
 
               <div class="small-container">
                 <div class="card">
-                  <img src={testimonial.profileImg} />
                   <p class="text">{testimonial.text}</p>
                   <p class="name">-{testimonial.name}</p>
                 </div>
