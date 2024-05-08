@@ -18,11 +18,11 @@ const tourSchema = mongoose.Schema(
       type: String,
       required: [true, "Provide Location Image URL"],
     },
-    startDate: {
+    tourStartDate: {
       type: Date,
       required: [true, "Provide Start Date"],
     },
-    endDate: {
+    tourEndDate: {
       type: Date,
       required: [true, "Provide End Date"],
     },

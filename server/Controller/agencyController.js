@@ -274,10 +274,98 @@ const getAllTours = asyncHandler(async (req, res) => {
   }
 });
 
+const publishTour = asyncHandler(async (req, res) => {
+  const agencyId = req.params.id;
+  console.log(agencyId);
+  const {
+    agencyName,
+    tourStartDate,
+    tourEndDate,
+    locationName,
+    locationImage,
+    registrationEndDate,
+    information,
+    status,
+    price,
+  } = req.body;
+
+  console.log("REQ BODY", req.body);
+
+  if (!tourStartDate) {
+    console.log("REQ.BODY.STARTDATE: ", tourStartDate);
+    res.status(400);
+    throw new Error("Tour start date is mandatory");
+  }
+
+  if (!tourEndDate) {
+    res.status(400);
+    throw new Error("Tour end date is mandatory");
+  }
+
+  if (!agencyName) {
+    res.status(400);
+    throw new Error("Tour agency name is mandatory");
+  }
+
+  if (!locationName) {
+    res.status(400);
+    throw new Error("Tour location name is mandatory");
+  }
+
+  if (!locationImage) {
+    res.status(400);
+    throw new Error("Tour location image is mandatory");
+  }
+
+  if (!registrationEndDate) {
+    res.status(400);
+    throw new Error("Tour registration end date is mandatory");
+  }
+
+  if (!information) {
+    res.status(400);
+    throw new Error("Tour information is mandatory");
+  }
+
+  if (!status) {
+    res.status(400);
+    throw new Error("Tour status is mandatory");
+  }
+
+  if (!price) {
+    res.status(400);
+    throw new Error("Tour Price is mandatory");
+  }
+
+  console.log("DB NEW TOUR", new Date(tourStartDate));
+
+  // Create the tour in the database
+  const newTour = await tour.create({
+    agencyId,
+    agencyName,
+    tourStartDate: new Date(tourStartDate),
+    tourEndDate: new Date(tourEndDate),
+    locationName,
+    locationImage,
+    registrationEndDate: new Date(registrationEndDate),
+    information,
+    status,
+    price,
+  });
+
+  console.log("DB NEW TOUR", newTour);
+
+  res.status(200).json({
+    message: "Tour created and published successfully",
+    tour: newTour,
+  });
+});
+
 module.exports = {
   registerAgency,
   loginAgency,
   refreshAccessToken,
   getCurrentAgency,
   getAllTours,
+  publishTour,
 };
