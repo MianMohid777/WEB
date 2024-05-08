@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import {
   useGoogleSignInMutation,
   useLoginMutation,
-} from "../../services/Login/loginAPI";
+} from "../../Services/Login/loginAPI";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
