@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   authAgency: {},
   profile: {},
+  allTours: [{}],
 };
 
 export const agencySlice = createSlice({
@@ -21,8 +22,14 @@ export const agencySlice = createSlice({
         profile: action.payload,
       };
     },
+    addTours: (state, action) => {
+      return {
+        ...state,
+        allTours: action.payload,
+      };
+    },
   },
 });
 
-export const { addAuthAgency, addProfile } = agencySlice.actions;
+export const { addAuthAgency, addProfile, addTours } = agencySlice.actions;
 export default agencySlice.reducer;

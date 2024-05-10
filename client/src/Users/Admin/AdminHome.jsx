@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
-  Button,
   Divider,
   Drawer,
   Grid,
@@ -21,7 +20,6 @@ import {
   useGetAllAgencyQuery,
   useGetAdminQuery,
   useLogoutMutation,
-  useDeleteApplicationMutation,
 } from "../../Services/Agency/agencyApi";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 

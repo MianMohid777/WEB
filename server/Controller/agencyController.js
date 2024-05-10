@@ -185,7 +185,6 @@ const loginAgency = asyncHandler(async (req, res) => {
   }
 });
 
-
 //@desc Refresh Access Token Using Refresh Token
 //@route Post /api/agencies/refresh-token
 //@access private
@@ -248,7 +247,6 @@ const getAllTours = asyncHandler(async (req, res) => {
   try {
     const userId = req.params.id;
 
-    console.log(userId.toString());
     if (userId !== req.user.id.toString()) {
       res.status(401);
       throw new Error("Unauthorized Access");
@@ -261,13 +259,15 @@ const getAllTours = asyncHandler(async (req, res) => {
       throw new Error("Agency Not Found");
     }
 
-    const tours = await tour.find({ agencyId: userId });
+    const tours = await tour
+      .find({ tourAgencyId: userId })
+      .sort({ createdAt: "desc" });
 
     console.log(tours);
 
     res.status(200).json({
       message: "Success",
-      tours,
+      tours: tours,
     });
   } catch (e) {
     console.log(e);
@@ -275,9 +275,25 @@ const getAllTours = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc POST A NEW TOUR
+//@route Post /api/agencies/current-agency/publish-tour/:id
+//@access private
 const publishTour = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+
+  if (userId !== req.user.id.toString()) {
+    res.status(401);
+    throw new Error("Unauthorized Access");
+  }
+
+  const agency = await agencyReg.findById(userId);
+
+  if (!agency) {
+    res.status(404);
+    throw new Error("Agency Not Found");
+  }
+
   const {
-    tourAgencyId,
     tourAgencyName,
     tourStartDate,
     tourEndDate,
@@ -287,11 +303,9 @@ const publishTour = asyncHandler(async (req, res) => {
     tourInformation,
     tourStatus,
     tourPrice,
-
   } = req.body;
 
-  
-
+  const tourAgencyId = req.params.id;
   console.log("REQ BODY", req.body);
   if (!tourStartDate) {
     console.log("REQ.BODY.STARTDATE: ", tourStartDate);
@@ -339,8 +353,6 @@ const publishTour = asyncHandler(async (req, res) => {
     throw new Error("Tour Price is mandatory");
   }
 
-  
-
   // Create the tour in the database
   const newTour = await tour.create({
     tourAgencyId,
@@ -355,7 +367,6 @@ const publishTour = asyncHandler(async (req, res) => {
     tourPrice,
   });
 
-
   console.log("DB NEW TOUR", newTour);
 
   res.status(200).json({
@@ -364,6 +375,86 @@ const publishTour = asyncHandler(async (req, res) => {
   });
 });
 
+//@desc GET TOURS ON SEARCH
+//@route Post /api/agencies/current-agency/search/:value
+//@access private
+const getSearchedTour = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (userId !== req.user.id.toString()) {
+      res.status(401);
+      throw new Error("Unauthorized Access");
+    }
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    const search = req.params.value;
+    console.log(search);
+    const tours = await tour.find({
+      $and: [
+        {
+          $or: [
+            { tourInformation: { $regex: search, $options: "i" } },
+            { tourLocationName: { $regex: search, $options: "i" } },
+          ],
+        },
+        { tourStatus: "Active" },
+      ],
+    });
+
+    res.status(200).json({
+      message: "Success",
+      tours: tours,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+
+//@desc Get All Ended Ads
+//@route Post /api/agencies/current-agency/tours/history/:id
+//@access private
+const getPastTours = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (userId !== req.user.id.toString()) {
+      res.status(401);
+      throw new Error("Unauthorized Access");
+    }
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    const tours = await tour
+      .find({
+        tourAgencyId: userId,
+        $or: [{ tourStatus: "Finished" }, { tourStatus: "Cancelled" }],
+      })
+      .sort({ createdAt: "desc" });
+
+    console.log(tours);
+
+    res.status(200).json({
+      message: "Success",
+      tours: tours,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
 
 module.exports = {
   registerAgency,
@@ -372,5 +463,6 @@ module.exports = {
   getCurrentAgency,
   getAllTours,
   publishTour,
+  getSearchedTour,
+  getPastTours,
 };
-

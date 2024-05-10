@@ -31,7 +31,7 @@ const tourSchema = mongoose.Schema(
     },
     tourRegistrationEndDate: {
       type: Date,
-      default: "2024-06-30T23:59:59.999Z", 
+      default: "2024-06-30T23:59:59.999Z",
       required: [true, "Provide Registration End Date"],
     },
     tourInformation: {
@@ -40,7 +40,13 @@ const tourSchema = mongoose.Schema(
     },
     tourStatus: {
       type: String,
-      enum: ['Upcoming', 'RegistrationsOpened', 'Finished', 'Cancelled'],
+      enum: [
+        "Upcoming",
+        "RegistrationsOpened",
+        "Active",
+        "Finished",
+        "Cancelled",
+      ],
 
       required: [true, "Provide Status"],
     },

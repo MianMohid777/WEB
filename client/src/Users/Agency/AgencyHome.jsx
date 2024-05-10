@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -31,7 +31,16 @@ import SearchIcon from "@mui/icons-material/Search";
 import CreatePost from "@mui/icons-material/EditCalendar";
 
 import DP from "../../Assets/Karakoram.jpg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  useGetAgencyQuery,
+  useGetAllToursQuery,
+} from "../../Services/Agency/agencyApi";
+import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
+
+import Loader from "../../Utils/Loader";
+import { addTours } from "../../Redux/Features/agencySlice";
+import TourPost from "../../Utils/TourPost";
 
 function AgencyHome() {
   const theme = createTheme({
@@ -40,9 +49,18 @@ function AgencyHome() {
     },
   });
 
-  //HOOKS
+  //Hooks
+  const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
+  const [dataState, setDataState] = useState(false);
+
+  const accessToken = getItem();
+  const refreshToken = getRefItem();
+
   const [open, setOpen] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
+  const [searchBar, setSearchBar] = useState("");
   const [color, setColor] = useState({
     dash: "#FF4E45",
     profile: "white",
@@ -51,16 +69,43 @@ function AgencyHome() {
     stats: "white",
     settings: "white",
   });
+
   const navigate = useNavigate();
   const agency = useSelector((state) => state.agency);
+  const dispatch = useDispatch();
 
-  console.log(agency);
+  // QUERY // MUTATIONS
+
+  const { data, isLoading, isError, isSuccess, refetch } = useGetAllToursQuery({
+    id: agency.authAgency.id,
+    accessToken: accessToken,
+  });
+
+  const { isLoading: isAgencyLoading, isError: agencyError } =
+    useGetAgencyQuery({ accessToken: accessToken });
 
   // HANDLE MENU STATES
   const handleClick = (idx) => {
     setSelectedIdx(idx);
   };
 
+  // HANDLE ERROR & SUCCESS RESPONSE
+  if (isError || agencyError) {
+    console.log("Its GET TOURS API ERROR", isError);
+    console.log(agencyError);
+    navigate("/agency-login", { replace: true });
+  }
+
+  useEffect(() => {
+    if (isSuccess && !isLoading) {
+      console.log(data.tours);
+      console.log("Dispatched");
+      dispatch(addTours(data?.tours));
+    }
+  }, [data]);
+
+  //LOADER LOGIC
+  if (isLoading || isAgencyLoading) return <Loader />;
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -116,6 +161,9 @@ function AgencyHome() {
                           <SearchIcon sx={{ color: "white" }} />
                         </InputAdornment>
                       }
+                      onChange={(e) => {
+                        setSearchBar(e.target.value);
+                      }}
                     />
                   </Box>
 
@@ -564,7 +612,108 @@ function AgencyHome() {
                 </Box>
               </Box>
             </Grid>
-            <Grid item lg={8} sx={{ height: "100%" }}></Grid>
+            <Grid
+              item
+              lg={8}
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                height: "100vh",
+                marginTop: "5%",
+                gap: "20px",
+              }}
+            >
+              <TourPost
+                agencyName={agency.authAgency.name}
+                img={DP}
+                locationName={"Hunza"}
+                info={
+                  "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
+                }
+                price={10000}
+                startDate={"1/5/2024"}
+                endDate={"5/5/2024"}
+              />
+
+              <TourPost
+                agencyName={agency.authAgency.name}
+                img={DP}
+                locationName={"Hunza"}
+                info={
+                  "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
+                }
+                price={10000}
+                startDate={"1/5/2024"}
+                endDate={"5/5/2024"}
+              />
+
+              <TourPost
+                agencyName={agency.authAgency.name}
+                img={DP}
+                locationName={"Hunza"}
+                info={
+                  "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
+                }
+                price={10000}
+                startDate={"1/5/2024"}
+                endDate={"5/5/2024"}
+              />
+              <TourPost
+                agencyName={agency.authAgency.name}
+                img={DP}
+                locationName={"Hunza"}
+                info={
+                  "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
+                }
+                price={10000}
+                startDate={"1/5/2024"}
+                endDate={"5/5/2024"}
+              />
+              <TourPost
+                agencyName={agency.authAgency.name}
+                img={DP}
+                locationName={"Hunza"}
+                info={
+                  "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
+                }
+                price={10000}
+                startDate={"1/5/2024"}
+                endDate={"5/5/2024"}
+              />
+              <TourPost
+                agencyName={agency.authAgency.name}
+                img={DP}
+                locationName={"Hunza"}
+                info={
+                  "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
+                }
+                price={10000}
+                startDate={"1/5/2024"}
+                endDate={"5/5/2024"}
+              />
+              <TourPost
+                agencyName={agency.authAgency.name}
+                img={DP}
+                locationName={"Hunza"}
+                info={
+                  "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
+                }
+                price={10000}
+                startDate={"1/5/2024"}
+                endDate={"5/5/2024"}
+              />
+              <TourPost
+                agencyName={agency.authAgency.name}
+                img={DP}
+                locationName={"Hunza"}
+                info={
+                  "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
+                }
+                price={10000}
+                startDate={"1/5/2024"}
+                endDate={"5/5/2024"}
+              />
+            </Grid>
           </Grid>
         </Typography>
       </ThemeProvider>

@@ -75,6 +75,42 @@ const adminRefreshTokenApi = api.injectEndpoints({
   },
 });
 
+const agencyRefreshTokenApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      agencyRefreshToken: builder.mutation({
+        query: ({ refreshToken }) => ({
+          url: "agencies/refresh-token",
+          method: "POST",
+          // credentials: "include",
+          body: { refreshToken },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      }),
+    };
+  },
+});
+
+const touristRefreshTokenApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      touristRefreshToken: builder.mutation({
+        query: ({ refreshToken }) => ({
+          url: "tourists/refresh-token",
+          method: "POST",
+          // credentials: "include",s
+          body: { refreshToken },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      }),
+    };
+  },
+});
+
 const googleSignInApi = api.injectEndpoints({
   endpoints: (builder) => {
     return {
@@ -96,4 +132,6 @@ export const { useLoginMutation } = loginAPI;
 export const { useAgencyLoginMutation } = agencyLoginApi;
 export const { useAdminLoginMutation } = adminLoginApi;
 export const { useAdminRefreshTokenMutation } = adminRefreshTokenApi;
+export const { useTouristRefreshTokenMutation } = touristRefreshTokenApi;
+export const { useAgencyRefreshTokenMutation } = agencyRefreshTokenApi;
 export const { useGoogleSignInMutation } = googleSignInApi;
