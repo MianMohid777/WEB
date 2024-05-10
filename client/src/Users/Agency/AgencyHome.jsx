@@ -31,6 +31,7 @@ import TourPost from "../../Utils/TourPost";
 import terror from "../../Assets/terror.jpg";
 import LeftDrawer from "../../Utils/LeftDrawer";
 import TopBar from "../../Utils/TopBar";
+import { useAnalytic } from "../../Utils/analyticCalc-Hook";
 
 function AgencyHome() {
   const theme = createTheme({
@@ -55,6 +56,7 @@ function AgencyHome() {
   const navigate = useNavigate();
   const agency = useSelector((state) => state.agency);
   const dispatch = useDispatch();
+  const { getToursSize } = useAnalytic();
 
   // QUERY // MUTATIONS
 
@@ -72,6 +74,7 @@ function AgencyHome() {
   useEffect(() => {
     refetch();
     currAgency();
+    console.log(getToursSize());
   }, []);
   // HANDLE MENU STATES
   const handleClick = (idx) => {
