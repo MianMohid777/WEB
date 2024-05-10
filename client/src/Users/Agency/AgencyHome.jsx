@@ -2,16 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
-  Divider,
   Grid,
   InputAdornment,
   AppBar,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  Drawer,
   ThemeProvider,
   Typography,
   createTheme,
@@ -20,13 +13,7 @@ import {
 } from "@mui/material";
 
 import Menu from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import StoreIcon from "@mui/icons-material/Store";
-import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
-import HistoryIcon from "@mui/icons-material/History";
-import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import SettingsIcon from "@mui/icons-material/Settings";
+
 import SearchIcon from "@mui/icons-material/Search";
 import CreatePost from "@mui/icons-material/EditCalendar";
 
@@ -41,6 +28,9 @@ import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 import Loader from "../../Utils/Loader";
 import { addTours } from "../../Redux/Features/agencySlice";
 import TourPost from "../../Utils/TourPost";
+import terror from "../../Assets/terror.jpg";
+import LeftDrawer from "../../Utils/LeftDrawer";
+import TopBar from "../../Utils/TopBar";
 
 function AgencyHome() {
   const theme = createTheme({
@@ -61,14 +51,6 @@ function AgencyHome() {
   const [open, setOpen] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [searchBar, setSearchBar] = useState("");
-  const [color, setColor] = useState({
-    dash: "#FF4E45",
-    profile: "white",
-    ads: "white",
-    history: "white",
-    stats: "white",
-    settings: "white",
-  });
 
   const navigate = useNavigate();
   const agency = useSelector((state) => state.agency);
@@ -81,9 +63,16 @@ function AgencyHome() {
     accessToken: accessToken,
   });
 
-  const { isLoading: isAgencyLoading, isError: agencyError } =
-    useGetAgencyQuery({ accessToken: accessToken });
+  const {
+    isLoading: isAgencyLoading,
+    isError: agencyError,
+    refetch: currAgency,
+  } = useGetAgencyQuery({ accessToken: accessToken });
 
+  useEffect(() => {
+    refetch();
+    currAgency();
+  }, []);
   // HANDLE MENU STATES
   const handleClick = (idx) => {
     setSelectedIdx(idx);
@@ -128,379 +117,26 @@ function AgencyHome() {
             <Box>
               <Grid
                 container
-                sx={{ backgroundColor: "#1F1F1F", height: "100vh" }}
+                sx={{
+                  backgroundColor: "#1F1F1F",
+                  height: "100vh",
+                }}
               >
                 <Grid item lg={12}>
-                  <AppBar
-                    sx={{
-                      bgcolor: "#282828",
-                      height: "10%",
-                    }}
-                  >
-                    <Box
-                      component="div"
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IconButton sx={{ margin: "20px", borderRadius: "0px" }}>
-                        <Menu
-                          fontSize="medium"
-                          sx={{ color: "white" }}
-                          onClick={() => setOpen(!open)}
-                        />
-                      </IconButton>
-                      <Box
-                        component="div"
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          flexBasis: "100%",
-                          marginLeft: "15%",
-                        }}
-                      >
-                        <InputBase
-                          sx={{
-                            width: "60%",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            color: "white",
-                            border: "1px solid white",
-                            paddingLeft: "20px",
-                            paddingRight: "20px",
-                            paddingTop: "5px",
-                            paddingBottom: "5px",
-                          }}
-                          placeholder="Search Active Ads"
-                          autoFocus={true}
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <SearchIcon sx={{ color: "white" }} />
-                            </InputAdornment>
-                          }
-                          onChange={(e) => {
-                            setSearchBar(e.target.value);
-                          }}
-                        />
-                      </Box>
-
-                      <IconButton
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          marginRight: "50px",
-                          color: "white",
-                          border: "1px solid white",
-                          borderRadius: "0px",
-                          gap: "10px",
-                          paddingLeft: "20px",
-                          paddingRight: "20px",
-                        }}
-                        onClick={() => {
-                          navigate("/current-agency/create-tour");
-                        }}
-                      >
-                        <CreatePost
-                          fontSize="large"
-                          sx={{ color: "#FF4E45" }}
-                        />
-
-                        <Box component="div" fontSize={16} fontWeight={700}>
-                          CREATE
-                        </Box>
-                      </IconButton>
-                    </Box>
-                  </AppBar>
-                  <Drawer
+                  <TopBar setOpen={setOpen} setSearchBar={setSearchBar} />
+                  <LeftDrawer
                     open={open}
-                    sx={{
-                      boxSizing: "border-box",
-
-                      "& .MuiDrawer-paper": {
-                        width: "20%",
-                        boxSizing: "border-box",
-                        backgroundColor: "#282828",
-                        color: "#FF4E45",
-                      },
-                    }}
-                    variant="temporary"
-                    anchor="left"
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 0.5,
-                        ml: "auto",
-                        mt: 1,
-                        mr: 2,
-                        cursor: "pointer",
-                      }}
-                      onClick={() => setOpen(!open)}
-                    >
-                      <CloseIcon sx={{ color: "white" }} />
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        flexDirection: "column",
-                        gap: 0.5,
-                        mt: 3,
-                      }}
-                    >
-                      <Divider />
-                      <List sx={{ width: "100%" }}>
-                        <ListItem sx={{ padding: "0" }}>
-                          <ListItemButton
-                            sx={{
-                              "&.Mui-selected": {
-                                backgroundColor: "black",
-                                "&:hover": {
-                                  backgroundColor: "black",
-                                },
-                                color: "#FF4E45",
-                              },
-                              "&:hover": {
-                                backgroundColor: "black",
-                              },
-                              color: "white",
-                            }}
-                            selected={selectedIdx === 0}
-                            onClick={() => {
-                              handleClick(0);
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                dash: "#FF4E45",
-                              }));
-                            }}
-                            onBlur={() => {
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                dash: "white",
-                              }));
-                            }}
-                          >
-                            <ListItemIcon>
-                              <DashboardIcon sx={{ color: color.dash }} />
-                            </ListItemIcon>
-                            <ListItemText primary="Dashboard"></ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                      </List>
-
-                      <Divider />
-                      <List sx={{ width: "100%" }}>
-                        <ListItem sx={{ padding: "0" }}>
-                          <ListItemButton
-                            sx={{
-                              "&.Mui-selected": {
-                                backgroundColor: "black",
-                                "&:hover": {
-                                  backgroundColor: "black",
-                                },
-                                color: "#FF4E45",
-                              },
-                              "&:hover": {
-                                backgroundColor: "black",
-                              },
-                              color: "white",
-                            }}
-                            selected={selectedIdx === 1}
-                            onClick={() => {
-                              handleClick(1);
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                profile: "#FF4E45",
-                              }));
-                            }}
-                            onBlur={() => {
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                profile: "white",
-                              }));
-                            }}
-                          >
-                            <ListItemIcon>
-                              <StoreIcon sx={{ color: color.profile }} />
-                            </ListItemIcon>
-
-                            <ListItemText primary="Agency Profile"></ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                      </List>
-
-                      <Divider />
-                      <List sx={{ width: "100%" }}>
-                        <ListItem sx={{ padding: "0" }}>
-                          <ListItemButton
-                            sx={{
-                              "&.Mui-selected": {
-                                backgroundColor: "black",
-                                "&:hover": {
-                                  backgroundColor: "black",
-                                },
-                                color: "#FF4E45",
-                              },
-                              "&:hover": {
-                                backgroundColor: "black",
-                              },
-                              color: "white",
-                            }}
-                            selected={selectedIdx === 2}
-                            onClick={() => {
-                              handleClick(2);
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                ads: "#FF4E45",
-                              }));
-                            }}
-                            onBlur={() => {
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                ads: "white",
-                              }));
-                            }}
-                          >
-                            <ListItemIcon>
-                              <DynamicFeedIcon sx={{ color: color.ads }} />
-                            </ListItemIcon>
-                            <ListItemText primary="Active Ads"></ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                      </List>
-
-                      <Divider />
-                      <List sx={{ width: "100%" }}>
-                        <ListItem sx={{ padding: "0" }}>
-                          <ListItemButton
-                            sx={{
-                              "&.Mui-selected": {
-                                backgroundColor: "black",
-                                "&:hover": {
-                                  backgroundColor: "black",
-                                },
-                                color: "#FF4E45",
-                              },
-                              "&:hover": {
-                                backgroundColor: "black",
-                              },
-                              color: "white",
-                            }}
-                            selected={selectedIdx === 3}
-                            onClick={() => {
-                              handleClick(3);
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                history: "#FF4E45",
-                              }));
-                            }}
-                            onBlur={() => {
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                history: "white",
-                              }));
-                            }}
-                          >
-                            <ListItemIcon>
-                              <HistoryIcon sx={{ color: color.history }} />
-                            </ListItemIcon>
-                            <ListItemText primary="Ads History"></ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                      </List>
-
-                      <Divider />
-                      <List sx={{ width: "100%" }}>
-                        <ListItem sx={{ padding: "0" }}>
-                          <ListItemButton
-                            sx={{
-                              "&.Mui-selected": {
-                                backgroundColor: "black",
-                                "&:hover": {
-                                  backgroundColor: "black",
-                                },
-                                color: "#FF4E45",
-                              },
-                              "&:hover": {
-                                backgroundColor: "black",
-                              },
-                              color: "white",
-                            }}
-                            selected={selectedIdx === 4}
-                            onClick={() => {
-                              handleClick(4);
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                stats: "#FF4E45",
-                              }));
-                            }}
-                            onBlur={() => {
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                stats: "white",
-                              }));
-                            }}
-                          >
-                            <ListItemIcon>
-                              <QueryStatsIcon sx={{ color: color.stats }} />
-                            </ListItemIcon>
-                            <ListItemText primary="Analytics"></ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                      </List>
-
-                      <Divider />
-                      <List sx={{ width: "100%" }}>
-                        <ListItem sx={{ padding: "0" }}>
-                          <ListItemButton
-                            sx={{
-                              "&.Mui-selected": {
-                                backgroundColor: "black",
-                                "&:hover": {
-                                  backgroundColor: "black",
-                                },
-                                color: "#FF4E45",
-                              },
-                              "&:hover": {
-                                backgroundColor: "black",
-                              },
-                              color: "white",
-                            }}
-                            selected={selectedIdx === 5}
-                            onClick={() => {
-                              handleClick(5);
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                settings: "#FF4E45",
-                              }));
-                            }}
-                            onBlur={() => {
-                              setColor((prevColor) => ({
-                                ...prevColor,
-                                settings: "white",
-                              }));
-                            }}
-                          >
-                            <ListItemIcon>
-                              <SettingsIcon sx={{ color: color.settings }} />
-                            </ListItemIcon>
-                            <ListItemText primary="Settings"></ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                      </List>
-                    </Box>
-                  </Drawer>
+                    setOpen={setOpen}
+                    handleClick={handleClick}
+                    selectedIdx={selectedIdx}
+                  />
                 </Grid>
                 <Grid item lg={3} sx={{ height: "100%" }}>
                   <Box
                     component="div"
                     sx={{
                       backgroundColor: "#282828",
-                      width: "85%",
+                      width: "100%",
                       height: "100vh",
                       display: "flex",
                       alignItems: "center",
@@ -644,6 +280,7 @@ function AgencyHome() {
                       marginTop: "10%",
                       padding: "20px",
                       height: "calc(100vh - 20%)",
+                      width: "100%",
                       overflowY: "auto",
                       display: "flex",
                       flexWrap: "wrap",
@@ -652,96 +289,55 @@ function AgencyHome() {
                       gap: "50px",
                     }}
                   >
-                    <TourPost
-                      agencyName={agency.authAgency.name}
-                      img={"http://localhost:3002/api/static/Space.jpg"}
-                      locationName={"Hunza"}
-                      info={
-                        "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
-                      }
-                      price={10000}
-                      startDate={"1/5/2024"}
-                      endDate={"5/5/2024"}
-                    />
-
-                    <TourPost
-                      agencyName={agency.authAgency.name}
-                      img={DP}
-                      locationName={"Hunza"}
-                      info={
-                        "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
-                      }
-                      price={10000}
-                      startDate={"1/5/2024"}
-                      endDate={"5/5/2024"}
-                    />
-
-                    <TourPost
-                      agencyName={agency.authAgency.name}
-                      img={DP}
-                      locationName={"Hunza"}
-                      info={
-                        "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
-                      }
-                      price={10000}
-                      startDate={"1/5/2024"}
-                      endDate={"5/5/2024"}
-                    />
-                    <TourPost
-                      agencyName={agency.authAgency.name}
-                      img={DP}
-                      locationName={"Hunza"}
-                      info={
-                        "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
-                      }
-                      price={10000}
-                      startDate={"1/5/2024"}
-                      endDate={"5/5/2024"}
-                    />
-                    <TourPost
-                      agencyName={agency.authAgency.name}
-                      img={DP}
-                      locationName={"Hunza"}
-                      info={
-                        "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
-                      }
-                      price={10000}
-                      startDate={"1/5/2024"}
-                      endDate={"5/5/2024"}
-                    />
-                    <TourPost
-                      agencyName={agency.authAgency.name}
-                      img={DP}
-                      locationName={"Hunza"}
-                      info={
-                        "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
-                      }
-                      price={10000}
-                      startDate={"1/5/2024"}
-                      endDate={"5/5/2024"}
-                    />
-                    <TourPost
-                      agencyName={agency.authAgency.name}
-                      img={DP}
-                      locationName={"Hunza"}
-                      info={
-                        "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
-                      }
-                      price={10000}
-                      startDate={"1/5/2024"}
-                      endDate={"5/5/2024"}
-                    />
-                    <TourPost
-                      agencyName={agency.authAgency.name}
-                      img={DP}
-                      locationName={"Hunza"}
-                      info={
-                        "Voluptate fugiat nulla laboris nisi consequat sit voluptate pariatur laborum reprehenderit do. Aute ullamco reprehenderit cillum deserunt ullamco elit laboris minim. Duis est ullamco irure magna dolore est irure dolor anim occaecat ipsum culpa."
-                      }
-                      price={10000}
-                      startDate={"1/5/2024"}
-                      endDate={"5/5/2024"}
-                    />
+                    {data && Array.isArray(data.tours) ? (
+                      data.tours?.map((tour) => {
+                        return (
+                          <TourPost
+                            agencyName={agency.authAgency.name}
+                            img={`http://localhost:3002/api/static/${tour.tourLocationImage}`}
+                            locationName={tour.tourLocationName}
+                            info={tour.tourInformation}
+                            price={tour.tourPrice}
+                            startDate={tour.tourStartDate}
+                            endDate={tour.tourEndDate}
+                            status={tour.tourStatus}
+                          />
+                        );
+                      })
+                    ) : (
+                      <Box
+                        component="div"
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginTop: "10%",
+                          borderRadius: "30px",
+                          width: "100vw",
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          src={terror}
+                          sx={{
+                            width: "220px",
+                            height: "200px",
+                            boxShadow:
+                              "0 6px 10px 0 rgba(0, 0, 0, 0.2), 0 8px 25px 0 rgba(0, 0, 0, 0.19)",
+                            borderRadius: "30px",
+                          }}
+                        />
+                        <Box
+                          component="div"
+                          mt={3}
+                          sx={{ fontSize: "40px", fontWeight: 700 }}
+                        >
+                          {" "}
+                          Nothing to Show !
+                        </Box>
+                      </Box>
+                    )}
                   </Box>
                 </Grid>
               </Grid>

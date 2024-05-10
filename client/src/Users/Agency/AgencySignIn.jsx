@@ -10,7 +10,11 @@ import {
   createTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useAgencyLoginMutation } from "../../Services/Login/loginAPI";
+import {
+  useAgencyLoginMutation,
+  useAgencyRefreshTokenMutation,
+} from "../../Services/Login/loginAPI";
+
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -29,31 +33,54 @@ import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 function AgencySignIn() {
   const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
 
   const accessToken = getItem();
+  const refreshToken = getRefItem();
 
   useEffect(() => {
     const checkLogIn = async () => {
       try {
-        const res = await loginAgency({ accessToken: accessToken }).unwrap();
-        console.log(res);
-        if (res) {
-          dispatch(
-            addAuthAgency({
-              email: res.email,
-              id: res.id,
-              name: res.name,
-              adminName: res.adminName,
-              ntn: res.ntn,
-              license: res.license,
-              address: res.address,
-              access_token: accessToken,
-            })
-          );
-          navigate("/agency-home");
+        if (accessToken) {
+          const res = await loginAgency({ accessToken: accessToken }).unwrap();
+          console.log(res);
+          if (res) {
+            dispatch(
+              addAuthAgency({
+                email: res.email,
+                id: res.id,
+                name: res.name,
+                adminName: res.adminName,
+                ntn: res.ntn,
+                license: res.license,
+                address: res.address,
+                access_token: accessToken,
+              })
+            );
+            navigate("/agency-home");
+          }
         }
       } catch (err) {
         console.log(err);
+        if (err.status === 401) {
+          console.log("Going for Token Refresh");
+
+          try {
+            const response = await agencyRefreshToken({
+              refreshToken: refreshToken,
+            }).unwrap();
+
+            console.log(response);
+            if (response) {
+              setItem(response.accessToken);
+              setRefItem(response.refreshToken);
+              navigate("/agency-home");
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }
       }
     };
 
@@ -68,6 +95,8 @@ function AgencySignIn() {
   });
 
   const [loginAgency, { isLoading }] = useAgencyLoginMutation();
+  const [agencyRefreshToken, { isLoading: refLoading }] =
+    useAgencyRefreshTokenMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

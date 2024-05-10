@@ -456,6 +456,39 @@ const getPastTours = asyncHandler(async (req, res) => {
   }
 });
 
+const updateTours = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // if (userId !== req.user.id.toString()) {
+    //   res.status(401);
+    //   throw new Error("Unauthorized Access");
+    // }
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    const tours = await tour.updateMany(
+      { tourAgencyId: userId },
+      { tourLocationImage: "flyingJatt.jpg" },
+      { new: true }
+    );
+
+    console.log(tours);
+
+    res.status(200).json({
+      message: "Success",
+      tours: tours,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
 module.exports = {
   registerAgency,
   loginAgency,
@@ -465,4 +498,5 @@ module.exports = {
   publishTour,
   getSearchedTour,
   getPastTours,
+  updateTours,
 };
