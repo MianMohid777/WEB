@@ -16,9 +16,9 @@ import { PhotoCamera } from "@mui/icons-material";
 import AgencyHeader from "./AgencyHeader.jsx";
 import { useSelector } from "react-redux";
 
-
 import Loader from "../../Utils/Loader";
 import { useTourPublishMutation } from "../../Services/Agency/publishTour.js";
+import { useLocalStorage } from "../../Utils/useLocalStorage-Hook.js";
 
 // Create the custom theme
 const theme = createTheme({
@@ -28,7 +28,6 @@ const theme = createTheme({
 });
 
 const CreateTour = () => {
-
   // State variables to store form data
   const [locationName, setLocationName] = useState("");
   const [locationImage, setLocationImage] = useState("image");
@@ -39,9 +38,11 @@ const CreateTour = () => {
   const [status, setStatus] = useState("");
   const [price, setPrice] = useState(0);
 
-  const [tourPublish, { isLoading }] = useTourPublishMutation();
+  const [tourPublish, { isLoading, isErrot }] = useTourPublishMutation();
   const agency = useSelector((state) => state.agency);
-  console.log(agency);
+  //Hooks
+  const { setItem, getItem } = useLocalStorage("access_token");
+  const accessToken = getItem();
 
   const [tourInfo, setTourInfo] = useState({
     tourAgencyName: "Amazing Adventure",
@@ -52,45 +53,47 @@ const CreateTour = () => {
     tourRegistrationEndDate: new Date().toLocaleDateString(),
     tourInformation: "",
     tourPrice: 0.0,
-    tourStatus: "Upcoming"
-
-  })
+    tourStatus: "Upcoming",
+  });
 
   const isValidDate = (dateString) => {
     const date = new Date(dateString);
     return date instanceof Date && !isNaN(date);
   };
 
-
   if (isLoading) return <Loader />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isValidDate(startDate) || !isValidDate(endDate) || !isValidDate(registrationEndDate)) {
-      alert('Please enter valid dates');
+    if (
+      !isValidDate(startDate) ||
+      !isValidDate(endDate) ||
+      !isValidDate(registrationEndDate)
+    ) {
+      alert("Please enter valid dates");
       return;
     }
 
     // Check if start date is after end date
     if (new Date(startDate) >= new Date(endDate)) {
-      alert('Start date must be before end date');
+      alert("Start date must be before end date");
       return;
     }
 
     // Check if registration end date is after end date
     if (new Date(registrationEndDate) > new Date(endDate)) {
-      alert('Registration end date must be before or equal to end date');
+      alert("Registration end date must be before or equal to end date");
       return;
     }
     if (new Date(startDate) >= new Date(endDate)) {
-      alert('Start date must be before end date');
+      alert("Start date must be before end date");
       return;
     }
 
     // Check if registration end date is after end date
     if (new Date(registrationEndDate) > new Date(endDate)) {
-      alert('Registration end date must be before or equal to end date');
+      alert("Registration end date must be before or equal to end date");
       return;
     }
 
@@ -104,19 +107,26 @@ const CreateTour = () => {
       tourRegistrationEndDate: registrationEndDate,
       tourInformation: information,
       tourStatus: status,
-      tourPrice: price
+      tourPrice: price,
     };
 
     console.log("TOUR INFO", newTourInfo);
-    setTourInfo(tourInfo)
+    setTourInfo(tourInfo);
 
+    const payload = {
+      tourInfo: newTourInfo,
+      id: agency.authAgency.id,
+      accessToken: accessToken,
+    };
+    console.log(payload);
+    try {
+      const response = await tourPublish(payload).unwrap();
 
-    const response = await tourPublish(newTourInfo).unwrap();
-
-    console.log("RESPONSE", response);
-
+      console.log("RESPONSE", response);
+    } catch (e) {
+      console.log(e);
+    }
   };
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -133,7 +143,6 @@ const CreateTour = () => {
         >
           <Typography variant="h4" gutterBottom>
             Create Tour
-
           </Typography>
           {agency.authAgency.name}
           <form onSubmit={handleSubmit}>
@@ -156,7 +165,6 @@ const CreateTour = () => {
                   fullWidth
                   onChange={(e) => setLocationImage(e.target.value)}
                 />
-              
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -205,7 +213,9 @@ const CreateTour = () => {
                     onChange={(e) => setStatus(e.target.value)}
                   >
                     <MenuItem value="Upcoming">Upcoming</MenuItem>
-                    <MenuItem value="RegistrationsOpened">Registrations Open</MenuItem>
+                    <MenuItem value="RegistrationsOpened">
+                      Registrations Open
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -234,12 +244,16 @@ const CreateTour = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" onClick={handleSubmit} variant="contained" color="primary">
+                <Button
+                  type="submit"
+                  onClick={handleSubmit}
+                  variant="contained"
+                  color="primary"
+                >
                   Create Tour
                 </Button>
               </Grid>
             </Grid>
-
           </form>
         </Box>
       </Typography>

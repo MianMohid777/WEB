@@ -1,25 +1,23 @@
 import { api } from "../api";
 
 const tourApi = api.injectEndpoints({
-    endpoints: (builder) => {
-      return {
-        tourPublish: builder.mutation({
-          query: (tourInfo, id, accessToken ) => {
-            console.log("API tourInfo:", tourInfo);
-            return {
-              url: "agencies/current-agency/publish-tour/"+ id,
-              method: "POST",
-              body: tourInfo,
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-            };
-          },
-        }),
-      };
-    },
-  });
-  
-  export const { useTourPublishMutation } = tourApi;
-  
+  endpoints: (builder) => {
+    return {
+      tourPublish: builder.mutation({
+        query: (payload) => {
+          return {
+            url: "agencies/current-agency/publish-tour/" + payload.id,
+            method: "POST",
+            body: payload.tourInfo,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${payload.accessToken}`,
+            },
+          };
+        },
+      }),
+    };
+  },
+});
+
+export const { useTourPublishMutation } = tourApi;

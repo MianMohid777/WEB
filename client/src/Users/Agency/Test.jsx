@@ -647,10 +647,9 @@ function Test() {
                       overflowY: "auto",
                       display: "flex",
                       flexWrap: "wrap",
-                      //justifyContent: "center",
+                      justifyContent: "center",
                       alignContent: "flex-start",
-
-                      gap: "20px",
+                      gap: "50px",
                     }}
                   >
                     <TourPost
