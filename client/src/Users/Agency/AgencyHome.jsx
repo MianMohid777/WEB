@@ -123,7 +123,11 @@ function AgencyHome() {
                 }}
               >
                 <Grid item lg={12}>
-                  <TopBar setOpen={setOpen} setSearchBar={setSearchBar} />
+                  <TopBar
+                    setOpen={setOpen}
+                    setSearchBar={setSearchBar}
+                    show={true}
+                  />
                   <LeftDrawer
                     open={open}
                     setOpen={setOpen}

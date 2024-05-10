@@ -75,29 +75,33 @@ function TopBar(props) {
           />
         </Box>
 
-        <IconButton
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginRight: "50px",
-            color: "white",
-            border: "1px solid white",
-            borderRadius: "0px",
-            gap: "10px",
-            paddingLeft: "20px",
-            paddingRight: "20px",
-          }}
-          onClick={() => {
-            navigate("/current-agency/create-tour");
-          }}
-        >
-          <CreatePost fontSize="large" sx={{ color: "#FF4E45" }} />
+        {props.show ? (
+          <IconButton
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginRight: "50px",
+              color: "white",
+              border: "1px solid white",
+              borderRadius: "0px",
+              gap: "10px",
+              paddingLeft: "20px",
+              paddingRight: "20px",
+            }}
+            onClick={() => {
+              navigate("/current-agency/create-tour");
+            }}
+          >
+            <CreatePost fontSize="large" sx={{ color: "#FF4E45" }} />
 
-          <Box component="div" fontSize={16} fontWeight={700}>
-            CREATE
-          </Box>
-        </IconButton>
+            <Box component="div" fontSize={16} fontWeight={700}>
+              CREATE
+            </Box>
+          </IconButton>
+        ) : (
+          <></>
+        )}
       </Box>
     </AppBar>
   );

@@ -36,14 +36,15 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SearchIcon from "@mui/icons-material/Search";
 import CreatePost from "@mui/icons-material/EditCalendar";
 import { PhotoCamera } from "@mui/icons-material";
-import AgencyHeader from './AgencyHeader.jsx';
+import AgencyHeader from "./AgencyHeader.jsx";
 import Loader from "../../Utils/Loader";
 import { useTourPublishMutation } from "../../Services/Agency/publishTour.js";
 
 import DP from "../../Assets/Karakoram.jpg";
 import { useSelector } from "react-redux";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook.js";
-
+import TopBar from "../../Utils/TopBar.jsx";
+import LeftDrawer from "../../Utils/LeftDrawer.jsx";
 
 function CreateTour() {
   const theme = createTheme({
@@ -51,7 +52,7 @@ function CreateTour() {
       fontFamily: "'Space Grotesk', sans-serif",
     },
     palette: {
-      mode: 'dark',
+      mode: "dark",
       primary: {
         main: "#FF4E45",
       },
@@ -67,15 +68,11 @@ function CreateTour() {
   // HOOKS
   const [open, setOpen] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const navigate = useNavigate();
-  const [color, setColor] = useState({
-    dash: "#FF4E45",
-    profile: "white",
-    ads: "white",
-    history: "white",
-    stats: "white",
-    settings: "white",
-  });
+  const [searchBar, setSearchBar] = useState("");
+  const [tourPublish, { isLoading, isError }] = useTourPublishMutation();
+  const agency = useSelector((state) => state.agency);
+  const { setItem, getItem } = useLocalStorage("access_token");
+  const accessToken = getItem();
 
   // State variables to store form data
   const [locationName, setLocationName] = useState("");
@@ -87,13 +84,6 @@ function CreateTour() {
   const [status, setStatus] = useState("");
   const [price, setPrice] = useState(0);
 
-  const [tourPublish, { isLoading, isError }] = useTourPublishMutation();
-  const agency = useSelector((state) => state.agency);
-  console.log(agency);
-  const { setItem, getItem } = useLocalStorage("access_token");
-  const accessToken = getItem();
-
-
   const [tourInfo, setTourInfo] = useState({
     tourAgencyName: "Amazing Adventure",
     tourLocationName: "",
@@ -103,21 +93,12 @@ function CreateTour() {
     tourRegistrationEndDate: new Date().toLocaleDateString(),
     tourInformation: "",
     tourPrice: 0.0,
-    tourStatus: "Upcoming"
+    tourStatus: "Upcoming",
+  });
 
-  })
-
-
-  console.log("Opened create Tour page")
-
-
-
-
-
-
+  console.log("Opened create Tour page");
 
   if (isLoading) return <Loader />;
-
 
   // Function to handle image upload
   const handleImageUpload = (e) => {
@@ -133,52 +114,48 @@ function CreateTour() {
     }
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleClick = (idx) => {
+    setSelectedIdx(idx);
   };
-
-  const handleItemClick = (index) => {
-    setSelectedIdx(index);
-  };
-
-
-
 
   const isValidDate = (dateString) => {
     const date = new Date(dateString);
     return date instanceof Date && !isNaN(date);
   };
 
-
   if (isLoading) return <Loader />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isValidDate(startDate) || !isValidDate(endDate) || !isValidDate(registrationEndDate)) {
-      alert('Please enter valid dates');
+    if (
+      !isValidDate(startDate) ||
+      !isValidDate(endDate) ||
+      !isValidDate(registrationEndDate)
+    ) {
+      alert("Please enter valid dates");
       return;
     }
 
     // Check if start date is after end date
     if (new Date(startDate) >= new Date(endDate)) {
-      alert('Start date must be before end date');
+      alert("Start date must be before end date");
       return;
     }
 
     // Check if registration end date is after end date
     if (new Date(registrationEndDate) > new Date(endDate)) {
-      alert('Registration end date must be before or equal to end date');
+      alert("Registration end date must be before or equal to end date");
       return;
     }
     if (new Date(startDate) >= new Date(endDate)) {
-      alert('Start date must be before end date');
+      alert("Start date must be before end date");
       return;
     }
 
     // Check if registration end date is after end date
     if (new Date(registrationEndDate) > new Date(endDate)) {
-      alert('Registration end date must be before or equal to end date');
+      alert("Registration end date must be before or equal to end date");
       return;
     }
 
@@ -192,12 +169,11 @@ function CreateTour() {
       tourRegistrationEndDate: registrationEndDate,
       tourInformation: information,
       tourStatus: status,
-      tourPrice: price
+      tourPrice: price,
     };
 
     console.log("TOUR INFO", newTourInfo);
-    setTourInfo(tourInfo)
-
+    setTourInfo(tourInfo);
 
     const payload = {
       tourInfo: newTourInfo,
@@ -214,375 +190,42 @@ function CreateTour() {
     }
   };
 
-
-
-
-
   return (
     <>
       <ThemeProvider theme={theme}>
         <Typography>
           <Grid container sx={{ backgroundColor: "#1F1F1F" }}>
             <Grid item lg={12}>
-              <AppBar sx={{ bgcolor: "#23b3b3b", height: "10%" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <IconButton sx={{ margin: "20px", borderRadius: "0px" }}>
-                    <Menu
-                      fontSize="medium"
-                      sx={{ color: "#FFF" }}
-                      onClick={() => setOpen(!open)}
-                    />
-                  </IconButton>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      flexBasis: "100%",
-                      marginLeft: "1%",
-                      
-                    }}
-                  >
-                    <InputBase
-                      sx={{
-                        width: "60%",
-                        fontSize: "16px",
-                        fontWeight: "bold",
-                        border: "1px solid #FFF",
-                        color: "#FFF",
-                        paddingLeft: "20px",
-                        paddingRight: "20px",
-                        paddingTop: "5px",
-                        paddingBottom: "5px",
-                      }}
-                      placeholder="Search Active Ads"
-                      autoFocus={true}
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <SearchIcon sx={{ color: "#FFF" }} />
-                        </InputAdornment>
-                      }
-                    />
-                  </Box>
-                  <IconButton
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginRight: "50px",
-                      color: "#FFF",
-                      border: "1px solid #FFF",
-                      borderRadius: "0px",
-                      gap: "10px",
-                      paddingLeft: "20px",
-                      paddingRight: "20px",
-                    }}
-                  >
-                    <CreatePost fontSize="large" sx={{ color: "#FF4E45" }} />
-                    <Box component="div" fontSize={16} fontWeight={700}>
-                      CREATE
-                    </Box>
-                  </IconButton>
-                </Box>
-              </AppBar>
-
-              {/* Drawer */}
-              <Drawer
+              <TopBar
+                setOpen={setOpen}
+                setSearchBar={setSearchBar}
+                show={false}
+              />
+              <LeftDrawer
                 open={open}
-                sx={{
-                  boxSizing: "border-box",
-
-                  "& .MuiDrawer-paper": {
-                    width: "20%",
-                    boxSizing: "border-box",
-                    backgroundColor: "#282828",
-                    color: "#FF4E45",
-                  },
-                }}
-                variant="temporary"
-                anchor="left"
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                    ml: "auto",
-                    mt: 1,
-                    mr: 2,
-                    cursor: "pointer",
-                  
-                  }}
-                  onClick={() => setOpen(!open)}
-                >
-                  <CloseIcon sx={{ color: "white" }} />
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    gap: 0.5,
-                    mt: 3,
-                    
-                  }}
-                >
-                  <Divider />
-                  <List sx={{ width: "100%" }}>
-                    <ListItem sx={{ padding: "0" }}>
-                      <ListItemButton
-                        sx={{
-                          "&.Mui-selected": {
-                            backgroundColor: "black",
-                            "&:hover": {
-                              backgroundColor: "black",
-                            },
-                            color: "#FF4E45",
-                          },
-                          "&:hover": {
-                            backgroundColor: "black",
-                          },
-                          color: "white",
-                        }}
-                        selected={selectedIdx === 0}
-                        onClick={() => {
-                          handleItemClick(0);
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            dash: "#FF4E45",
-                          }));
-                        }}
-                        onBlur={() => {
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            dash: "white",
-                          }));
-                        }}
-                      >
-                        <ListItemIcon>
-                          <DashboardIcon sx={{ color: color.dash }} />
-                        </ListItemIcon>
-                        <ListItemText primary="Dashboard"></ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  </List>
-
-                  <Divider />
-                  <List sx={{ width: "100%" }}>
-                    <ListItem sx={{ padding: "0" }}>
-                      <ListItemButton
-                        sx={{
-                          "&.Mui-selected": {
-                            backgroundColor: "black",
-                            "&:hover": {
-                              backgroundColor: "black",
-                            },
-                            color: "#FF4E45",
-                          },
-                          "&:hover": {
-                            backgroundColor: "black",
-                          },
-                          color: "white",
-                        }}
-                        selected={selectedIdx === 1}
-                        onClick={() => {
-                          handleItemClick(1);
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            profile: "#FF4E45",
-                          }));
-                        }}
-                        onBlur={() => {
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            profile: "white",
-                          }));
-                        }}
-                      >
-                        <ListItemIcon>
-                          <StoreIcon sx={{ color: color.profile }} />
-                        </ListItemIcon>
-
-                        <ListItemText primary="Agency Profile"></ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  </List>
-
-                  <Divider />
-                  <List sx={{ width: "100%" }}>
-                    <ListItem sx={{ padding: "0" }}>
-                      <ListItemButton
-                        sx={{
-                          "&.Mui-selected": {
-                            backgroundColor: "black",
-                            "&:hover": {
-                              backgroundColor: "black",
-                            },
-                            color: "#FF4E45",
-                          },
-                          "&:hover": {
-                            backgroundColor: "black",
-                          },
-                          color: "white",
-                        }}
-                        selected={selectedIdx === 2}
-                        onClick={() => {
-                          handleItemClick(2);
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            ads: "#FF4E45",
-                          }));
-                        }}
-                        onBlur={() => {
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            ads: "white",
-                          }));
-                        }}
-                      >
-                        <ListItemIcon>
-                          <DynamicFeedIcon sx={{ color: color.ads }} />
-                        </ListItemIcon>
-                        <ListItemText primary="Active Ads"></ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  </List>
-
-                  <Divider />
-                  <List sx={{ width: "100%" }}>
-                    <ListItem sx={{ padding: "0" }}>
-                      <ListItemButton
-                        sx={{
-                          "&.Mui-selected": {
-                            backgroundColor: "black",
-                            "&:hover": {
-                              backgroundColor: "black",
-                            },
-                            color: "#FF4E45",
-                          },
-                          "&:hover": {
-                            backgroundColor: "black",
-                          },
-                          color: "white",
-                        }}
-                        selected={selectedIdx === 3}
-                        onClick={() => {
-                          handleItemClick(3);
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            history: "#FF4E45",
-                          }));
-                        }}
-                        onBlur={() => {
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            history: "white",
-                          }));
-                        }}
-                      >
-                        <ListItemIcon>
-                          <HistoryIcon sx={{ color: color.history }} />
-                        </ListItemIcon>
-                        <ListItemText primary="Ads History"></ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  </List>
-
-                  <Divider />
-                  <List sx={{ width: "100%" }}>
-                    <ListItem sx={{ padding: "0" }}>
-                      <ListItemButton
-                        sx={{
-                          "&.Mui-selected": {
-                            backgroundColor: "black",
-                            "&:hover": {
-                              backgroundColor: "black",
-                            },
-                            color: "#FF4E45",
-                          },
-                          "&:hover": {
-                            backgroundColor: "black",
-                          },
-                          color: "white",
-                        }}
-                        selected={selectedIdx === 4}
-                        onClick={() => {
-                          handleItemClick(4);
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            stats: "#FF4E45",
-                          }));
-                        }}
-                        onBlur={() => {
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            stats: "white",
-                          }));
-                        }}
-                      >
-                        <ListItemIcon>
-                          <QueryStatsIcon sx={{ color: color.stats }} />
-                        </ListItemIcon>
-                        <ListItemText primary="Analytics"></ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  </List>
-
-                  <Divider />
-                  <List sx={{ width: "100%" }}>
-                    <ListItem sx={{ padding: "0" }}>
-                      <ListItemButton
-                        sx={{
-                          "&.Mui-selected": {
-                            backgroundColor: "black",
-                            "&:hover": {
-                              backgroundColor: "black",
-                            },
-                            color: "#FF4E45",
-                          },
-                          "&:hover": {
-                            backgroundColor: "black",
-                          },
-                          color: "white",
-                        }}
-                        selected={selectedIdx === 5}
-                        onClick={() => {
-                          handleItemClick(5);
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            settings: "#FF4E45",
-                          }));
-                        }}
-                        onBlur={() => {
-                          setColor((prevColor) => ({
-                            ...prevColor,
-                            settings: "white",
-                          }));
-                        }}
-                      >
-                        <ListItemIcon>
-                          <SettingsIcon sx={{ color: color.settings }} />
-                        </ListItemIcon>
-                        <ListItemText primary="Settings"></ListItemText>
-                      </ListItemButton>
-                    </ListItem>
-                  </List>
-                </Box>
-              </Drawer>
+                setOpen={setOpen}
+                handleClick={handleClick}
+                selectedIdx={selectedIdx}
+              />
             </Grid>
 
-
-            <Grid container spacing={3} padding={8} margin={8} sx={{ justifyContent: "center", alignItems: "center", height: "100%", backgroundColor: "#282828" }}>
+            <Grid
+              container
+              spacing={3}
+              padding={8}
+              margin={8}
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+                backgroundColor: "#282828",
+              }}
+            >
               <Typography variant="h4" gutterBottom color={"#FFF"}>
                 Create Tour
               </Typography>
               <hr></hr>
-              <Typography variant="p" gutterBottom color={"#FFF"}> 
+              <Typography variant="p" gutterBottom color={"#FFF"}>
                 {agency.authAgency.name}
               </Typography>
               <form onSubmit={handleSubmit}>
@@ -660,10 +303,15 @@ function CreateTour() {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth required>
-                      <InputLabel sx={{ color: "#FFF" }}>Status</InputLabel> 
-                      <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+                      <InputLabel sx={{ color: "#FFF" }}>Status</InputLabel>
+                      <Select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                      >
                         <MenuItem value="Upcoming">Upcoming</MenuItem>
-                        <MenuItem value="RegistrationsOpened">Registrations Open</MenuItem>
+                        <MenuItem value="RegistrationsOpened">
+                          Registrations Open
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -699,7 +347,6 @@ function CreateTour() {
                     </Button>
                   </Grid>
                 </Grid>
-
               </form>
             </Grid>
           </Grid>
@@ -707,7 +354,6 @@ function CreateTour() {
       </ThemeProvider>
     </>
   );
-};
-
+}
 
 export default CreateTour;
