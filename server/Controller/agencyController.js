@@ -32,6 +32,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.companyEmail,
         id: user._id,
+        role: "agency",
       },
     },
     process.env.REFRESH_TOKEN_SECRET, // Signature

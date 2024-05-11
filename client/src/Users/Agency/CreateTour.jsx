@@ -53,6 +53,7 @@ function CreateTour() {
   const [upload, { isLoading: uploadLoading, isError: uploadError }] =
     useUploadMutation();
   const agency = useSelector((state) => state.agency);
+  const navigate = useNavigate();
   const { setItem, getItem } = useLocalStorage("access_token");
   const accessToken = getItem();
 
@@ -208,6 +209,7 @@ function CreateTour() {
       const response = await tourPublish(payload).unwrap();
 
       console.log("RESPONSE", response);
+      navigate("/agency-home");
     } catch (e) {
       console.log(e);
     }
