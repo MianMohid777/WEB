@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   useGetAgencyQuery,
   useGetAllToursQuery,
+  useUpdateStatusMutation,
+  useUpdateTourStatusMutation,
 } from "../../Services/Agency/agencyApi";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
@@ -33,16 +35,13 @@ function AgencyHome() {
 
   //Hooks
   const { setItem, getItem } = useLocalStorage("access_token");
-  const { setItem: setRefItem, getItem: getRefItem } =
-    useLocalStorage("refresh_token");
   const [dataState, setDataState] = useState([]);
 
   const accessToken = getItem();
-  const refreshToken = getRefItem();
 
   const [open, setOpen] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const [searchBar, setSearchBar] = useState("");
+  const [setSearchBar] = useState("");
 
   const navigate = useNavigate();
   const agency = useSelector((state) => state.agency);
@@ -62,11 +61,32 @@ function AgencyHome() {
     refetch: currAgency,
   } = useGetAgencyQuery({ accessToken: accessToken });
 
+  const [updateTourStatus, { isLoading: updating, isError: updateErr }] =
+    useUpdateStatusMutation();
+
   useEffect(() => {
+    const checkUpdates = async () => {
+      try {
+        if (accessToken) {
+          const response = await updateTourStatus({
+            id: agency.authAgency.id,
+            accessToken: accessToken,
+          }).unwrap();
+
+          if (response) {
+            console.log(response);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     refetch();
     currAgency();
     console.log(getToursSize());
     setDataState(data);
+    checkUpdates();
   }, []);
   // HANDLE MENU STATES
   const handleClick = (idx) => {
@@ -74,10 +94,9 @@ function AgencyHome() {
   };
 
   // HANDLE ERROR & SUCCESS RESPONSE
-  if (isError || agencyError) {
+  if (isError || agencyError || updateErr) {
     console.log("Its GET TOURS API ERROR", isError);
     console.log(agencyError);
-    setItem("");
     navigate("/agency-login", { replace: true });
   }
 
@@ -92,7 +111,7 @@ function AgencyHome() {
   }, [data]);
 
   //LOADER LOGIC
-  if (isLoading || isAgencyLoading) return <Loader />;
+  if (isLoading || isAgencyLoading || updating) return <Loader />;
 
   return (
     <>
@@ -125,6 +144,7 @@ function AgencyHome() {
                     setOpen={setOpen}
                     setSearchBar={setSearchBar}
                     show={true}
+                    showBar={true}
                     searchType={"All"}
                     setData={setDataState}
                   />

@@ -121,6 +121,7 @@ function PastAds() {
                     setOpen={setOpen}
                     setSearchBar={setSearchBar}
                     show={true}
+                    showBar={true}
                     searchType={"Past"}
                     setData={setData}
                   />

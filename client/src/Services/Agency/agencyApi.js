@@ -121,6 +121,24 @@ const getAllToursApi = api.injectEndpoints({
     };
   },
 });
+
+const updateTourStatus = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      updateTourStatus: builder.mutation({
+        query: ({ id, accessToken }) => ({
+          url: `agencies/current-agency/tours/${id}`,
+          method: "PUT",
+          body: {},
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      }),
+    };
+  },
+});
 export const { useGetAllAgencyQuery } = agencyGetAllApi;
 export const { useGetAdminQuery } = getAdminApi;
 export const { useGetAgencyQuery } = getAgencyApi;
@@ -128,3 +146,4 @@ export const { useUpdateStatusMutation } = updateStatusApi;
 export const { useLogoutMutation } = logoutApi;
 export const { useDeleteApplicationMutation } = deleteApplicationApi;
 export const { useGetAllToursQuery } = getAllToursApi;
+export const { useUpdateTourStatusMutation } = updateTourStatus;

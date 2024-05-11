@@ -108,6 +108,7 @@ function ActiveAds() {
                   <TopBar
                     setOpen={setOpen}
                     show={true}
+                    showBar={true}
                     searchType={"Active"}
                     setData={setData}
                   />

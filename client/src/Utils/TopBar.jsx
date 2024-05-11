@@ -43,42 +43,47 @@ function TopBar(props) {
             }
           />
         </IconButton>
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexBasis: "100%",
-            marginLeft: "15%",
-          }}
-        >
-          <InputBase
+        {props.showBar ? (
+          <Box
+            component="div"
             sx={{
-              width: "60%",
-              fontSize: "16px",
-              fontWeight: "bold",
-              color: "white",
-              border: "1px solid white",
-              paddingLeft: "20px",
-              paddingRight: "20px",
-              paddingTop: "5px",
-              paddingBottom: "5px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexBasis: "100%",
+              marginLeft: "15%",
             }}
-            placeholder={`Search ${props.searchType} Ads`}
-            autoFocus={true}
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: "white" }} />
-              </InputAdornment>
-            }
-            onChange={(e) => {
-              props.setData(getSearchedTours(e.target.value, props.searchType));
-              console.log(getSearchedTours(e.target.value, props.searchType));
-            }}
-          />
-        </Box>
-
+          >
+            <InputBase
+              sx={{
+                width: "60%",
+                fontSize: "16px",
+                fontWeight: "bold",
+                color: "white",
+                border: "1px solid white",
+                paddingLeft: "20px",
+                paddingRight: "20px",
+                paddingTop: "5px",
+                paddingBottom: "5px",
+              }}
+              placeholder={`Search ${props.searchType} Ads`}
+              autoFocus={true}
+              startAdornment={
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: "white" }} />
+                </InputAdornment>
+              }
+              onChange={(e) => {
+                props.setData(
+                  getSearchedTours(e.target.value, props.searchType)
+                );
+                console.log(getSearchedTours(e.target.value, props.searchType));
+              }}
+            />
+          </Box>
+        ) : (
+          <></>
+        )}
         {props.show ? (
           <IconButton
             sx={{

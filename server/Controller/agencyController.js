@@ -23,7 +23,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
-    { expiresIn: "50m" } // Expiry Duration
+    { expiresIn: "1m" } // Expiry Duration
   );
 
   const refToken = jwt.sign(
@@ -471,14 +471,9 @@ const getPastTours = asyncHandler(async (req, res) => {
   }
 });
 
-const updateTours = asyncHandler(async (req, res) => {
+const updateTours_ActiveComplete = asyncHandler(async (req, res) => {
   try {
     const userId = req.params.id;
-
-    // if (userId !== req.user.id.toString()) {
-    //   res.status(401);
-    //   throw new Error("Unauthorized Access");
-    // }
 
     const agency = await agencyReg.findById(userId);
 
@@ -486,24 +481,40 @@ const updateTours = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error("Agency Not Found");
     }
+    const currentDate = new Date();
 
-    const tours = await Tour.updateMany(
-      { $and: [{ tourAgencyId: userId }, { tourStartDate }] },
+    const toursActive = await Tour.updateMany(
+      {
+        tourAgencyId: userId,
+        tourStartDate: { $lte: currentDate },
+        tourStatus: "Registeration-Opened",
+      },
       { tourStatus: "Active" },
       { new: true }
     );
 
-    console.log(tours);
+    const toursComplete = await Tour.updateMany(
+      {
+        tourAgencyId: userId,
+        tourEndDate: { $lt: currentDate },
+        tourStatus: "Active",
+      },
+      { tourStatus: "Completed" },
+      { new: true }
+    );
+    console.log(toursActive, toursComplete);
 
     res.status(200).json({
-      message: "Success",
-      tours: tours,
+      message: "Successfully, Updated",
+      ActiveTours: toursActive,
+      CompleteTours: toursComplete,
     });
   } catch (e) {
     console.log(e);
     res.status(400).json({ message: e.message });
   }
 });
+
 module.exports = {
   registerAgency,
   loginAgency,
@@ -513,5 +524,5 @@ module.exports = {
   publishTour,
   getSearchedTour,
   getPastTours,
-  updateTours,
+  updateTours_ActiveComplete,
 };

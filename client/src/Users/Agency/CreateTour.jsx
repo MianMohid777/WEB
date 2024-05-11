@@ -86,7 +86,7 @@ function CreateTour() {
   });
 
   if (isLoading) return <Loader />;
-  console.log(agency);
+  //console.log(agency);
 
   // Function to handle image upload
   const handleImageChange = (e) => {
@@ -206,8 +206,10 @@ function CreateTour() {
     try {
       const response = await tourPublish(payload).unwrap();
 
-      console.log("RESPONSE", response);
-      navigate("/agency-home");
+      if (response) {
+        console.log("RESPONSE", response);
+        navigate("/agency-home");
+      }
     } catch (e) {
       console.log(e);
     }
@@ -223,6 +225,7 @@ function CreateTour() {
                 setOpen={setOpen}
                 setSearchBar={setSearchBar}
                 show={false}
+                showBar={false}
               />
               <LeftDrawer
                 open={open}

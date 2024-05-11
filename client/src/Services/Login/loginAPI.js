@@ -82,7 +82,6 @@ const agencyRefreshTokenApi = api.injectEndpoints({
         query: ({ refreshToken }) => ({
           url: "agencies/refresh-token",
           method: "POST",
-          // credentials: "include",
           body: { refreshToken },
           headers: {
             "Content-Type": "application/json",
