@@ -27,6 +27,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.emailAddress,
         id: user._id,
+        role: "tourist",
       },
     },
     process.env.REFRESH_TOKEN_SECRET, // Signature

@@ -85,6 +85,7 @@ function AgencyHome() {
   if (isError || agencyError) {
     console.log("Its GET TOURS API ERROR", isError);
     console.log(agencyError);
+    setItem("");
     navigate("/agency-login", { replace: true });
   }
 
@@ -284,7 +285,7 @@ function AgencyHome() {
                 <Grid item lg={9} sx={{ height: "100%" }}>
                   <Box
                     sx={{
-                      marginTop: "10%",
+                      marginTop: "15%",
                       padding: "20px",
                       height: "calc(100vh - 20%)",
                       width: "calc(70vw)",

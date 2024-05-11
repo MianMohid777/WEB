@@ -18,7 +18,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
-    { expiresIn: "5m" } // Expiry Duration
+    { expiresIn: "15m" } // Expiry Duration
   );
 
   const refToken = jwt.sign(
@@ -27,6 +27,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.email,
         id: user._id,
+        role: "admin",
       },
     },
     process.env.REFRESH_TOKEN_SECRET, // Signature
@@ -53,7 +54,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
       role: req.user.role,
     });
     return;
-  } else if (req.user) {
+  } else if (req.user && req.user.role !== "admin") {
     res.status(401);
     throw new Error("Unauthorized User Access");
   }
@@ -235,40 +236,45 @@ const createProfile = asyncHandler(async (req, res) => {
 //@route Post /api/admin/refresh-token
 //@access private
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  try {
-    const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
-    const user = await admin.findById(req?.user.id);
+  if (req.user && req.user.role === "admin") {
+    try {
+      const inRefreshToken =
+        req.cookies?.refresh_token || req.body?.refreshToken;
+      const user = await admin.findById(req?.user.id);
 
-    if (!user) {
-      res.status(401);
-      throw new Error("Invalid Refresh Token");
+      if (!user) {
+        res.status(401);
+        throw new Error("Invalid Refresh Token");
+      }
+      if (inRefreshToken !== user?.refreshToken) {
+        res.status(401);
+        throw new Error("Refresh Token Expired or Used");
+      }
+
+      const options = {
+        httpOnly: true,
+        secure: true,
+      };
+
+      const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
+        user._id
+      );
+
+      res
+        .status(200)
+        .cookie("access_token", accessToken, options)
+        .cookie("refresh_token", refToken, options)
+        .json({
+          message: "Access Token Refreshed",
+          accessToken,
+          refreshToken: refToken,
+        });
+    } catch (err) {
+      console.log(err);
+      res.status(401).json({ message: err.message });
     }
-    if (inRefreshToken !== user?.refreshToken) {
-      res.status(401);
-      throw new Error("Refresh Token Expired or Used");
-    }
-
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
-
-    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
-      user._id
-    );
-
-    res
-      .status(200)
-      .cookie("access_token", accessToken, options)
-      .cookie("refresh_token", refToken, options)
-      .json({
-        message: "Access Token Refreshed",
-        accessToken,
-        refreshToken: refToken,
-      });
-  } catch (err) {
-    console.log(err);
-    res.status(401).json({ message: err.message });
+  } else {
+    res.status(401).json({ message: "Unauthorized Access" });
   }
 });
 module.exports = {

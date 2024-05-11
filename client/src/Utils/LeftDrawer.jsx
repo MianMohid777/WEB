@@ -9,9 +9,6 @@ import {
   ListItemText,
   ListItemButton,
   Drawer,
-  ThemeProvider,
-  Typography,
-  createTheme,
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -31,6 +28,7 @@ function LeftDrawer(props) {
     stats: "white",
     settings: "white",
   });
+  const navigate = useNavigate();
 
   return (
     <Drawer
@@ -260,6 +258,8 @@ function LeftDrawer(props) {
                   ...prevColor,
                   stats: "#FF4E45",
                 }));
+
+                navigate("/current-agency/analytics");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({

@@ -19,7 +19,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(cookieParser());
-app.use(express.json()); // Middleware to parse the body from client
+app.use(express.json({ limit: "50mb" })); // Middleware to parse the body from client
 
 app.use("/api/tourists", touristRoutes);
 app.use("/api/agencies", agencyRoutes);
