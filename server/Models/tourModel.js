@@ -1,10 +1,27 @@
 const mongoose = require("mongoose");
 
+// Sub schema
+const daySchema = mongoose.Schema({
+  dayNumber: {
+    type: Number,
+    required: true,
+  },
+  dayTitle: {
+    type: String,
+    required: true,
+  },
+  dayInformation: {
+    type: String,
+    required: true,
+  },
+});
+
+//Actual schema
 const tourSchema = mongoose.Schema(
   {
     tourAgencyId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, "UNable to find Agency ID"],
+      required: [true, "Unable to find Agency ID"],
     },
     tourAgencyName: {
       type: String,
@@ -18,7 +35,6 @@ const tourSchema = mongoose.Schema(
       type: String,
       required: [true, "Provide Location Image URL"],
     },
-
     tourStartDate: {
       type: Date,
       default: new Date("2024-06-01T00:00:00.000Z"),
@@ -47,12 +63,20 @@ const tourSchema = mongoose.Schema(
         "Finished",
         "Cancelled",
       ],
-
       required: [true, "Provide Status"],
     },
     tourPrice: {
       type: String,
       required: [true, "Provide Price"],
+    },
+    tourPlan: [daySchema], // Sub schema
+    tourLocationLink: {
+      type: String,
+      required: [true, "Provide Location Link"],
+    },
+    tourMaxSlots: {
+      type: Number,
+      required: [true, "Provide Max Slots"],
     },
   },
   { timestamps: true }
