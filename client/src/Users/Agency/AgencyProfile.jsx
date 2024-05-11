@@ -196,7 +196,7 @@ function AgencyProfile() {
                 <Box>
                   <Box pt={2} px={2} mt={5}>
                     <Typography variant="h3" gutterBottom>
-                      Tours
+                      Gallery
                     </Typography>
                     <Grid container spacing={3}>
                       {galleryImages.map((image, index) => (
