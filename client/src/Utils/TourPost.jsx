@@ -26,8 +26,8 @@ function TourPost(props) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        width: "25%",
-        height: "70%",
+        width: "30%",
+
         overflow: "hidden",
         boxShadow:
           "0 6px 10px 0 rgba(0, 0, 0, 0.2), 0 8px 25px 0 rgba(0, 0, 0, 0.19)",
@@ -38,8 +38,7 @@ function TourPost(props) {
 
         "&:hover": {
           overflow: "auto",
-          scale: "1.2",
-          height: "90%",
+          scale: "1.1",
         },
       }}
     >
@@ -124,6 +123,13 @@ function TourPost(props) {
               Status:
             </Box>{" "}
             {props.status}
+          </Box>
+          <Divider component="div" />
+          <Box component="div" mt={1}>
+            <Box component="span" sx={{ fontSize: "14px", fontWeight: "bold" }}>
+              Max Slots:
+            </Box>{" "}
+            {props.slots}
           </Box>
         </Box>
       </CardContent>

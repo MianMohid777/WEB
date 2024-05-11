@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -12,9 +12,12 @@ import Menu from "@mui/icons-material/Menu";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CreatePost from "@mui/icons-material/EditCalendar";
+import { useAnalytic } from "./analyticCalc-Hook";
 
 function TopBar(props) {
+  const { getSearchedTours } = useAnalytic();
   const navigate = useNavigate();
+  const [searchBar, setSearchBar] = useState("");
   return (
     <AppBar
       sx={{
@@ -62,7 +65,7 @@ function TopBar(props) {
               paddingTop: "5px",
               paddingBottom: "5px",
             }}
-            placeholder="Search Active Ads"
+            placeholder={`Search ${props.searchType} Ads`}
             autoFocus={true}
             startAdornment={
               <InputAdornment position="start">
@@ -70,7 +73,8 @@ function TopBar(props) {
               </InputAdornment>
             }
             onChange={(e) => {
-              props.setSearchBar(e.target.value);
+              props.setData(getSearchedTours(e.target.value, props.searchType));
+              console.log(getSearchedTours(e.target.value, props.searchType));
             }}
           />
         </Box>

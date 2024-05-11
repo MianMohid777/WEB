@@ -260,9 +260,9 @@ const getAllTours = asyncHandler(async (req, res) => {
       throw new Error("Agency Not Found");
     }
 
-    const tours = await tour
-      .find({ tourAgencyId: userId })
-      .sort({ createdAt: "desc" });
+    const tours = await Tour.find({ tourAgencyId: userId }).sort({
+      createdAt: "desc",
+    });
 
     console.log(tours);
 
@@ -454,12 +454,10 @@ const getPastTours = asyncHandler(async (req, res) => {
       throw new Error("Agency Not Found");
     }
 
-    const tours = await tour
-      .find({
-        tourAgencyId: userId,
-        $or: [{ tourStatus: "Finished" }, { tourStatus: "Cancelled" }],
-      })
-      .sort({ createdAt: "desc" });
+    const tours = await Tour.find({
+      tourAgencyId: userId,
+      $or: [{ tourStatus: "Finished" }, { tourStatus: "Cancelled" }],
+    }).sort({ createdAt: "desc" });
 
     console.log(tours);
 
@@ -489,9 +487,9 @@ const updateTours = asyncHandler(async (req, res) => {
       throw new Error("Agency Not Found");
     }
 
-    const tours = await tour.updateMany(
-      { tourAgencyId: userId },
-      { tourLocationImage: "flyingJatt.jpg" },
+    const tours = await Tour.updateMany(
+      { $and: [{ tourAgencyId: userId }, { tourStartDate }] },
+      { tourStatus: "Active" },
       { new: true }
     );
 

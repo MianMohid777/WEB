@@ -28,6 +28,8 @@ import SignUp from "./Users/Tourist/SignUp";
 import ToastMessage from "./Utils/Toast-Message";
 import Test from "./Users/Agency/Test";
 import AgencyAnalytics from "./Users/Agency/AgencyAnalytics";
+import ActiveAds from "./Users/Agency/ActiveAds";
+import PastAds from "./Users/Agency/PastAds";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,6 +48,8 @@ const router = createBrowserRouter(
       {/* Agency Routes */}
       <Route path="/agency-home" element={<AgencyHome />} />
       <Route path="/current-agency/analytics" element={<AgencyAnalytics />} />
+      <Route path="/current-agency/active-ads" element={<ActiveAds />} />
+      <Route path="/current-agency/past-ads" element={<PastAds />} />
       <Route path="/agency-login" element={<AgencySignIn />} />
       <Route path="/agency-registeration" element={<AgencyRegister />} />
       <Route path="/current-agency/profile" element={<AgencyProfile />} />

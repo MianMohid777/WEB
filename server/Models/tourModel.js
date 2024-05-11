@@ -60,7 +60,7 @@ const tourSchema = mongoose.Schema(
         "Upcoming",
         "Registrations-Opened",
         "Active",
-        "Finished",
+        "Completed",
         "Cancelled",
       ],
       required: [true, "Provide Status"],

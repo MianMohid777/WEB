@@ -17,14 +17,14 @@ import {
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 import Loader from "../../Utils/Loader";
-import { addTours } from "../../Redux/Features/agencySlice";
 import TourPost from "../../Utils/TourPost";
 import terror from "../../Assets/terror.jpg";
 import LeftDrawer from "../../Utils/LeftDrawer";
 import TopBar from "../../Utils/TopBar";
 import { useAnalytic } from "../../Utils/analyticCalc-Hook";
+import { addTours } from "../../Redux/Features/agencySlice";
 
-function AgencyHome() {
+function PastAds() {
   const theme = createTheme({
     typography: {
       fontFamily: "'Space Grotesk', sans-serif",
@@ -35,38 +35,45 @@ function AgencyHome() {
   const { setItem, getItem } = useLocalStorage("access_token");
   const { setItem: setRefItem, getItem: getRefItem } =
     useLocalStorage("refresh_token");
-  const [dataState, setDataState] = useState([]);
-
+  const [dataState, setDataState] = useState(false);
+  const [data, setData] = useState("");
+  const dispatch = useDispatch();
   const accessToken = getItem();
-  const refreshToken = getRefItem();
 
   const [open, setOpen] = useState(false);
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const [searchBar, setSearchBar] = useState("");
+  const [selectedIdx, setSelectedIdx] = useState(3);
+  const [setSearchBar] = useState("");
 
   const navigate = useNavigate();
   const agency = useSelector((state) => state.agency);
-  const dispatch = useDispatch();
-  const { getToursSize } = useAnalytic();
+
+  const {
+    getToursSize,
+    getActiveTours,
+    getCompletedTours,
+    getCancelledTours,
+    getUpcomingTours,
+    getSearchedTours,
+  } = useAnalytic();
 
   // QUERY // MUTATIONS
-
-  const { data, isLoading, isError, isSuccess, refetch } = useGetAllToursQuery({
-    id: agency.authAgency.id,
-    accessToken: accessToken,
-  });
 
   const {
     isLoading: isAgencyLoading,
     isError: agencyError,
-    refetch: currAgency,
+    refetch,
   } = useGetAgencyQuery({ accessToken: accessToken });
 
+  const { data: allTours, refetch: refetchTours } = useGetAllToursQuery({
+    id: agency.authAgency.id,
+    accessToken: accessToken,
+  });
+
   useEffect(() => {
-    refetch();
-    currAgency();
-    console.log(getToursSize());
-    setDataState(data);
+    dispatch(addTours(allTours.tours));
+    const pastTours = getCompletedTours().concat(getCancelledTours());
+    console.log(pastTours);
+    setData(pastTours);
   }, []);
   // HANDLE MENU STATES
   const handleClick = (idx) => {
@@ -74,25 +81,14 @@ function AgencyHome() {
   };
 
   // HANDLE ERROR & SUCCESS RESPONSE
-  if (isError || agencyError) {
-    console.log("Its GET TOURS API ERROR", isError);
+  if (agencyError) {
     console.log(agencyError);
     setItem("");
     navigate("/agency-login", { replace: true });
   }
 
-  useEffect(() => {
-    if (isSuccess && !isLoading) {
-      console.log(data.tours);
-      setDataState(data.tours);
-      console.log(dataState);
-      console.log("Dispatched");
-      dispatch(addTours(data?.tours));
-    }
-  }, [data]);
-
   //LOADER LOGIC
-  if (isLoading || isAgencyLoading) return <Loader />;
+  if (isAgencyLoading) return <Loader />;
 
   return (
     <>
@@ -125,8 +121,8 @@ function AgencyHome() {
                     setOpen={setOpen}
                     setSearchBar={setSearchBar}
                     show={true}
-                    searchType={"All"}
-                    setData={setDataState}
+                    searchType={"Past"}
+                    setData={setData}
                   />
                   <LeftDrawer
                     open={open}
@@ -293,10 +289,8 @@ function AgencyHome() {
                       gap: "50px",
                     }}
                   >
-                    {dataState &&
-                    Array.isArray(dataState) &&
-                    dataState.length > 0 ? (
-                      dataState?.map((tour) => {
+                    {data && data.length > 0 ? (
+                      data?.map((tour) => {
                         return (
                           <TourPost
                             agencyName={agency.authAgency.name}
@@ -355,4 +349,4 @@ function AgencyHome() {
     </>
   );
 }
-export default AgencyHome;
+export default PastAds;

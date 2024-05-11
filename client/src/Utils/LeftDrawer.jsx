@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Divider,
@@ -96,6 +97,7 @@ function LeftDrawer(props) {
                   ...prevColor,
                   dash: "#FF4E45",
                 }));
+                navigate("/agency-home");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({
@@ -177,6 +179,8 @@ function LeftDrawer(props) {
                   ...prevColor,
                   ads: "#FF4E45",
                 }));
+
+                navigate("/current-agency/active-ads");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({
@@ -217,6 +221,7 @@ function LeftDrawer(props) {
                   ...prevColor,
                   history: "#FF4E45",
                 }));
+                navigate("/current-agency/past-ads");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({

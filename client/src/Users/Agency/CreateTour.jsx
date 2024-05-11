@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-
   Box,
   Grid,
   ThemeProvider,
@@ -11,9 +10,9 @@ import {
   MenuItem,
   TextField,
   InputLabel,
-  FormControl
+  FormControl,
 } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
@@ -67,14 +66,14 @@ function CreateTour() {
   const [information, setInformation] = useState("");
   const [status, setStatus] = useState("");
   const [price, setPrice] = useState(0);
-  const [locationLink, setLocationLink] = useState("")
+  const [locationLink, setLocationLink] = useState("");
   const [tourPlan, setTourPlan] = useState([]);
   const [maxSlots, setMaxSlots] = useState(0);
 
   const [tourInfo, setTourInfo] = useState({
-    tourAgencyName: "Amazing Adventure",
+    tourAgencyName: "",
     tourLocationName: "",
-    tourLocationImage: "image",
+    tourLocationImage: "",
     tourStartDate: new Date().toLocaleDateString(),
     tourEndDate: new Date().toLocaleDateString(),
     tourRegistrationEndDate: new Date().toLocaleDateString(),
@@ -83,7 +82,7 @@ function CreateTour() {
     tourStatus: "Upcoming",
     tourLocationLink: "",
     tourPlan: [],
-    tourMaxSlots: 0
+    tourMaxSlots: 0,
   });
 
   if (isLoading) return <Loader />;
@@ -145,7 +144,6 @@ function CreateTour() {
     setTourPlan(newTourPlan);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -193,7 +191,7 @@ function CreateTour() {
       tourPrice: price,
       tourPlan: tourPlan,
       tourLocationLink: locationLink,
-      tourMaxSlots: maxSlots
+      tourMaxSlots: maxSlots,
     };
 
     console.log("TOUR INFO", newTourInfo);
@@ -435,7 +433,8 @@ function CreateTour() {
                             value={day.dayInformation}
                             onChange={(e) => {
                               const newTourPlan = [...tourPlan];
-                              newTourPlan[index].dayInformation = e.target.value;
+                              newTourPlan[index].dayInformation =
+                                e.target.value;
                               setTourPlan(newTourPlan);
                             }}
                             fullWidth
@@ -450,7 +449,7 @@ function CreateTour() {
                             onClick={() => deleteDay(index)}
                             variant="outlined"
                             color="secondary"
-                            sx={{ mb: "50px", }}
+                            sx={{ mb: "50px" }}
                           >
                             Delete Day
                           </Button>
@@ -458,12 +457,15 @@ function CreateTour() {
                       </Grid>
                     ))}
                     <Grid item xs={12}>
-                      <Button onClick={addDay} variant="outlined" color="primary">
+                      <Button
+                        onClick={addDay}
+                        variant="outlined"
+                        color="primary"
+                      >
                         Add Day
                       </Button>
                     </Grid>
                   </Grid>
-
 
                   <Grid item xs={12}>
                     <Button type="submit" variant="contained" color="primary">
