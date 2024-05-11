@@ -8,8 +8,37 @@ const getImage = (req, res) => {
   console.log(imagePath);
 
   const image = fs.readFileSync(imagePath);
-  console.log(dir);
+  //console.log(dir);
   res.send(image);
 };
 
-module.exports = { getImage };
+const uploadImage = (req, res) => {
+  console.log(req.body);
+  console.log(req.file);
+  if (!req.file) {
+    res.status(400);
+    throw new Error("No file uploaded");
+  }
+
+  res.status(200).json({
+    message: "Image Uploaded Successfully",
+    filePath: req.file.path,
+  });
+};
+
+const uploadGallery = (req, res) => {
+  console.log(req.body);
+  console.log(req.files);
+  if (!req.files) {
+    res.status(400);
+    throw new Error("No file uploaded");
+  }
+  const filePaths = req.files.map((file) => file.path);
+
+  res.status(200).json({
+    message: "Image Uploaded Successfully",
+    filePath: filePaths,
+  });
+};
+
+module.exports = { getImage, uploadImage, uploadGallery };

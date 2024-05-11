@@ -7,7 +7,7 @@ const {
   registerTourist,
   refreshAccessToken,
   currentTourist,
-} = require("../Controller/touristController");
+} = require("../Controller/TouristController");
 
 const stayLoggedValidator = require("../Middleware/stayLoggedIn.validation");
 const validateToken = require("../Middleware/validateToken");

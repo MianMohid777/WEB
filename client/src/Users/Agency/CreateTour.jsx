@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import {
-  Grid, ThemeProvider,
+
+  Box,
+  Grid,
+  ThemeProvider,
   Typography,
-  createTheme, Button,
+  createTheme,
+  Button,
   Select,
   MenuItem,
   TextField,
@@ -10,7 +14,9 @@ import {
   FormControl
 } from "@mui/material";
 
-import { PhotoCamera } from "@mui/icons-material";
+
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import Loader from "../../Utils/Loader";
 import { useTourPublishMutation } from "../../Services/Agency/publishTour.js";
 
@@ -18,6 +24,7 @@ import { useSelector } from "react-redux";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook.js";
 import TopBar from "../../Utils/TopBar.jsx";
 import LeftDrawer from "../../Utils/LeftDrawer.jsx";
+import { useUploadMutation } from "../../Services/UtilsApi/fileApi.js";
 
 function CreateTour() {
   const theme = createTheme({
@@ -43,13 +50,16 @@ function CreateTour() {
   const [selectedIdx, setSelectedIdx] = useState(0);
   const [searchBar, setSearchBar] = useState("");
   const [tourPublish, { isLoading, isError }] = useTourPublishMutation();
+  const [upload, { isLoading: uploadLoading, isError: uploadError }] =
+    useUploadMutation();
   const agency = useSelector((state) => state.agency);
   const { setItem, getItem } = useLocalStorage("access_token");
   const accessToken = getItem();
 
   // State variables to store form data
   const [locationName, setLocationName] = useState("");
-  const [locationImage, setLocationImage] = useState("image");
+  const [locationImage, setLocationImage] = useState("");
+  const [imagePath, setImagePath] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [registrationEndDate, setRegistrationEndDate] = useState(new Date());
@@ -74,21 +84,33 @@ function CreateTour() {
   if (isLoading) return <Loader />;
 
   // Function to handle image upload
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setLocationImage(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+  const handleImageChange = (e) => {
+    setLocationImage(e.target.files[0]);
   };
 
   const handleClick = (idx) => {
     setSelectedIdx(idx);
+  };
+
+  const handleUpload = async () => {
+    try {
+      console.log(locationImage);
+      const file = new FormData();
+      file.append("file", locationImage);
+
+      console.log(file);
+      const response = await upload(file).unwrap();
+
+      if (response) {
+        console.log(response);
+        let staticPath = response.filePath.split("/");
+        let index = staticPath.length;
+        console.log(staticPath[index - 1]);
+        setImagePath(staticPath[index - 1]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const isValidDate = (dateString) => {
@@ -136,7 +158,7 @@ function CreateTour() {
       tourAgencyId: agency.authAgency.id,
       tourAgencyName: agency.authAgency.name,
       tourLocationName: locationName,
-      tourLocationImage: locationImage,
+      tourLocationImage: imagePath,
       tourStartDate: startDate,
       tourEndDate: endDate,
       tourRegistrationEndDate: registrationEndDate,
@@ -219,18 +241,30 @@ function CreateTour() {
                       accept="image/*"
                       id="image-upload"
                       style={{ display: "none" }}
-                      onChange={handleImageUpload}
+                      onChange={handleImageChange}
                     />
-                    <label htmlFor="image-upload">
+                    <Box sx={{ display: "flex", gap: "30px" }}>
+                      <label htmlFor="image-upload">
+                        <Button
+                          variant="outlined"
+                          component="span"
+                          startIcon={<PhotoCamera />}
+                          sx={{ color: "#FFF" }} // White text
+                        >
+                          Choose Cover Image
+                        </Button>
+                      </label>
                       <Button
-                        variant="outlined"
+                        variant="contained"
+                        color="primary"
                         component="span"
-                        startIcon={<PhotoCamera />}
+                        startIcon={<DriveFolderUploadIcon />}
                         sx={{ color: "#FFF" }} // White text
+                        onClick={handleUpload}
                       >
-                        Upload Image
+                        Upload
                       </Button>
-                    </label>
+                    </Box>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -282,7 +316,7 @@ function CreateTour() {
                         onChange={(e) => setStatus(e.target.value)}
                       >
                         <MenuItem value="Upcoming">Upcoming</MenuItem>
-                        <MenuItem value="RegistrationsOpened">
+                        <MenuItem value="Registrations-Opened">
                           Registrations Open
                         </MenuItem>
                       </Select>

@@ -287,7 +287,7 @@ function AgencyHome() {
                       marginTop: "10%",
                       padding: "20px",
                       height: "calc(100vh - 20%)",
-                      width: "100%",
+                      width: "calc(70vw)",
                       overflowY: "auto",
                       display: "flex",
                       flexWrap: "wrap",
@@ -296,7 +296,9 @@ function AgencyHome() {
                       gap: "50px",
                     }}
                   >
-                    {data && Array.isArray(data.tours) ? (
+                    {data &&
+                    Array.isArray(data.tours) &&
+                    data.tours.length > 0 ? (
                       data.tours?.map((tour) => {
                         return (
                           <TourPost
