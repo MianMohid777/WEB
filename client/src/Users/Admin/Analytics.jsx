@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
+  Button,
   Divider,
   Drawer,
   Grid,
@@ -31,22 +32,15 @@ import error from "../../Assets/error.png";
 import Loader from "../../Utils/Loader";
 import ApplicationCard from "../../Utils/ApplicationCard";
 
-function AdminHome() {
+function Analytics() {
   //Hooks
   const { setItem, getItem } = useLocalStorage("access_token");
-  const { setItem: setRefItem, getItem: getRefItem } =
-    useLocalStorage("refresh_token");
-  const [dataState, setDataState] = useState(false);
-  const [selectedIdx, setSelectedIdx] = useState(0);
+  const [selectedIdx, setSelectedIdx] = useState(1);
   const navigate = useNavigate();
 
   const accessToken = getItem();
 
   // QUERY // MUTATIONS
-
-  const { data, isLoading, isError, refetch } = useGetAllAgencyQuery({
-    accessToken: accessToken,
-  });
 
   const { isLoading: isAdminLoading, isError: adminError } = useGetAdminQuery({
     accessToken: accessToken,
@@ -56,12 +50,6 @@ function AdminHome() {
     useLogoutMutation({ accessToken: accessToken });
 
   // REFETCHING API
-  useEffect(() => {
-    if (dataState) {
-      refetch();
-      setDataState(false);
-    }
-  }, [dataState]);
 
   // THEME
   const theme = createTheme({
@@ -71,8 +59,8 @@ function AdminHome() {
   });
 
   // HANDLE ERROR RESPONSE
-  if (isError || adminError) {
-    console.log("Its GET AGENCY API ERROR", isError);
+
+  if (adminError) {
     console.log(adminError);
     navigate("/admin-login", { replace: true });
   }
@@ -88,7 +76,6 @@ function AdminHome() {
 
       if (response) {
         setItem("");
-        setRefItem("");
         console.log("Logged out");
         navigate("/admin-login", { replace: true });
       }
@@ -96,9 +83,8 @@ function AdminHome() {
       console.log(err);
     }
   };
-
   //LOADER LOGIC
-  // if (isLoading || isAdminLoading || logoutLoading) return <Loader />;
+  if (logoutLoading) return <Loader />;
 
   return (
     <ThemeProvider theme={theme}>
@@ -137,6 +123,7 @@ function AdminHome() {
                       selected={selectedIdx === 0}
                       onClick={() => {
                         handleClick(0);
+                        navigate("/admin-dashboard", { replace: true });
                       }}
                     >
                       <ListItemIcon sx={{ width: "50px", height: "30px" }}>
@@ -155,7 +142,6 @@ function AdminHome() {
                       selected={selectedIdx === 1}
                       onClick={() => {
                         handleClick(1);
-                        navigate("/admin-dashboard/analytics");
                       }}
                     >
                       <ListItemIcon sx={{ width: "50px", height: "30px" }}>
@@ -200,47 +186,17 @@ function AdminHome() {
               minHeight: "100vh",
             }}
           >
-            {isLoading || isAdminLoading || logoutLoading ? (
-              <Loader />
-            ) : (
-              <>
-                <Box sx={{ fontWeight: "bolder", fontSize: "50px" }}>
-                  Agency Applications
-                </Box>
+            <Box sx={{ fontWeight: "bolder", fontSize: "50px" }}>Analytics</Box>
 
-                <Box component="div" sx={{ marginTop: "30px" }}>
-                  {data && Array.isArray(data) ? (
-                    data?.map((agency) => {
-                      return (
-                        <ApplicationCard
-                          key={agency._id}
-                          companyName={agency.companyName}
-                          adminName={agency.adminName}
-                          email={agency.companyEmail}
-                          phone={agency.contactNo}
-                          cnic={agency.adminCNIC}
-                          license={agency.license}
-                          ntn={agency.companyNTN}
-                          address={agency.officeAddress}
-                          city={agency.city}
-                          province={agency.province}
-                          id={agency._id}
-                          setState={setDataState}
-                        />
-                      );
-                    })
-                  ) : (
-                    <Box
-                      component="img"
-                      src={error}
-                      sx={{
-                        marginTop: "50%",
-                      }}
-                    />
-                  )}
-                </Box>
-              </>
-            )}
+            <Box component="div" sx={{ marginTop: "30px" }}>
+              <Box
+                component="img"
+                src={error}
+                sx={{
+                  marginTop: "50%",
+                }}
+              />
+            </Box>
           </Grid>
         </Grid>
       </Typography>
@@ -248,4 +204,4 @@ function AdminHome() {
   );
 }
 
-export default AdminHome;
+export default Analytics;

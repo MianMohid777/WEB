@@ -5,8 +5,8 @@ const stayLoggedValidator = asyncHandler(async (req, res, next) => {
   let token;
   let authHeader = req.headers.authorization;
 
-  token = req.cookies?.accessToken; //Get from Cookies
-  if (token) console.log("Cookies mey sey mil giya Token", token);
+  token = req.cookies?.access_token; //Get from Cookies
+  if (token) console.log("Cookies mey sey mil giya Token");
 
   if (
     typeof token === "undefined" ||
@@ -28,6 +28,7 @@ const stayLoggedValidator = asyncHandler(async (req, res, next) => {
         next();
         return;
       } else {
+        console.log(token);
         console.log("Bhai Agiya Yaha tak Token ley KARR");
         req.user = decoded.user;
         console.log(req.user);

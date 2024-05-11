@@ -7,9 +7,13 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Home from "./Users/Tourist/Home";
+
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+
+import Home from "./Users/Tourist/Home";
 import TouristSignIn from "./Users/Tourist/TouristSignIn";
 import AgencySignIn from "./Users/Agency/AgencySignIn";
 import LoginAs from "./Users/Common/LoginAs";
@@ -18,27 +22,43 @@ import AgencyHome from "./Users/Agency/AgencyHome";
 import AdminSignIn from "./Users/Admin/AdminSignIn";
 import AdminHome from "./Users/Admin/AdminHome";
 import AgencyProfile from "./Users/Agency/AgencyProfile";
-import BookTour from "./Users/Tourist/BookTour";
+import CreateTour from "./Users/Agency/CreateTour";
+import Analytics from "./Users/Admin/Analytics";
+import SignUp from "./Users/Tourist/SignUp";
+import ToastMessage from "./Utils/Toast-Message";
+import Test from "./Users/Agency/Test";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
+      {/* Tourist Routes */}
       <Route path="/" element={<LoginAs />} />
-      <Route path="/tourist-login" element={<TouristSignIn />} />
-      <Route path="/agency-login" element={<AgencySignIn />} />
-      <Route path="/agency-registeration" element={<AgencyRegister />} />
-      <Route path="/agency-home" element={<AgencyHome />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/tourist-login" element={<TouristSignIn />} />
+      <Route path="/tourist-signup" element={<SignUp />} />
+
+      {/* Admin Routes */}
       <Route path="/admin-login" element={<AdminSignIn />} />
       <Route path="/admin-dashboard" element={<AdminHome />} />
-      <Route path="/profile" element={<AgencyProfile />} />
-      <Route path="/booktour" element={<BookTour />} />
+      <Route path="/admin-dashboard/analytics" element={<Analytics />} />
+
+      {/* Agency Routes */}
+      <Route path="/agency-home" element={<AgencyHome />} />
+      <Route path="/agency-home2" element={<Test />} />
+      <Route path="/agency-login" element={<AgencySignIn />} />
+      <Route path="/agency-registeration" element={<AgencyRegister />} />
+      <Route path="/current-agency/profile" element={<AgencyProfile />} />
+      <Route path="/current-agency/create-tour" element={<CreateTour />} />
+      <Route path="/test" element={<ToastMessage />} />
+      <Route path="/agency-profile" element={<AgencyProfile />} />
     </Route>
   )
 );
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <PersistGate loading={null} persistor={persistStore(store)}>
+      <RouterProvider router={router} />
+    </PersistGate>
   </Provider>
 );

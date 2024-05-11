@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const agencyReg = require("../Models/agency-RegModel");
+const tour = require("../Models/tourModel");
+// const agency = require("../Models/agencyModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -12,11 +14,16 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.companyEmail,
         id: user._id,
-        name: user.compnayName,
+        name: user.companyName,
+        adminName: user.adminName,
+        ntn: user.companyNTN,
+        license: user.license,
+        address: `${user.officeAddress}, ${user.city}, ${user.province}, Pakistan`,
+        role: "agency",
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
-    { expiresIn: "5m" } // Expiry Duration
+    { expiresIn: "50m" } // Expiry Duration
   );
 
   const refToken = jwt.sign(
@@ -112,12 +119,17 @@ const registerAgency = asyncHandler(async (req, res) => {
 //@access public
 
 const loginAgency = asyncHandler(async (req, res) => {
-  if (req.user) {
+  if (req.user && req.user.role === "agency") {
     res.status(200).json({
       message: "Already Logged In Before",
       email: req.user.email,
       id: req.user.id,
       name: req.user.name,
+      adminName: req.user.adminName,
+      ntn: req.user.ntn,
+      license: req.user.license,
+      address: req.user.address,
+      role: "agency",
     });
     return;
   }
@@ -159,12 +171,332 @@ const loginAgency = asyncHandler(async (req, res) => {
         message: "Success",
         accessToken: accessToken,
         refreshToken: refToken,
+        email: agency.companyEmail,
         id: agency._id,
         name: agency.companyName,
+        adminName: agency.adminName,
+        ntn: agency.companyNTN,
+        license: agency.license,
+        address: `${agency.officeAddress}, ${agency.city}, ${agency.province}, Pakistan`,
       });
   } else {
     res.status(404);
     throw new Error("Invalid Username or Password");
   }
 });
-module.exports = { registerAgency, loginAgency };
+
+//@desc Refresh Access Token Using Refresh Token
+//@route Post /api/agencies/refresh-token
+//@access private
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  try {
+    const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
+    const user = await agencyReg.findById(req?.user.id);
+
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid Refresh Token");
+    }
+    if (inRefreshToken !== user?.refreshToken) {
+      res.status(401);
+      throw new Error("Refresh Token Expired or Used");
+    }
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
+      user._id
+    );
+
+    res
+      .status(200)
+      .cookie("access_token", accessToken, options)
+      .cookie("refresh_token", refToken, options)
+      .json({
+        message: "Access Token Refreshed",
+        accessToken,
+        refreshToken: refToken,
+      });
+  } catch (err) {
+    console.log(err);
+    res.status(401).json({ message: err.message });
+  }
+});
+
+//@desc Get Currently Logged In User
+//@route Post /api/agencies/current-agency
+//@access private
+const getCurrentAgency = asyncHandler(async (req, res) => {
+  if (req.user && req.user.role === "agency") {
+    res
+      .status(200)
+      .json({ message: "Agency Logged In", status: res.statusCode });
+    return;
+  }
+  res.status(401).json({ message: "Unauthorized Access" });
+});
+
+//@desc Get All Active Ads
+//@route Post /api/agencies/current-agency/tours:id
+//@access private
+
+const getAllTours = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (userId !== req.user.id.toString()) {
+      res.status(401);
+      throw new Error("Unauthorized Access");
+    }
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    const tours = await tour
+      .find({ tourAgencyId: userId })
+      .sort({ createdAt: "desc" });
+
+    console.log(tours);
+
+    res.status(200).json({
+      message: "Success",
+      tours: tours,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+
+//@desc POST A NEW TOUR
+//@route Post /api/agencies/current-agency/publish-tour/:id
+//@access private
+const publishTour = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+
+  if (userId !== req.user.id.toString()) {
+    res.status(401);
+    throw new Error("Unauthorized Access");
+  }
+
+  const agency = await agencyReg.findById(userId);
+
+  if (!agency) {
+    res.status(404);
+    throw new Error("Agency Not Found");
+  }
+
+  const {
+    tourAgencyName,
+    tourStartDate,
+    tourEndDate,
+    tourLocationName,
+    tourLocationImage,
+    tourRegistrationEndDate,
+    tourInformation,
+    tourStatus,
+    tourPrice,
+  } = req.body;
+
+  const tourAgencyId = req.params.id;
+  console.log("REQ BODY", req.body);
+  if (!tourStartDate) {
+    console.log("REQ.BODY.STARTDATE: ", tourStartDate);
+    res.status(400);
+    throw new Error("Tour start date is mandatory");
+  }
+
+  if (!tourEndDate) {
+    res.status(400);
+    throw new Error("Tour end date is mandatory");
+  }
+
+  if (!tourAgencyName) {
+    res.status(400);
+    throw new Error("Tour agency name is mandatory");
+  }
+
+  if (!tourLocationName) {
+    res.status(400);
+    throw new Error("Tour location name is mandatory");
+  }
+
+  if (!tourLocationImage) {
+    res.status(400);
+    throw new Error("Tour location image is mandatory");
+  }
+
+  if (!tourRegistrationEndDate) {
+    res.status(400);
+    throw new Error("Tour registration end date is mandatory");
+  }
+
+  if (!tourInformation) {
+    res.status(400);
+    throw new Error("Tour information is mandatory");
+  }
+
+  if (!tourStatus) {
+    res.status(400);
+    throw new Error("Tour status is mandatory");
+  }
+
+  if (!tourPrice) {
+    res.status(400);
+    throw new Error("Tour Price is mandatory");
+  }
+
+  // Create the tour in the database
+  const newTour = await tour.create({
+    tourAgencyId,
+    tourAgencyName,
+    tourStartDate,
+    tourEndDate,
+    tourLocationName,
+    tourLocationImage,
+    tourRegistrationEndDate,
+    tourInformation,
+    tourStatus,
+    tourPrice,
+  });
+
+  console.log("DB NEW TOUR", newTour);
+
+  res.status(200).json({
+    message: "Tour created and published successfully",
+    tour: newTour,
+  });
+});
+
+//@desc GET TOURS ON SEARCH
+//@route Post /api/agencies/current-agency/search/:value
+//@access private
+const getSearchedTour = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (userId !== req.user.id.toString()) {
+      res.status(401);
+      throw new Error("Unauthorized Access");
+    }
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    const search = req.params.value;
+    console.log(search);
+    const tours = await tour.find({
+      $and: [
+        {
+          $or: [
+            { tourInformation: { $regex: search, $options: "i" } },
+            { tourLocationName: { $regex: search, $options: "i" } },
+          ],
+        },
+        { tourStatus: "Active" },
+      ],
+    });
+
+    res.status(200).json({
+      message: "Success",
+      tours: tours,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+
+//@desc Get All Ended Ads
+//@route Post /api/agencies/current-agency/tours/history/:id
+//@access private
+const getPastTours = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    if (userId !== req.user.id.toString()) {
+      res.status(401);
+      throw new Error("Unauthorized Access");
+    }
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    const tours = await tour
+      .find({
+        tourAgencyId: userId,
+        $or: [{ tourStatus: "Finished" }, { tourStatus: "Cancelled" }],
+      })
+      .sort({ createdAt: "desc" });
+
+    console.log(tours);
+
+    res.status(200).json({
+      message: "Success",
+      tours: tours,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+
+const updateTours = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // if (userId !== req.user.id.toString()) {
+    //   res.status(401);
+    //   throw new Error("Unauthorized Access");
+    // }
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    const tours = await tour.updateMany(
+      { tourAgencyId: userId },
+      { tourLocationImage: "flyingJatt.jpg" },
+      { new: true }
+    );
+
+    console.log(tours);
+
+    res.status(200).json({
+      message: "Success",
+      tours: tours,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+module.exports = {
+  registerAgency,
+  loginAgency,
+  refreshAccessToken,
+  getCurrentAgency,
+  getAllTours,
+  publishTour,
+  getSearchedTour,
+  getPastTours,
+  updateTours,
+};

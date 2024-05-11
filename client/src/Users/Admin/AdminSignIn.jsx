@@ -11,7 +11,10 @@ import {
   createTheme,
 } from "@mui/material";
 
-import { useAdminLoginMutation } from "../../Services/Login/loginAPI";
+import {
+  useAdminLoginMutation,
+  useAdminRefreshTokenMutation,
+} from "../../Services/Login/loginAPI";
 import Loader from "../../Utils/Loader";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
@@ -24,17 +27,41 @@ import tower from "../../Assets/tower copy 2.svg";
 
 function AdminSignIn() {
   const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
   const accessToken = getItem();
+  const refreshToken = getRefItem();
 
   useEffect(() => {
     const checkLogIn = async () => {
       try {
-        const res = await adminLogin({ accessToken: accessToken }).unwrap();
-        console.log(res);
+        if (accessToken) {
+          const res = await adminLogin({ accessToken: accessToken }).unwrap();
+          console.log(res);
 
-        if (res) navigate("/admin-dashboard");
+          if (res) navigate("/admin-dashboard");
+        }
       } catch (err) {
         console.log(err);
+
+        if (err.status === 401) {
+          console.log("Going for Token Refresh");
+
+          try {
+            const response = await adminRefreshToken({
+              refreshToken: refreshToken,
+            }).unwrap();
+
+            console.log(response);
+            if (response) {
+              setItem(response.accessToken);
+              setRefItem(response.refreshToken);
+              navigate("/admin-dashboard");
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }
       }
     };
 
@@ -49,6 +76,8 @@ function AdminSignIn() {
   });
 
   const [adminLogin, { isLoading }] = useAdminLoginMutation();
+  const [adminRefreshToken, { isLoading: refLoading }] =
+    useAdminRefreshTokenMutation();
 
   const navigate = useNavigate();
 
@@ -65,7 +94,7 @@ function AdminSignIn() {
     },
   });
 
-  if (isLoading) return <Loader />;
+  if (isLoading || refLoading) return <Loader />;
 
   const handleSubmit = async () => {
     if (!email.includes("@") || email.length === 0) {
@@ -92,13 +121,19 @@ function AdminSignIn() {
       }));
     }
     try {
-      if (!error.emailError && !error.passwordError) {
+      if (
+        !error.emailError &&
+        !error.passwordError &&
+        email.length > 0 &&
+        password.length > 0
+      ) {
         const response = await adminLogin({
           email: email,
           password: password,
         }).unwrap();
 
         setItem(response.accessToken);
+        setRefItem(response.refreshToken);
         navigate("/admin-dashboard");
       }
     } catch (err) {

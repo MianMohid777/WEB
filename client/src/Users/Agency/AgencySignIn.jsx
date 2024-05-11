@@ -10,7 +10,11 @@ import {
   createTheme,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useAgencyLoginMutation } from "../../Services/Login/loginAPI";
+import {
+  useAgencyLoginMutation,
+  useAgencyRefreshTokenMutation,
+} from "../../Services/Login/loginAPI";
+
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -29,41 +33,59 @@ import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 function AgencySignIn() {
   const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
 
   const accessToken = getItem();
+  const refreshToken = getRefItem();
 
   useEffect(() => {
     const checkLogIn = async () => {
       try {
-        const res = await loginAgency({ accessToken: accessToken }).unwrap();
-        console.log(res);
-        if (res) {
-          dispatch(
-            addAuthAgency({
-              email: res.email,
-              id: res.id,
-              name: res.name,
-              access_token: accessToken,
-            })
-          );
-          navigate("/home");
+        if (accessToken) {
+          const res = await loginAgency({ accessToken: accessToken }).unwrap();
+          console.log(res);
+          if (res) {
+            dispatch(
+              addAuthAgency({
+                email: res.email,
+                id: res.id,
+                name: res.name,
+                adminName: res.adminName,
+                ntn: res.ntn,
+                license: res.license,
+                address: res.address,
+                access_token: accessToken,
+              })
+            );
+            navigate("/agency-home");
+          }
         }
       } catch (err) {
         console.log(err);
+        if (err.status === 401) {
+          console.log("Going for Token Refresh");
+
+          try {
+            const response = await agencyRefreshToken({
+              refreshToken: refreshToken,
+            }).unwrap();
+
+            console.log(response);
+            if (response) {
+              setItem(response.accessToken);
+              setRefItem(response.refreshToken);
+              navigate("/agency-home");
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }
       }
     };
 
     checkLogIn();
   }, []);
-
-  const [svg, setSvg] = useState(google);
-
-  const handleMouseOver = () => {
-    svg === google ? setSvg(google2) : setSvg(google);
-  };
-  const handleMouseOut = () => {
-    svg === google2 ? setSvg(google) : setSvg(google2);
-  };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +95,8 @@ function AgencySignIn() {
   });
 
   const [loginAgency, { isLoading }] = useAgencyLoginMutation();
+  const [agencyRefreshToken, { isLoading: refLoading }] =
+    useAgencyRefreshTokenMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -129,13 +153,17 @@ function AgencySignIn() {
             email: email,
             id: response.id,
             name: response.name,
+            adminName: response.adminName,
+            ntn: response.ntn,
+            license: response.license,
+            address: response.address,
             access_token: response.accessToken,
             refresh_token: response.refreshToken,
           })
         );
 
         setItem(response.accessToken);
-        navigate("/home");
+        navigate("/agency-home");
       }
     } catch (err) {
       console.log(err);
@@ -274,36 +302,6 @@ function AgencySignIn() {
             >
               LOGIN
             </Button>
-
-            <Box sx={{ display: "flex", color: "#848383", gap: "5px", mt: 2 }}>
-              <Box component="div">
-                <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
-              </Box>
-              <Box
-                sx={{
-                  fontSize: "14px",
-                  color: "#000000",
-                  fontWeight: "normal",
-                }}
-              >
-                OR
-              </Box>
-
-              <Box component="div">
-                <Divider sx={{ width: "100px", color: "#CCCCCC", mt: 1 }} />
-              </Box>
-            </Box>
-
-            <Box component="Box">
-              <Box
-                component="img"
-                src={svg}
-                alt=""
-                sx={{ mt: 2 }}
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
-              />
-            </Box>
 
             <Box
               component="Box"

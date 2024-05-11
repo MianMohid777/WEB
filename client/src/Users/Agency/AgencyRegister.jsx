@@ -107,7 +107,7 @@ function AgencyRegister() {
         setCompanyInfo({ ...companyInfo, phone: e.target.value });
         break;
       case "license":
-        setCompanyInfo({ ...companyInfo, license: e.target.files[0] });
+        setCompanyInfo({ ...companyInfo, license: e.target.value });
         break;
       case "ntn":
         setCompanyInfo({ ...companyInfo, ntn: e.target.value });
