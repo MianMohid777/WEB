@@ -89,6 +89,15 @@ function AgencyHome() {
     navigate("/agency-login", { replace: true });
   }
 
+  if (isError || agencyError) {
+    console.log("Its GET TOURS API ERROR", isError);
+    console.log(agencyError);
+    setItem("");
+    navigate("/agency-login", { replace: true });
+  }
+
+
+
   useEffect(() => {
     if (isSuccess && !isLoading) {
       console.log(data.tours);
