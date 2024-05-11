@@ -58,7 +58,7 @@ const tourSchema = mongoose.Schema(
       type: String,
       enum: [
         "Upcoming",
-        "RegistrationsOpened",
+        "Registrations-Opened",
         "Active",
         "Finished",
         "Cancelled",
