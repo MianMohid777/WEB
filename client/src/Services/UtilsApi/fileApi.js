@@ -16,4 +16,21 @@ const uploadApi = api.injectEndpoints({
   },
 });
 
+const uploadGalleryApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      uploadGallery: builder.mutation({
+        query: (files) => {
+          return {
+            url: "Static/upload-gallery",
+            method: "POST",
+            body: files,
+          };
+        },
+      }),
+    };
+  },
+});
+
 export const { useUploadMutation } = uploadApi;
+export const { useUploadGalleryMutation } = uploadGalleryApi;
