@@ -1,46 +1,19 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import {
-  Box,
-  Divider,
-  Grid,
-  InputAdornment,
-  AppBar,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  Drawer,
-  ThemeProvider,
+  Grid, ThemeProvider,
   Typography,
-  createTheme,
-  IconButton,
-  InputBase,
-  Button,
+  createTheme, Button,
   Select,
   MenuItem,
   TextField,
   InputLabel,
-  FormControl,
+  FormControl
 } from "@mui/material";
 
-import Menu from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import StoreIcon from "@mui/icons-material/Store";
-import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
-import HistoryIcon from "@mui/icons-material/History";
-import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import SettingsIcon from "@mui/icons-material/Settings";
-import SearchIcon from "@mui/icons-material/Search";
-import CreatePost from "@mui/icons-material/EditCalendar";
 import { PhotoCamera } from "@mui/icons-material";
-import AgencyHeader from "./AgencyHeader.jsx";
 import Loader from "../../Utils/Loader";
 import { useTourPublishMutation } from "../../Services/Agency/publishTour.js";
 
-import DP from "../../Assets/Karakoram.jpg";
 import { useSelector } from "react-redux";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook.js";
 import TopBar from "../../Utils/TopBar.jsx";

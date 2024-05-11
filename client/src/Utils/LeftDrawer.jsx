@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Divider,
@@ -8,10 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   ListItemButton,
-  Drawer,
-  ThemeProvider,
-  Typography,
-  createTheme,
+  Drawer
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -24,7 +20,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 function LeftDrawer(props) {
   const [color, setColor] = useState({
-    dash: "#FF4E45",
+    dash: "white",
     profile: "white",
     ads: "white",
     history: "white",
