@@ -44,7 +44,10 @@ function AdminSignIn() {
       } catch (err) {
         console.log(err);
 
-        if (err.status === 401) {
+        if (
+          err.status === 401 &&
+          err.data.message !== "Unauthorized User Access"
+        ) {
           console.log("Going for Token Refresh");
 
           try {

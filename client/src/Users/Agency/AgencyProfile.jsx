@@ -1,17 +1,24 @@
-import { useState } from "react";
-import React from "react";
-import { Link } from "react-router-dom"; // Import Link from React Router
-import { Box, Grid, Typography, ThemeProvider, createTheme, Button, Divider, Card, CardMedia, CardContent, TextField } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Grid,
+  Typography,
+  createTheme,
+  ThemeProvider,
+  TextField,
+  Card,
+  CardContent,
+  Box,
+  Button
+} from "@mui/material";
+import Loader from "../../Utils/Loader";
+import { useSelector } from "react-redux";
+import { useLocalStorage } from "../../Utils/useLocalStorage-Hook.js";
+import TopBar from "../../Utils/TopBar.jsx";
+import LeftDrawer from "../../Utils/LeftDrawer.jsx";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import AgencyHeader from './AgencyHeader.jsx';
 
-const theme = createTheme({
-  typography: {
-    fontFamily: "'Space Grotesk', sans-serif",
-  },
-});
 
 const EditableProfileBox = ({ title, data, onDataChange }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -35,7 +42,7 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
     <Card sx={{ height: "100%" }}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center" pb={2}>
-          <Typography variant="h6" fontWeight="medium" textTransform="capitalize">
+          <Typography variant="h4" fontWeight="medium" textTransform="capitalize">
             {title}
           </Typography>
           {!isEditing && (
@@ -73,7 +80,7 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
           <>
             {Object.entries(data).map(([key, value]) => (
               <Box key={key} py={1}>
-                <Typography variant="body1">
+                <Typography variant="h6">
                   <strong>{key === "Instagram Link" ? <InstagramIcon sx={{ marginBottom: "-6px" }} /> : key === "Facebook Link" ? <FacebookIcon sx={{ marginBottom: "-6px" }} /> : key === "Twitter Link" ? <TwitterIcon sx={{ marginBottom: "-6px" }} /> : key}:</strong> {key === "Agency Licence" ? <a href={value} target="_blank">{value}</a> : value}
                 </Typography>
               </Box>
@@ -86,145 +93,129 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
 };
 
 
+function AgencyProfile() {
+
+  
+  const theme = createTheme({
+    typography: {
+      fontFamily: "'Space Grotesk', sans-serif",
+    },
+    palette: {
+      mode: "dark",
+      primary: {
+        main: "#FF4E45",
+      },
+      background: {
+        default: "#282828", // Black background
+      },
+      text: {
+        primary: "#FFF", // White text
+      },
+    },
+  });
+
+  // HOOKS
+  const [open, setOpen] = useState(false);
+  const [selectedIdx, setSelectedIdx] = useState(1);
+  const [searchBar, setSearchBar] = useState("");;
+  const agency = useSelector((state) => state.agency);
+  const { setItem, getItem } = useLocalStorage("access_token");
+  const accessToken = getItem();
+
+  console.log(agency);
 
 
-
-const ProfileBox = () => {
   const [agencyInfo, setAgencyInfo] = useState({
-    "Agency Name": "Example Agency",
-    "Agency Mail": "agency@example.com",
-    "Agency NTN": "1234567890",
-    "Agency Licence": "ABCDE12345",
+    "Agency Name": agency.profile.name,
+    "Agency Mail": agency.profile.name,
+    "Phone Number": agency.profile.phoneNumber,
+    "Description": agency.profile.description,
+
   });
 
-  const [adminInfo, setAdminInfo] = useState({
-    "Admin Name": "Aaloo Bukhara",
-    "Admin CNIC": "12345-6789012-3",
-    "Phone Number": "123-456-7890",
-  });
 
   const [socialMediaInfo, setSocialMediaInfo] = useState({
-    "Twitter Link": "X.com",
-    "Facebook Link": "Facebook.com",
-    "Instagram Link": "instagram.com",
-  })
+    "Facebook Link": agency.profile.facebookLink,
+    "Instagram Link": agency.profile.instagramLink,
+    "Twitter Link": agency.profile.twittersLink,
+    "Website": agency.profile.websiteLink
+
+  });
+
+  const galleryImages = agency.profile.gallery || [];
+
+  const handleClick = (idx) => {
+    setSelectedIdx(idx);
+  };
+
+  const handleAgencyInfoChange = (newData) => {
+    setAgencyInfo(newData);
+  };
+  
+  const handleSocialMediaInfoChange = (newData) => {
+    setSocialMediaInfo(newData);
+  };
+  
+  useEffect(() => {
+    updateAgencyProfile();
+  }, [agencyInfo, socialMediaInfo]);
+
+  const updateAgencyProfile = (newProfileData) => {
+    const updatedProfile = {
+      ...agency.profile,
+      ...agencyInfo,
+      ...socialMediaInfo
+    };
+
+    console.log("Updated Agency Profile", updatedProfile);
+  };
 
   return (
-    <Grid container spacing={3}>
+    <>
+      <ThemeProvider theme={theme}>
+        <Typography>
+          <Grid container sx={{ backgroundColor: "#1F1F1F" }}>
+            <Grid item lg={12}>
+              <TopBar setOpen={setOpen} setSearchBar={setSearchBar} show={false} />
+              <LeftDrawer open={open} setOpen={setOpen} handleClick={handleClick} selectedIdx={selectedIdx} />
+            </Grid>
+            <Grid container spacing={3} padding={8} margin={8} sx={{ borderRadius: "2%", justifyContent: "center", alignItems: "center", height: "100%", backgroundColor: "#282828" }}>
 
-      {/* Admin Information */}
-      <Grid item xs={12} md={4} xl={4}>
-        <EditableProfileBox
-          title="Admin Information"
-          data={adminInfo}
-          onDataChange={setAdminInfo}
-        />
-      </Grid>
+              <Box width={"100%"} sx={{ backgroundColor: "#4e4e4e", padding: "50px", margin: 8, borderRadius: "2%" }}>
+                {/* Profile Box */}
+                <Grid container spacing={3} >
 
-      {/* Agency Information */}
-      <Grid item xs={12} md={4} xl={4}>
-        <EditableProfileBox
-          title="Agency Information"
-          data={agencyInfo}
-          onDataChange={setAgencyInfo}
-        />
-      </Grid>
-
-      {/* Social Media Info */}
-      <Grid item xs={12} md={4} xl={4}>
-        <EditableProfileBox
-          title="Social Media Info"
-          data={socialMediaInfo}
-          onDataChange={setSocialMediaInfo}
-        />
-      </Grid>
-
-    </Grid>
-  );
-};
-
-const TourCard = ({ name, date, status, imagesrc }) => {
-  return (
-    <Link to={`/tour/${name}`} style={{ textDecoration: 'none' }}>
-      <Card sx={{
-        backgroundColor: "rgb(255, 255, 255, 0.8)",
-        display: "flex",
-        flexDirection: "column",
-        margin: "20px",
-        padding: "20px"
-      }}>
-        <Box position="relative" width="100%">
-          <CardMedia
-            src={imagesrc}
-            component="img"
-            title={name}
-            sx={{
-              objectFit: "cover",
-              objectPosition: "center",
-            }}
-          />
-        </Box>
-        <Box mt={2} lineHeight={0}>
-          <Typography variant="h4" fontWeight="bold" color="text" textTransform="uppercase">
-            {name}
-          </Typography>
-        </Box>
-        <Box mb={3} lineHeight={0}>
-          <Typography variant="subtitle1" fontWeight="light" color="text" textTransform="capitalize">
-            {status} - {date}
-          </Typography>
-        </Box>
-      </Card>
-    </Link>
-  );
-}
-
-
-function AgencyProfile() {
-  return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ borderRadius: "2%" }}>
-        
-        <Box sx={{  backgroundColor: "	rgb(169, 201, 214, 0.8)",padding: "50px", margin: 8, borderRadius: "2%" }}>
-          {/* Top Header Bar */}
-          {/* <AgencyHeader /> */}
-
-          {/* Info Box */}
-
-          <ProfileBox title="Profile" />
-
-
-          {/* Tours Box */}
-          <Box>
-            <Box pt={2} px={2} mt={5}>
-              <Typography variant="h3" gutterBottom>
-                Tours
-              </Typography>
-              <Grid container spacing={0}>
-                <Grid item xs={6} md={4} lg={3}>
-                  <TourCard date={"5/10/15"} status={"Completed"} name={"Rawalindi"} imagesrc={"https://cdn.britannica.com/14/144114-050-24FA947B/Bazaar-Rawalpindi-Pak.jpg"} />
+                  {/* Agency Information */}
+                  <Grid item xs={12} md={12} xl={12}>
+                    <EditableProfileBox title="Agency Information" data={agencyInfo} onDataChange={handleAgencyInfoChange} />
+                  </Grid>
+                  {/* Social Media Info */}
+                  <Grid item xs={12} md={12} xl={12}>
+                    <EditableProfileBox title="Social Media Info" data={socialMediaInfo} onDataChange={handleSocialMediaInfoChange} />
+                  </Grid>
                 </Grid>
-                <Grid item xs={6} md={4} lg={3}>
-                  <TourCard date={"9/2/21"} status={"Cancelled"} name={"Lahore"} imagesrc={"https://cdn.britannica.com/14/144114-050-24FA947B/Bazaar-Rawalpindi-Pak.jpg"} />
-                </Grid>
-                <Grid item xs={6} md={4} lg={3}>
-                  <TourCard date={"26/7/24"} status={"Pending"} name={"Faisalabad"} imagesrc={"https://cdn.britannica.com/14/144114-050-24FA947B/Bazaar-Rawalpindi-Pak.jpg"} />
-                </Grid>
-                <Grid item xs={6} md={4} lg={3}>
-                  <TourCard date={"6/9/24"} status={"Pending"} name={"Lahore"} imagesrc={"https://cdn.britannica.com/14/144114-050-24FA947B/Bazaar-Rawalpindi-Pak.jpg"} />
-                </Grid>
-                <Grid item xs={6} md={4} lg={3}>
-                  <TourCard date={"26/7/24"} status={"Pending"} name={"Faisalabad"} imagesrc={"https://cdn.britannica.com/14/144114-050-24FA947B/Bazaar-Rawalpindi-Pak.jpg"} />
-                </Grid>
-                <Grid item xs={6} md={4} lg={3}>
-                  <TourCard date={"6/9/24"} status={"Completed"} name={"Lahore"} imagesrc={"https://cdn.britannica.com/14/144114-050-24FA947B/Bazaar-Rawalpindi-Pak.jpg"} />
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-    </ThemeProvider>
+                {/* Tours Box */}
+                <Box>
+                  <Box pt={2} px={2} mt={5}>
+                    <Typography variant="h3" gutterBottom>
+                      Gallery
+                    </Typography>
+                    <Grid container spacing={3}>
+                      {galleryImages.map((image, index) => (
+                        <Grid item key={index}>
+                          <img src={image} alt={`Gallery Image ${index}`} style={{ maxWidth: "100%", height: "auto" }} />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
+                </Box>
+              </Box>
+
+            </Grid>
+          </Grid>
+        </Typography>
+      </ThemeProvider>
+    </>
   );
 }
 

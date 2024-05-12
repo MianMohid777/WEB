@@ -9,25 +9,18 @@ import {
 } from "@mui/material";
 
 import DP from "../../Assets/Karakoram.jpg";
-import emptyUser from "../../Assets/emptyUser.png";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  useGetAgencyQuery,
-  useGetAllToursQuery,
-  useUpdateStatusMutation,
-  useUpdateTourStatusMutation,
-} from "../../Services/Agency/agencyApi";
+import { useGetAgencyQuery } from "../../Services/Agency/agencyApi";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 import Loader from "../../Utils/Loader";
-import { addTours } from "../../Redux/Features/agencySlice";
 import TourPost from "../../Utils/TourPost";
 import terror from "../../Assets/terror.jpg";
 import LeftDrawer from "../../Utils/LeftDrawer";
 import TopBar from "../../Utils/TopBar";
 import { useAnalytic } from "../../Utils/analyticCalc-Hook";
 
-function AgencyHome() {
+function ActiveAds() {
   const theme = createTheme({
     typography: {
       fontFamily: "'Space Grotesk', sans-serif",
@@ -36,58 +29,39 @@ function AgencyHome() {
 
   //Hooks
   const { setItem, getItem } = useLocalStorage("access_token");
-  const [dataState, setDataState] = useState([]);
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
+  const [dataState, setDataState] = useState(false);
+  const [data, setData] = useState([]);
 
   const accessToken = getItem();
 
   const [open, setOpen] = useState(false);
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const [setSearchBar] = useState("");
+  const [selectedIdx, setSelectedIdx] = useState(2);
 
   const navigate = useNavigate();
   const agency = useSelector((state) => state.agency);
-  const dispatch = useDispatch();
-  const { getToursSize } = useAnalytic();
+
+  const {
+    getToursSize,
+    getActiveTours,
+    getCompletedTours,
+    getCancelledTours,
+    getUpcomingTours,
+    getSearchedTours,
+  } = useAnalytic();
 
   // QUERY // MUTATIONS
-
-  const { data, isLoading, isError, isSuccess, refetch } = useGetAllToursQuery({
-    id: agency.authAgency.id,
-    accessToken: accessToken,
-  });
 
   const {
     isLoading: isAgencyLoading,
     isError: agencyError,
-    refetch: currAgency,
+    refetch,
   } = useGetAgencyQuery({ accessToken: accessToken });
 
-  const [updateTourStatus, { isLoading: updating, isError: updateErr }] =
-    useUpdateStatusMutation();
-
   useEffect(() => {
-    const checkUpdates = async () => {
-      try {
-        if (accessToken) {
-          const response = await updateTourStatus({
-            id: agency.authAgency.id,
-            accessToken: accessToken,
-          }).unwrap();
-
-          if (response) {
-            console.log(response);
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     refetch();
-    currAgency();
-    console.log(getToursSize());
-    setDataState(data);
-    checkUpdates();
+    setData(getActiveTours());
   }, []);
   // HANDLE MENU STATES
   const handleClick = (idx) => {
@@ -95,24 +69,14 @@ function AgencyHome() {
   };
 
   // HANDLE ERROR & SUCCESS RESPONSE
-  if (isError || agencyError || updateErr) {
-    console.log("Its GET TOURS API ERROR", isError);
+  if (agencyError) {
     console.log(agencyError);
+    setItem("");
     navigate("/agency-login", { replace: true });
   }
 
-  useEffect(() => {
-    if (isSuccess && !isLoading) {
-      console.log(data.tours);
-      setDataState(data.tours);
-      console.log(dataState);
-      console.log("Dispatched");
-      dispatch(addTours(data?.tours));
-    }
-  }, [data]);
-
   //LOADER LOGIC
-  if (isLoading || isAgencyLoading || updating) return <Loader />;
+  if (isAgencyLoading) return <Loader />;
 
   return (
     <>
@@ -143,11 +107,10 @@ function AgencyHome() {
                 <Grid item lg={12}>
                   <TopBar
                     setOpen={setOpen}
-                    setSearchBar={setSearchBar}
                     show={true}
                     showBar={true}
-                    searchType={"All"}
-                    setData={setDataState}
+                    searchType={"Active"}
+                    setData={setData}
                   />
                   <LeftDrawer
                     open={open}
@@ -175,12 +138,8 @@ function AgencyHome() {
                         width: "200px",
                         borderRadius: "50%",
                         marginTop: "40%",
-                        backgroundImage: `url(${emptyUser})`,
-                        backgroundSize: "cover",
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
                       }}
-                      src={`http://localhost:3002/api/static/${agency.profile.profileImage}`}
+                      src={DP}
                     />
                     <Box
                       component="div"
@@ -318,10 +277,8 @@ function AgencyHome() {
                       gap: "50px",
                     }}
                   >
-                    {dataState &&
-                    Array.isArray(dataState) &&
-                    dataState.length > 0 ? (
-                      dataState?.map((tour) => {
+                    {data && data.length > 0 ? (
+                      data?.map((tour) => {
                         return (
                           <TourPost
                             agencyName={agency.authAgency.name}
@@ -380,4 +337,4 @@ function AgencyHome() {
     </>
   );
 }
-export default AgencyHome;
+export default ActiveAds;

@@ -9,9 +9,6 @@ import {
   ListItemText,
   ListItemButton,
   Drawer,
-  ThemeProvider,
-  Typography,
-  createTheme,
 } from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
@@ -24,13 +21,14 @@ import SettingsIcon from "@mui/icons-material/Settings";
 
 function LeftDrawer(props) {
   const [color, setColor] = useState({
-    dash: "#FF4E45",
+    dash: "white",
     profile: "white",
     ads: "white",
     history: "white",
     stats: "white",
     settings: "white",
   });
+  const navigate = useNavigate();
 
   return (
     <Drawer
@@ -99,6 +97,7 @@ function LeftDrawer(props) {
                   ...prevColor,
                   dash: "#FF4E45",
                 }));
+                navigate("/agency-home");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({
@@ -139,6 +138,7 @@ function LeftDrawer(props) {
                   ...prevColor,
                   profile: "#FF4E45",
                 }));
+                navigate("/current-agency/profile");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({
@@ -180,6 +180,8 @@ function LeftDrawer(props) {
                   ...prevColor,
                   ads: "#FF4E45",
                 }));
+
+                navigate("/current-agency/active-ads");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({
@@ -220,6 +222,7 @@ function LeftDrawer(props) {
                   ...prevColor,
                   history: "#FF4E45",
                 }));
+                navigate("/current-agency/past-ads");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({
@@ -260,6 +263,8 @@ function LeftDrawer(props) {
                   ...prevColor,
                   stats: "#FF4E45",
                 }));
+
+                navigate("/current-agency/analytics");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({

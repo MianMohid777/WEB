@@ -1,5 +1,4 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
@@ -13,6 +12,7 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
@@ -52,6 +52,7 @@ function CreateTour() {
   const [upload, { isLoading: uploadLoading, isError: uploadError }] =
     useUploadMutation();
   const agency = useSelector((state) => state.agency);
+  const navigate = useNavigate();
   const { setItem, getItem } = useLocalStorage("access_token");
   const accessToken = getItem();
 
@@ -65,22 +66,27 @@ function CreateTour() {
   const [information, setInformation] = useState("");
   const [status, setStatus] = useState("");
   const [price, setPrice] = useState(0);
+  const [locationLink, setLocationLink] = useState("");
+  const [tourPlan, setTourPlan] = useState([]);
+  const [maxSlots, setMaxSlots] = useState(0);
 
   const [tourInfo, setTourInfo] = useState({
-    tourAgencyName: "Amazing Adventure",
+    tourAgencyName: "",
     tourLocationName: "",
-    tourLocationImage: "image",
+    tourLocationImage: "",
     tourStartDate: new Date().toLocaleDateString(),
     tourEndDate: new Date().toLocaleDateString(),
     tourRegistrationEndDate: new Date().toLocaleDateString(),
     tourInformation: "",
     tourPrice: 0.0,
     tourStatus: "Upcoming",
+    tourLocationLink: "",
+    tourPlan: [],
+    tourMaxSlots: 0,
   });
 
-  console.log("Opened create Tour page");
-
   if (isLoading) return <Loader />;
+  //console.log(agency);
 
   // Function to handle image upload
   const handleImageChange = (e) => {
@@ -117,7 +123,26 @@ function CreateTour() {
     return date instanceof Date && !isNaN(date);
   };
 
-  if (isLoading) return <Loader />;
+  const addDay = () => {
+    setTourPlan([
+      ...tourPlan,
+      {
+        dayNumber: tourPlan.length + 1,
+        dayTitle: "",
+        dayInformation: "",
+      },
+    ]);
+  };
+
+  const deleteDay = (index) => {
+    const newTourPlan = [...tourPlan];
+    newTourPlan.splice(index, 1);
+    // Update day numbers
+    for (let i = index; i < newTourPlan.length; i++) {
+      newTourPlan[i].dayNumber = i + 1;
+    }
+    setTourPlan(newTourPlan);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -164,6 +189,9 @@ function CreateTour() {
       tourInformation: information,
       tourStatus: status,
       tourPrice: price,
+      tourPlan: tourPlan,
+      tourLocationLink: locationLink,
+      tourMaxSlots: maxSlots,
     };
 
     console.log("TOUR INFO", newTourInfo);
@@ -178,7 +206,10 @@ function CreateTour() {
     try {
       const response = await tourPublish(payload).unwrap();
 
-      console.log("RESPONSE", response);
+      if (response) {
+        console.log("RESPONSE", response);
+        navigate("/agency-home");
+      }
     } catch (e) {
       console.log(e);
     }
@@ -194,6 +225,7 @@ function CreateTour() {
                 setOpen={setOpen}
                 setSearchBar={setSearchBar}
                 show={false}
+                showBar={false}
               />
               <LeftDrawer
                 open={open}
@@ -229,6 +261,16 @@ function CreateTour() {
                       label="Location Name"
                       value={locationName}
                       onChange={(e) => setLocationName(e.target.value)}
+                      fullWidth
+                      required
+                      sx={{ color: "#FFF" }} // White text
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Location Link"
+                      value={locationLink}
+                      onChange={(e) => setLocationLink(e.target.value)}
                       fullWidth
                       required
                       sx={{ color: "#FFF" }} // White text
@@ -333,6 +375,21 @@ function CreateTour() {
                       sx={{ color: "#FFF" }}
                     />
                   </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Max Slots"
+                      type="number"
+                      value={maxSlots}
+                      onChange={(e) => setMaxSlots(e.target.value)}
+                      fullWidth
+                      required
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      sx={{ color: "#FFF" }}
+                    />
+                  </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Ticket Price"
@@ -347,6 +404,72 @@ function CreateTour() {
                       sx={{ color: "#FFF" }}
                     />
                   </Grid>
+                  <Grid item xs={12}>
+                    {tourPlan.map((day, index) => (
+                      <Grid container spacing={3} key={index}>
+                        <Grid item xs={4}>
+                          <TextField
+                            label={`Day ${index + 1} Number`}
+                            value={day.dayNumber}
+                            fullWidth
+                            disabled
+                            sx={{ color: "#FFF", marginBottom: "16px" }} // Added margin bottom
+                          />
+                        </Grid>
+                        <Grid item xs={8}>
+                          <TextField
+                            label={`Day ${index + 1} Title`}
+                            value={day.dayTitle}
+                            onChange={(e) => {
+                              const newTourPlan = [...tourPlan];
+                              newTourPlan[index].dayTitle = e.target.value;
+                              setTourPlan(newTourPlan);
+                            }}
+                            fullWidth
+                            required
+                            sx={{ color: "#FFF", marginBottom: "16px" }} // Added margin bottom
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            label={`Day ${index + 1} Information`}
+                            value={day.dayInformation}
+                            onChange={(e) => {
+                              const newTourPlan = [...tourPlan];
+                              newTourPlan[index].dayInformation =
+                                e.target.value;
+                              setTourPlan(newTourPlan);
+                            }}
+                            fullWidth
+                            required
+                            multiline
+                            rows={4}
+                            sx={{ color: "#FFF", marginBottom: "0px" }}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Button
+                            onClick={() => deleteDay(index)}
+                            variant="outlined"
+                            color="secondary"
+                            sx={{ mb: "50px" }}
+                          >
+                            Delete Day
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    ))}
+                    <Grid item xs={12}>
+                      <Button
+                        onClick={addDay}
+                        variant="outlined"
+                        color="primary"
+                      >
+                        Add Day
+                      </Button>
+                    </Grid>
+                  </Grid>
+
                   <Grid item xs={12}>
                     <Button type="submit" variant="contained" color="primary">
                       Create Tour

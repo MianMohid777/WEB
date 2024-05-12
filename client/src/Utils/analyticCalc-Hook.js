@@ -13,6 +13,7 @@ export const useAnalytic = () => {
     return tours.filter((tour) => tour.tourStatus === "Active");
   };
   const getCompletedTours = () => {
+    console.log(tours);
     return tours.filter((tour) => tour.tourStatus === "Completed");
   };
 
@@ -24,11 +25,32 @@ export const useAnalytic = () => {
     return tours.filter((tour) => tour.tourStatus === "Upcoming");
   };
 
-  const getSearchedActiveTours = (search) => {
-    return tours.filter(
-      (tour) =>
-        tour.tourStatus === "Active" && tour.tourLocationName.includes(search)
-    );
+  const getSearchedTours = (search, status) => {
+    if (status === "All") {
+      console.log(search);
+      return tours.filter((tour) =>
+        tour.tourLocationName
+          .toLowerCase()
+          .includes(search.trim().toLowerCase())
+      );
+    } else if (status === "Past") {
+      return tours.filter(
+        (tour) =>
+          (tour.tourStatus === "Completed" ||
+            tour.tourStatus === "Cancelled") &&
+          tour.tourLocationName
+            .toLowerCase()
+            .includes(search.trim().toLowerCase())
+      );
+    } else {
+      return tours.filter(
+        (tour) =>
+          tour.tourStatus === status &&
+          tour.tourLocationName
+            .toLowerCase()
+            .includes(search.trim().toLowerCase())
+      );
+    }
   };
 
   return {
@@ -37,6 +59,6 @@ export const useAnalytic = () => {
     getCompletedTours,
     getCancelledTours,
     getUpcomingTours,
-    getSearchedActiveTours,
+    getSearchedTours,
   };
 };

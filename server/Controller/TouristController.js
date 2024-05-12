@@ -27,6 +27,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.emailAddress,
         id: user._id,
+        role: "tourist",
       },
     },
     process.env.REFRESH_TOKEN_SECRET, // Signature
@@ -129,7 +130,15 @@ const registerTourist = asyncHandler(async (req, res) => {
     password: hashPassword,
   });
 
-  res.status(201).json({ message: "User created successfully", id: user._id });
+  res
+    .status(201)
+    .json({
+      message: "User created successfully",
+      id: user._id,
+      firstName,
+      lastName,
+      emailAddress,
+    });
 });
 
 //@desc Refresh Access Token Using Refresh Token

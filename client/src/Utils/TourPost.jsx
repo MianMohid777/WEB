@@ -9,12 +9,12 @@ import {
   CardHeader,
   CardMedia,
 } from "@mui/material";
+import DP from "../Assets/Karakoram.jpg";
 function TourPost(props) {
   //THEME
   const theme = createTheme({
     typography: {
       fontFamily: "'Space Grotesk', sans-serif",
-      fontSize: "1rem",
       fontWeight: "bolder",
     },
   });
@@ -26,16 +26,26 @@ function TourPost(props) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        width: "45%",
+        width: "30%",
+
+        overflow: "hidden",
         boxShadow:
           "0 6px 10px 0 rgba(0, 0, 0, 0.2), 0 8px 25px 0 rgba(0, 0, 0, 0.19)",
         borderRadius: "30px",
+        backgroundColor: "#FF4E45",
+        color: "white",
+        transition: " 0.5s ease-in",
+
+        "&:hover": {
+          overflow: "auto",
+          scale: "1.1",
+        },
       }}
     >
       <CardContent>
         <Box
           sx={{
-            fontSize: "28px",
+            fontSize: "18px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -52,8 +62,9 @@ function TourPost(props) {
         >
           <CardMedia
             component="img"
-            sx={{ width: "100%", height: "300px", mt: 1 }}
+            sx={{ width: "100%", height: "20%", mt: 1, borderRadius: "20px" }}
             image={props.img}
+            alt="Cover Photo"
           />
         </Box>
         <Box sx={{ fontSize: "12px" }}>
@@ -112,6 +123,13 @@ function TourPost(props) {
               Status:
             </Box>{" "}
             {props.status}
+          </Box>
+          <Divider component="div" />
+          <Box component="div" mt={1}>
+            <Box component="span" sx={{ fontSize: "14px", fontWeight: "bold" }}>
+              Max Slots:
+            </Box>{" "}
+            {props.slots}
           </Box>
         </Box>
       </CardContent>

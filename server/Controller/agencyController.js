@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const agencyReg = require("../Models/agency-RegModel");
-const tour = require("../Models/tourModel");
+const Tour = require("../Models/tourModel");
 // const agency = require("../Models/agencyModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -23,7 +23,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
-    { expiresIn: "50m" } // Expiry Duration
+    { expiresIn: "5m" } // Expiry Duration
   );
 
   const refToken = jwt.sign(
@@ -32,6 +32,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       user: {
         email: user.companyEmail,
         id: user._id,
+        role: "agency",
       },
     },
     process.env.REFRESH_TOKEN_SECRET, // Signature
@@ -177,6 +178,7 @@ const loginAgency = asyncHandler(async (req, res) => {
         adminName: agency.adminName,
         ntn: agency.companyNTN,
         license: agency.license,
+        contactNo: agency.contactNo,
         address: `${agency.officeAddress}, ${agency.city}, ${agency.province}, Pakistan`,
       });
   } else {
@@ -259,9 +261,9 @@ const getAllTours = asyncHandler(async (req, res) => {
       throw new Error("Agency Not Found");
     }
 
-    const tours = await tour
-      .find({ tourAgencyId: userId })
-      .sort({ createdAt: "desc" });
+    const tours = await Tour.find({ tourAgencyId: userId }).sort({
+      createdAt: "desc",
+    });
 
     console.log(tours);
 
@@ -275,9 +277,9 @@ const getAllTours = asyncHandler(async (req, res) => {
   }
 });
 
-//@desc POST A NEW TOUR
-//@route Post /api/agencies/current-agency/publish-tour/:id
-//@access private
+// @desc    Create and publish a new tour
+// @route   POST /api/agencies/current-agency/publish-tour/:id
+// @access  Private
 const publishTour = asyncHandler(async (req, res) => {
   const userId = req.params.id;
 
@@ -303,12 +305,12 @@ const publishTour = asyncHandler(async (req, res) => {
     tourInformation,
     tourStatus,
     tourPrice,
+    tourPlan,
+    tourLocationLink,
+    tourMaxSlots,
   } = req.body;
 
-  const tourAgencyId = req.params.id;
-  console.log("REQ BODY", req.body);
   if (!tourStartDate) {
-    console.log("REQ.BODY.STARTDATE: ", tourStartDate);
     res.status(400);
     throw new Error("Tour start date is mandatory");
   }
@@ -353,23 +355,39 @@ const publishTour = asyncHandler(async (req, res) => {
     throw new Error("Tour Price is mandatory");
   }
 
+  if (!tourPlan) {
+    res.status(400);
+    throw new Error("Tour plan is mandatory");
+  }
+
+  if (!tourLocationLink) {
+    res.status(400);
+    throw new Error("Location link is mandatory");
+  }
+
+  if (!tourMaxSlots) {
+    res.status(400);
+    throw new Error("Max slots is mandatory");
+  }
+
   // Create the tour in the database
-  const newTour = await tour.create({
-    tourAgencyId,
+  const newTour = await Tour.create({
+    tourAgencyId: userId,
     tourAgencyName,
-    tourStartDate,
-    tourEndDate,
     tourLocationName,
     tourLocationImage,
+    tourStartDate,
+    tourEndDate,
     tourRegistrationEndDate,
     tourInformation,
     tourStatus,
     tourPrice,
+    tourPlan,
+    tourLocationLink,
+    tourMaxSlots,
   });
 
-  console.log("DB NEW TOUR", newTour);
-
-  res.status(200).json({
+  res.status(201).json({
     message: "Tour created and published successfully",
     tour: newTour,
   });
@@ -437,12 +455,10 @@ const getPastTours = asyncHandler(async (req, res) => {
       throw new Error("Agency Not Found");
     }
 
-    const tours = await tour
-      .find({
-        tourAgencyId: userId,
-        $or: [{ tourStatus: "Finished" }, { tourStatus: "Cancelled" }],
-      })
-      .sort({ createdAt: "desc" });
+    const tours = await Tour.find({
+      tourAgencyId: userId,
+      $or: [{ tourStatus: "Finished" }, { tourStatus: "Cancelled" }],
+    }).sort({ createdAt: "desc" });
 
     console.log(tours);
 
@@ -456,14 +472,9 @@ const getPastTours = asyncHandler(async (req, res) => {
   }
 });
 
-const updateTours = asyncHandler(async (req, res) => {
+const updateTours_ActiveComplete = asyncHandler(async (req, res) => {
   try {
     const userId = req.params.id;
-
-    // if (userId !== req.user.id.toString()) {
-    //   res.status(401);
-    //   throw new Error("Unauthorized Access");
-    // }
 
     const agency = await agencyReg.findById(userId);
 
@@ -471,24 +482,40 @@ const updateTours = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error("Agency Not Found");
     }
+    const currentDate = new Date();
 
-    const tours = await tour.updateMany(
-      { tourAgencyId: userId },
-      { tourLocationImage: "flyingJatt.jpg" },
+    const toursActive = await Tour.updateMany(
+      {
+        tourAgencyId: userId,
+        tourStartDate: { $lte: currentDate },
+        tourStatus: "Registeration-Opened",
+      },
+      { tourStatus: "Active" },
       { new: true }
     );
 
-    console.log(tours);
+    const toursComplete = await Tour.updateMany(
+      {
+        tourAgencyId: userId,
+        tourEndDate: { $lt: currentDate },
+        tourStatus: "Active",
+      },
+      { tourStatus: "Completed" },
+      { new: true }
+    );
+    console.log(toursActive, toursComplete);
 
     res.status(200).json({
-      message: "Success",
-      tours: tours,
+      message: "Successfully, Updated",
+      ActiveTours: toursActive,
+      CompleteTours: toursComplete,
     });
   } catch (e) {
     console.log(e);
     res.status(400).json({ message: e.message });
   }
 });
+
 module.exports = {
   registerAgency,
   loginAgency,
@@ -498,5 +525,5 @@ module.exports = {
   publishTour,
   getSearchedTour,
   getPastTours,
-  updateTours,
+  updateTours_ActiveComplete,
 };

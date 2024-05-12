@@ -27,8 +27,6 @@ import Analytics from "./Users/Admin/Analytics";
 import SignUp from "./Users/Tourist/SignUp";
 import ToastMessage from "./Utils/Toast-Message";
 import Test from "./Users/Agency/Test";
-import Profile from "../src/Users/Tourist/Profile";
-import TouristHistoryTable from "../src/Users/Tourist/DashBoard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,8 +36,6 @@ const router = createBrowserRouter(
       <Route path="/home" element={<Home />} />
       <Route path="/tourist-login" element={<TouristSignIn />} />
       <Route path="/tourist-signup" element={<SignUp />} />
-      <Route path="/tourist-profile" element={<Profile />} />
-      <Route path="/tourist-history" element={<TouristHistoryTable />} />
 
       {/* Admin Routes */}
       <Route path="/admin-login" element={<AdminSignIn />} />
@@ -48,7 +44,9 @@ const router = createBrowserRouter(
 
       {/* Agency Routes */}
       <Route path="/agency-home" element={<AgencyHome />} />
-      <Route path="/agency-home2" element={<Test />} />
+      <Route path="/current-agency/analytics" element={<AgencyAnalytics />} />
+      <Route path="/current-agency/active-ads" element={<ActiveAds />} />
+      <Route path="/current-agency/past-ads" element={<PastAds />} />
       <Route path="/agency-login" element={<AgencySignIn />} />
       <Route path="/agency-registeration" element={<AgencyRegister />} />
       <Route path="/current-agency/profile" element={<AgencyProfile />} />
