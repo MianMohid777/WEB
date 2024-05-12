@@ -21,6 +21,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import { useDispatch } from "react-redux";
 import { useUpdateAgencyProfileMutation } from "../../Services/Agency/agencyApi.js";
+import { useUploadMutation } from "../../Services/UtilsApi/fileApi.js";
+import PhotoCamera from "@mui/icons-material/PhotoCamera"
 
 const EditableProfileBox = ({ title, data, onDataChange }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -154,7 +156,9 @@ function AgencyProfile() {
   const accessToken = getItem();
   const dispatch = useDispatch();
 
+
   const [updateAgencyProfile, { isLoading: updating, isError: updateErr }] = useUpdateAgencyProfileMutation();
+  const [upload, { isLoading: uploadLoading, isError: uploadError }] = useUploadMutation();
 
 
 
@@ -172,7 +176,29 @@ function AgencyProfile() {
     website: agency.profile.website,
   });
 
-  const galleryImages = agency.profile.gallery || [];
+  const [gallery, setgallery] = useState([agency.profile.gallery]);
+  const [locationImage, setLocationImage] = useState("");
+
+  const handleImageChange = (e) => {
+    setLocationImage(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    try {
+      const file = new FormData();
+      file.append("file", locationImage);
+
+      const response = await upload(file).unwrap();
+
+      if (response) {
+        const imageUrl = response.filePath;
+        setgallery([...gallery, imageUrl]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 
   const handleClick = (idx) => {
     setSelectedIdx(idx);
@@ -192,19 +218,20 @@ function AgencyProfile() {
     const updatedProfile = {
       ...agency.profile,
       ...agencyInfo,
-      socialMediaLinks: { 
+      gallery,
+      socialMediaLinks: {
         faceBook: socialMediaInfo.faceBook,
         instagram: socialMediaInfo.instagram,
         twitter: socialMediaInfo.twitter,
       },
-      
+
     };
-  
+
     dispatch(addProfile(updatedProfile));
-  
+
     console.log("Updated Agency Profile", updatedProfile);
     console.log("Latest Agency", agency);
-  
+
     try {
       if (accessToken) {
         const response = await updateAgencyProfile({
@@ -212,7 +239,7 @@ function AgencyProfile() {
           accessToken: accessToken,
           updatedData: updatedProfile
         }).unwrap();
-  
+
         if (response) {
           console.log(response);
         }
@@ -221,7 +248,7 @@ function AgencyProfile() {
       console.log(err);
     }
   };
-  
+
 
   useEffect(() => {
     updateProfile();
@@ -293,18 +320,50 @@ function AgencyProfile() {
                     <Typography variant="h3" gutterBottom>
                       Gallery
                     </Typography>
-                    <Grid container spacing={3}>
-                      {galleryImages.map((image, index) => (
-                        <Grid item key={index}>
-                          <Box
-                            component="img"
-                            src={image}
-                            alt={`Gallery Image ${index}`}
-                            style={{ maxWidth: "100%", height: "auto" }}
+                    <Box pt={2} px={2} mt={5}>
+                      <Typography variant="h3" gutterBottom>
+                        Gallery
+                      </Typography>
+                      <Grid container spacing={3}>
+                        {gallery.map((image, index) => (
+                          <Grid item key={index}>
+                            <Box
+                              component="img"
+                              src={image}
+                              alt={`Gallery Image ${index}`}
+                              style={{ maxWidth: "100%", height: "auto" }}
+                            />
+                          </Grid>
+                        ))}
+                        <Grid item>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            id="image-upload"
+                            style={{ display: "none" }}
+                            onChange={handleImageChange}
                           />
+                          <label htmlFor="image-upload">
+                            <Button
+                              variant="outlined"
+                              component="span"
+                              startIcon={<PhotoCamera />}
+                            >
+                              Upload Image
+                            </Button>
+                          </label>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleUpload}
+                          >
+                            Save
+                          </Button>
                         </Grid>
-                      ))}
-                    </Grid>
+                      </Grid>
+                    </Box>
+
+                    
                   </Box>
                 </Box>
               </Box>
