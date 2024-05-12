@@ -1,11 +1,9 @@
-const express = require("express");
+// const express = require("express");
 
-const router = express.Router();
+// const router = express.Router();
 
-const {
-    allTour
-} = require("../Controller/tourController");
+// const { allTour } = require("../Controller/tourController");
 
-router.route("/all-tours").get(allTour);
+// router.route("/all-tours").get(allTour);
 
-module.exports = router;
+// module.exports = router;

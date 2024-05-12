@@ -3,9 +3,9 @@ import { api } from "../api";
 const tourApi = api.injectEndpoints({
   endpoints: (builder) => {
     return {
-      getAllTours: builder.query({
-        query: ({}) => ({
-          url: "tourist/all-tours",
+      getTours: builder.query({
+        query: () => ({
+          url: "tourists/current-home/all-tours",
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -16,4 +16,4 @@ const tourApi = api.injectEndpoints({
   },
 });
 
-export const { useGetAllToursQuery } = tourApi;
+export const { useGetToursQuery } = tourApi;

@@ -23,7 +23,6 @@ app.use(cookieParser());
 app.use(express.json({ limit: "50mb" })); // Middleware to parse the body from client
 
 app.use("/api/tourists", touristRoutes);
-app.use("/api/tourists", tourRoutes);
 app.use("/api/agencies", agencyRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", oauthRoutes);
