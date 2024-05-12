@@ -10,6 +10,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import { addProfile } from "../../Redux/Features/agencySlice";
 import Loader from "../../Utils/Loader";
 import { useSelector } from "react-redux";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook.js";
@@ -18,6 +19,8 @@ import LeftDrawer from "../../Utils/LeftDrawer.jsx";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import { useDispatch } from "react-redux";
+import { useUpdateAgencyProfileMutation } from "../../Services/Agency/agencyApi.js";
 
 const EditableProfileBox = ({ title, data, onDataChange }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -149,18 +152,23 @@ function AgencyProfile() {
   const agency = useSelector((state) => state.agency);
   const { setItem, getItem } = useLocalStorage("access_token");
   const accessToken = getItem();
+  const dispatch = useDispatch();
+
+  const [updateAgencyProfile, { isLoading: updating, isError: updateErr }] = useUpdateAgencyProfileMutation();
+
+
 
   const [agencyInfo, setAgencyInfo] = useState({
-    AgencyName: agency.profile.name,
-    AgencyEmail: agency.authAgency.email,
-    PhoneNumber: agency.authAgency.contactNo,
-    Description: agency.profile.description,
+    agencyName: agency.profile.name,
+    agencyEmail: agency.authAgency.email,
+    phoneNumber: agency.authAgency.contactNo,
+    description: agency.profile.description,
   });
 
   const [socialMediaInfo, setSocialMediaInfo] = useState({
-    fbLink: agency.profile.socialMediaLinks.faceBook,
-    instaLink: agency.profile.socialMediaLinks.instagram,
-    twitterLink: agency.profile.socialMediaLinks.twitter,
+    faceBook: agency.profile.socialMediaLinks.faceBook,
+    instagram: agency.profile.socialMediaLinks.instagram,
+    twitter: agency.profile.socialMediaLinks.twitter,
     website: agency.profile.website,
   });
 
@@ -178,19 +186,47 @@ function AgencyProfile() {
     setSocialMediaInfo(newData);
   };
 
-  useEffect(() => {
-    updateAgencyProfile();
-  }, [agencyInfo, socialMediaInfo]);
 
-  const updateAgencyProfile = (newProfileData) => {
+
+  const updateProfile = async (newProfileData) => {
     const updatedProfile = {
       ...agency.profile,
       ...agencyInfo,
-      ...socialMediaInfo,
+      socialMediaLinks: { 
+        faceBook: socialMediaInfo.faceBook,
+        instagram: socialMediaInfo.instagram,
+        twitter: socialMediaInfo.twitter,
+      },
+      
     };
-
+  
+    dispatch(addProfile(updatedProfile));
+  
     console.log("Updated Agency Profile", updatedProfile);
+    console.log("Latest Agency", agency);
+  
+    try {
+      if (accessToken) {
+        const response = await updateAgencyProfile({
+          id: agency.authAgency.id,
+          accessToken: accessToken,
+          updatedData: updatedProfile
+        }).unwrap();
+  
+        if (response) {
+          console.log(response);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+  
+
+  useEffect(() => {
+    updateProfile();
+  }, [agencyInfo, socialMediaInfo]);
+
 
   return (
     <>
