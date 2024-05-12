@@ -17,6 +17,9 @@ import {
   useUpdateStatusMutation,
   useUpdateTourStatusMutation,
 } from "../../Services/Agency/agencyApi";
+import {
+  useGetAgencyProfileQuery
+} from "../../Services/Agency/agencyApi";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 import Loader from "../../Utils/Loader";
@@ -49,12 +52,15 @@ function AgencyHome() {
   const dispatch = useDispatch();
   const { getToursSize } = useAnalytic();
 
+
+
   // QUERY // MUTATIONS
 
   const { data, isLoading, isError, isSuccess, refetch } = useGetAllToursQuery({
     id: agency.authAgency.id,
     accessToken: accessToken,
   });
+
 
   const {
     isLoading: isAgencyLoading,
@@ -64,8 +70,14 @@ function AgencyHome() {
 
   const [updateTourStatus, { isLoading: updating, isError: updateErr }] =
     useUpdateStatusMutation();
+  console.log("access token", accessToken)
+  console.log("agency.authAgency.refresh_token", agency.authAgency.refresh_token)
+    const { data: agencyProfile } = useGetAgencyProfileQuery(agency.authAgency.id, agency.authAgency.refresh_token );
+
+    console.log("DATA", agencyProfile, agency);
 
   useEffect(() => {
+  
     const checkUpdates = async () => {
       try {
         if (accessToken) {
@@ -88,6 +100,7 @@ function AgencyHome() {
     console.log(getToursSize());
     setDataState(data);
     checkUpdates();
+
   }, []);
   // HANDLE MENU STATES
   const handleClick = (idx) => {
@@ -319,8 +332,8 @@ function AgencyHome() {
                     }}
                   >
                     {dataState &&
-                    Array.isArray(dataState) &&
-                    dataState.length > 0 ? (
+                      Array.isArray(dataState) &&
+                      dataState.length > 0 ? (
                       dataState?.map((tour) => {
                         return (
                           <TourPost

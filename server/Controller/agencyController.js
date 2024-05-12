@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const agencyReg = require("../Models/agency-RegModel");
+const agencyProfile = require("../Models/agencyModel");
 const Tour = require("../Models/tourModel");
 // const agency = require("../Models/agencyModel");
 const bcrypt = require("bcrypt");
@@ -193,15 +194,17 @@ const loginAgency = asyncHandler(async (req, res) => {
 const refreshAccessToken = asyncHandler(async (req, res) => {
   try {
     const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
-    const user = await agencyReg.findById(req?.user.id);
+
+    if (!inRefreshToken) {
+      res.status(401);
+      throw new Error("Refresh token not provided");
+    }
+
+    const user = await agencyReg.findById(req?.user?.id);
 
     if (!user) {
       res.status(401);
-      throw new Error("Invalid Refresh Token");
-    }
-    if (inRefreshToken !== user?.refreshToken) {
-      res.status(401);
-      throw new Error("Refresh Token Expired or Used");
+      throw new Error("Invalid user");
     }
 
     const options = {
@@ -209,9 +212,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       secure: true,
     };
 
-    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
-      user._id
-    );
+    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(user._id);
 
     res
       .status(200)
@@ -227,6 +228,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     res.status(401).json({ message: err.message });
   }
 });
+
+
+
 
 //@desc Get Currently Logged In User
 //@route Post /api/agencies/current-agency
@@ -516,6 +520,51 @@ const updateTours_ActiveComplete = asyncHandler(async (req, res) => {
   }
 });
 
+
+const getAgencyProfile = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  console.log("UserId", userId)
+
+  const agency = await agencyProfile.findOne({ agencyId: userId });
+
+  if (!agency) {
+    res.status(404);
+    throw new Error("Agency Not Found");
+  }
+  res.status(200).json({
+    message: "Success",
+    agency: agency,
+  });
+});
+
+const updateAgencyProfile = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const updatedData = req.body;
+
+  console.log("Data to update:", updatedData);
+
+  const updatedAgency = await agencyProfile.findOneAndUpdate(
+    { agencyId: userId },
+    updatedData,
+    { new: true }
+  );
+
+  if (!updatedAgency) {
+    res.status(404);
+    throw new Error("Agency Not Found");
+  }
+
+  res.status(200).json({
+    message: "Agency Profile Updated Successfully",
+    agency: updatedAgency,
+  });
+});
+
+
+
+
+
+
 module.exports = {
   registerAgency,
   loginAgency,
@@ -526,4 +575,6 @@ module.exports = {
   getSearchedTour,
   getPastTours,
   updateTours_ActiveComplete,
+  getAgencyProfile,
+  updateAgencyProfile,
 };
