@@ -168,47 +168,23 @@ const agencyProfileApi = api.injectEndpoints({
   },
 });
 
-// const agencyProfileApi = api.injectEndpoints({
-//   endpoints: (builder) => {
-//     return {
-//       getAgencyProfile: builder.query({
-//         queryFn: async ({ id, accessToken }) => {
-//           const response = await fetch(`/agencies/current-agency/profile/${id}`, {
-//             method: "GET",
-//             headers: {
-//               "Content-Type": "application/json",
-//               Authorization: `Bearer ${accessToken}`,
-//             },
-//           });
-
-//           if (!response.ok) {
-//             throw new Error("Failed to fetch agency profile");
-//           }
-
-//           return response.json();
-//         },
-//       }),
-//       updateAgencyProfile: builder.mutation({
-//         queryFn: async ({ id, accessToken, updatedData }) => {
-//           const response = await fetch(`/agencies/current-agency/profile/${id}`, {
-//             method: "POST",
-//             headers: {
-//               "Content-Type": "application/json",
-//               Authorization: `Bearer ${accessToken}`,
-//             },
-//             body: JSON.stringify(updatedData),
-//           });
-
-//           if (!response.ok) {
-//             throw new Error("Failed to update agency profile");
-//           }
-
-//           return response.json();
-//         },
-//       }),
-//     };
-//   },
-// });
+const changeTourStatusApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      changeTourStatus: builder.mutation({
+        query: ({ id, flag, tid }) => ({
+          url: `agencies/current-agency/tours/${id}/${flag}/${tid}`,
+          method: "PUT",
+          body: {},
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      }),
+    };
+  },
+});
 
 export const { useGetAllAgencyQuery } = agencyGetAllApi;
 export const { useGetAdminQuery } = getAdminApi;
@@ -221,3 +197,5 @@ export const { useUpdateTourStatusMutation } = updateTourStatus;
 
 export const { useGetAgencyProfileQuery, useUpdateAgencyProfileMutation } =
   agencyProfileApi;
+
+export const { useChangeTourStatusMutation } = changeTourStatusApi;
