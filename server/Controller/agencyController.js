@@ -193,15 +193,17 @@ const loginAgency = asyncHandler(async (req, res) => {
 const refreshAccessToken = asyncHandler(async (req, res) => {
   try {
     const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
-    const user = await agencyReg.findById(req?.user.id);
+
+    if (!inRefreshToken) {
+      res.status(401);
+      throw new Error("Refresh token not provided");
+    }
+
+    const user = await agencyReg.findById(req?.user?.id);
 
     if (!user) {
       res.status(401);
-      throw new Error("Invalid Refresh Token");
-    }
-    if (inRefreshToken !== user?.refreshToken) {
-      res.status(401);
-      throw new Error("Refresh Token Expired or Used");
+      throw new Error("Invalid user");
     }
 
     const options = {
@@ -209,9 +211,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       secure: true,
     };
 
-    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
-      user._id
-    );
+    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(user._id);
 
     res
       .status(200)
@@ -227,6 +227,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     res.status(401).json({ message: err.message });
   }
 });
+
+
+
 
 //@desc Get Currently Logged In User
 //@route Post /api/agencies/current-agency
