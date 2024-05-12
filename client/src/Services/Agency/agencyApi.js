@@ -156,7 +156,7 @@ const agencyProfileApi = api.injectEndpoints({
       updateAgencyProfile: builder.mutation({
         query: ({ id, accessToken, updatedData }) => ({
           url: `/agencies/current-agency/profile/${id}`,
-          method: "PUT",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,

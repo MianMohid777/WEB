@@ -10,6 +10,10 @@ const agencySchema = mongoose.Schema(
       type: String,
       required: [true, "Provide Agency Name"],
     },
+    phoneNumber: {
+      type: String,
+      required: [true, "Provide Phone Number"],
+    },
     description: {
       type: String,
       required: [true, "Provide Agency Description"],

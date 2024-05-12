@@ -549,6 +549,8 @@ const updateAgencyProfile = asyncHandler(async (req, res) => {
     { new: true }
   );
 
+  console.log("Updated Agency with Data", updatedAgency);
+
   if (!updatedAgency) {
     res.status(404);
     throw new Error("Agency Not Found");
