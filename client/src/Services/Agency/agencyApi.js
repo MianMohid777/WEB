@@ -139,6 +139,81 @@ const updateTourStatus = api.injectEndpoints({
     };
   },
 });
+
+const agencyProfileApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      getAgencyProfile: builder.query({
+        query: (id, accessToken) => ({
+          url: `/agencies/current-agency/profile/${id}`,
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      }),
+      updateAgencyProfile: builder.mutation({
+        query: ({ id, accessToken, updatedData }) => ({
+          url: `/agencies/current-agency/profile/${id}`,
+          method: "PUT", // Assuming you are using PUT method for updating
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(updatedData),
+        }),
+      }),
+    };
+  },
+});
+
+
+
+// const agencyProfileApi = api.injectEndpoints({
+//   endpoints: (builder) => {
+//     return {
+//       getAgencyProfile: builder.query({
+//         queryFn: async ({ id, accessToken }) => {
+//           const response = await fetch(`/agencies/current-agency/profile/${id}`, {
+//             method: "GET",
+//             headers: {
+//               "Content-Type": "application/json",
+//               Authorization: `Bearer ${accessToken}`,
+//             },
+//           });
+
+//           if (!response.ok) {
+//             throw new Error("Failed to fetch agency profile");
+//           }
+
+//           return response.json();
+//         },
+//       }),
+//       updateAgencyProfile: builder.mutation({
+//         queryFn: async ({ id, accessToken, updatedData }) => {
+//           const response = await fetch(`/agencies/current-agency/profile/${id}`, {
+//             method: "POST",
+//             headers: {
+//               "Content-Type": "application/json",
+//               Authorization: `Bearer ${accessToken}`,
+//             },
+//             body: JSON.stringify(updatedData),
+//           });
+
+//           if (!response.ok) {
+//             throw new Error("Failed to update agency profile");
+//           }
+
+//           return response.json();
+//         },
+//       }),
+//     };
+//   },
+// });
+
+
+export const { useGetAgencyProfileQuery, useUpdateAgencyProfileMutation } = agencyProfileApi;
 export const { useGetAllAgencyQuery } = agencyGetAllApi;
 export const { useGetAdminQuery } = getAdminApi;
 export const { useGetAgencyQuery } = getAgencyApi;

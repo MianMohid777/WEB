@@ -12,6 +12,8 @@ const {
   getSearchedTour,
   getPastTours,
   updateTours_ActiveComplete,
+  getAgencyProfile,
+  updateAgencyProfile
 } = require("../Controller/agencyController");
 
 const stayLoggedValidator = require("../Middleware/stayLoggedIn.validation");
@@ -40,4 +42,13 @@ router
 // router
 //   .route("/current-agency/tours/history/:id")
 //   .post(validateToken, getPastTours);
+
+
+router
+  .route("/current-agency/profile/:id")
+  .get(validateToken, getAgencyProfile)
+  .post(validateToken, updateAgencyProfile);
+
+
+
 module.exports = router;
