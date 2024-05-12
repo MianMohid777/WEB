@@ -27,6 +27,8 @@ import Analytics from "./Users/Admin/Analytics";
 import SignUp from "./Users/Tourist/SignUp";
 import ToastMessage from "./Utils/Toast-Message";
 import Test from "./Users/Agency/Test";
+import Profile from "../src/Users/Tourist/Profile";
+import TouristHistoryTable from "../src/Users/Tourist/DashBoard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +38,8 @@ const router = createBrowserRouter(
       <Route path="/home" element={<Home />} />
       <Route path="/tourist-login" element={<TouristSignIn />} />
       <Route path="/tourist-signup" element={<SignUp />} />
+      <Route path="/tourist-profile" element={<Profile />} />
+      <Route path="/tourist-history" element={<TouristHistoryTable />} />
 
       {/* Admin Routes */}
       <Route path="/admin-login" element={<AdminSignIn />} />
