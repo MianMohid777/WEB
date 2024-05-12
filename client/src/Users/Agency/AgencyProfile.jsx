@@ -95,16 +95,7 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
 
 function AgencyProfile() {
 
-  // HOOKS
-  const [open, setOpen] = useState(false);
-  const [selectedIdx, setSelectedIdx] = useState(2);
-  const [searchBar, setSearchBar] = useState("");;
-  const agency = useSelector((state) => state.agency);
-  const { setItem, getItem } = useLocalStorage("access_token");
-  const accessToken = getItem();
-
-  console.log(agency);
-
+  
   const theme = createTheme({
     typography: {
       fontFamily: "'Space Grotesk', sans-serif",
@@ -122,6 +113,17 @@ function AgencyProfile() {
       },
     },
   });
+
+  // HOOKS
+  const [open, setOpen] = useState(false);
+  const [selectedIdx, setSelectedIdx] = useState(1);
+  const [searchBar, setSearchBar] = useState("");;
+  const agency = useSelector((state) => state.agency);
+  const { setItem, getItem } = useLocalStorage("access_token");
+  const accessToken = getItem();
+
+  console.log(agency);
+
 
   const [agencyInfo, setAgencyInfo] = useState({
     "Agency Name": agency.profile.name,
@@ -164,7 +166,7 @@ function AgencyProfile() {
       ...agencyInfo,
       ...socialMediaInfo
     };
-    agency.profile = updatedProfile;
+
     console.log("Updated Agency Profile", updatedProfile);
   };
 
