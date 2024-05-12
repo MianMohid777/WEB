@@ -521,6 +521,57 @@ const updateTours_ActiveComplete = asyncHandler(async (req, res) => {
   }
 });
 
+const updateToursStatus = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const tourId = req.params.tid;
+    const flag = req.params.flag;
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    let updatedTour = "";
+    if (flag === "true") {
+      const tour = await Tour.updateOne(
+        {
+          tourAgencyId: userId,
+          _id: tourId,
+          tourStatus: "Upcoming",
+        },
+        { tourStatus: "Registrations-Opened" },
+        { new: true }
+      );
+      updatedTour = tour;
+    } else if (flag === "false") {
+      const tour = await Tour.updateOne(
+        {
+          tourAgencyId: userId,
+          _id: tourId,
+          tourStatus: "Registrations-Opened",
+        },
+        { tourStatus: "Upcoming" },
+        { new: true }
+      );
+      updatedTour = tour;
+    } else {
+      res.status(404);
+      throw new Error("Tour Not Found");
+    }
+    console.log(updatedTour);
+    res.status(200).json({
+      message: "Successfully, Updated",
+      Updated_Tour_Res: updatedTour,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+
 const getAgencyProfile = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   console.log("UserId", userId);
@@ -572,4 +623,5 @@ module.exports = {
   updateTours_ActiveComplete,
   getAgencyProfile,
   updateAgencyProfile,
+  updateToursStatus,
 };

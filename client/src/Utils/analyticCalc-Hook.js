@@ -25,6 +25,10 @@ export const useAnalytic = () => {
     return tours.filter((tour) => tour.tourStatus === "Upcoming");
   };
 
+  const getRegOpenTours = () => {
+    return tours.filter((tour) => tour.tourStatus === "Registrations-Opened");
+  };
+
   const getSearchedTours = (search, status) => {
     if (status === "All") {
       console.log(search);
@@ -38,6 +42,15 @@ export const useAnalytic = () => {
         (tour) =>
           (tour.tourStatus === "Completed" ||
             tour.tourStatus === "Cancelled") &&
+          tour.tourLocationName
+            .toLowerCase()
+            .includes(search.trim().toLowerCase())
+      );
+    } else if (status === "Available") {
+      return tours.filter(
+        (tour) =>
+          (tour.tourStatus === "Upcoming" ||
+            tour.tourStatus === "Registrations-Opened") &&
           tour.tourLocationName
             .toLowerCase()
             .includes(search.trim().toLowerCase())
@@ -60,5 +73,6 @@ export const useAnalytic = () => {
     getCancelledTours,
     getUpcomingTours,
     getSearchedTours,
+    getRegOpenTours,
   };
 };
