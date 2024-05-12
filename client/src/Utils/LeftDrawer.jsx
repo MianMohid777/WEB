@@ -138,6 +138,7 @@ function LeftDrawer(props) {
                   ...prevColor,
                   profile: "#FF4E45",
                 }));
+                navigate("/current-agency/profile");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({
