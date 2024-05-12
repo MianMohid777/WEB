@@ -30,6 +30,8 @@ import Test from "./Users/Agency/Test";
 import AgencyAnalytics from "./Users/Agency/AgencyAnalytics";
 import ActiveAds from "./Users/Agency/ActiveAds";
 import PastAds from "./Users/Agency/PastAds";
+import Tours from "./Users/Tourist/Tour"
+import BookTour from "./Users/Tourist/BookTour"
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +41,8 @@ const router = createBrowserRouter(
       <Route path="/home" element={<Home />} />
       <Route path="/tourist-login" element={<TouristSignIn />} />
       <Route path="/tourist-signup" element={<SignUp />} />
+      <Route path="/tours" element={<Tours />} />
+      <Route path="/book-tour" element={<BookTour />} />
 
       {/* Admin Routes */}
       <Route path="/admin-login" element={<AdminSignIn />} />

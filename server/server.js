@@ -5,6 +5,7 @@ const connectDb = require("./Config/DbConnection");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const touristRoutes = require("./Routes/TouristRoutes");
+const tourRoutes = require("./Routes/TourRoutes");
 const agencyRoutes = require("./Routes/agencyRoutes");
 const adminRoutes = require("./Routes/adminRoutes");
 const oauthRoutes = require("./Routes/oauthRoutes");
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use(express.json({ limit: "50mb" })); // Middleware to parse the body from client
 
 app.use("/api/tourists", touristRoutes);
+app.use("/api/tourists", tourRoutes);
 app.use("/api/agencies", agencyRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", oauthRoutes);
