@@ -130,7 +130,15 @@ const registerTourist = asyncHandler(async (req, res) => {
     password: hashPassword,
   });
 
-  res.status(201).json({ message: "User created successfully", id: user._id });
+  res
+    .status(201)
+    .json({
+      message: "User created successfully",
+      id: user._id,
+      firstName,
+      lastName,
+      emailAddress,
+    });
 });
 
 //@desc Refresh Access Token Using Refresh Token
