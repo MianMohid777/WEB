@@ -144,7 +144,7 @@ const agencyProfileApi = api.injectEndpoints({
   endpoints: (builder) => {
     return {
       getAgencyProfile: builder.query({
-        query: (id, accessToken) => ({
+        query: ({ id, accessToken }) => ({
           url: `/agencies/current-agency/profile/${id}`,
           method: "GET",
           headers: {
@@ -156,7 +156,7 @@ const agencyProfileApi = api.injectEndpoints({
       updateAgencyProfile: builder.mutation({
         query: ({ id, accessToken, updatedData }) => ({
           url: `/agencies/current-agency/profile/${id}`,
-          method: "PUT", // Assuming you are using PUT method for updating
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
@@ -167,8 +167,6 @@ const agencyProfileApi = api.injectEndpoints({
     };
   },
 });
-
-
 
 // const agencyProfileApi = api.injectEndpoints({
 //   endpoints: (builder) => {
@@ -212,8 +210,6 @@ const agencyProfileApi = api.injectEndpoints({
 //   },
 // });
 
-
-export const { useGetAgencyProfileQuery, useUpdateAgencyProfileMutation } = agencyProfileApi;
 export const { useGetAllAgencyQuery } = agencyGetAllApi;
 export const { useGetAdminQuery } = getAdminApi;
 export const { useGetAgencyQuery } = getAgencyApi;
@@ -222,3 +218,6 @@ export const { useLogoutMutation } = logoutApi;
 export const { useDeleteApplicationMutation } = deleteApplicationApi;
 export const { useGetAllToursQuery } = getAllToursApi;
 export const { useUpdateTourStatusMutation } = updateTourStatus;
+
+export const { useGetAgencyProfileQuery, useUpdateAgencyProfileMutation } =
+  agencyProfileApi;

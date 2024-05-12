@@ -8,17 +8,16 @@ import {
   Card,
   CardContent,
   Box,
-  Button
+  Button,
 } from "@mui/material";
 import Loader from "../../Utils/Loader";
 import { useSelector } from "react-redux";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook.js";
 import TopBar from "../../Utils/TopBar.jsx";
 import LeftDrawer from "../../Utils/LeftDrawer.jsx";
-import InstagramIcon from '@mui/icons-material/Instagram';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-
+import InstagramIcon from "@mui/icons-material/Instagram";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
 
 const EditableProfileBox = ({ title, data, onDataChange }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -41,8 +40,17 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
   return (
     <Card sx={{ height: "100%" }}>
       <CardContent>
-        <Box display="flex" justifyContent="space-between" alignItems="center" pb={2}>
-          <Typography variant="h4" fontWeight="medium" textTransform="capitalize">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          pb={2}
+        >
+          <Typography
+            variant="h4"
+            fontWeight="medium"
+            textTransform="capitalize"
+          >
             {title}
           </Typography>
           {!isEditing && (
@@ -53,10 +61,15 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
         </Box>
         {isEditing ? (
           <>
-            {Object.entries(editedData).map(([key, value]) => (
+            {Object.entries(editedData).map(([key, value]) =>
               key === "Agency Licence" ? (
                 <Box key={key} py={1}>
-                  <input type="file" accept="image/*" onChange={handleChange} name={key} />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleChange}
+                    name={key}
+                  />
                 </Box>
               ) : (
                 <TextField
@@ -69,7 +82,7 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
                   margin="dense"
                 />
               )
-            ))}
+            )}
             <Box pt={2} textAlign="right">
               <Button onClick={handleSave} variant="contained" color="primary">
                 Save
@@ -81,7 +94,25 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
             {Object.entries(data).map(([key, value]) => (
               <Box key={key} py={1}>
                 <Typography variant="h6">
-                  <strong>{key === "Instagram Link" ? <InstagramIcon sx={{ marginBottom: "-6px" }} /> : key === "Facebook Link" ? <FacebookIcon sx={{ marginBottom: "-6px" }} /> : key === "Twitter Link" ? <TwitterIcon sx={{ marginBottom: "-6px" }} /> : key}:</strong> {key === "Agency Licence" ? <a href={value} target="_blank">{value}</a> : value}
+                  <strong>
+                    {key === "Instagram Link" ? (
+                      <InstagramIcon sx={{ marginBottom: "-6px" }} />
+                    ) : key === "Facebook Link" ? (
+                      <FacebookIcon sx={{ marginBottom: "-6px" }} />
+                    ) : key === "Twitter Link" ? (
+                      <TwitterIcon sx={{ marginBottom: "-6px" }} />
+                    ) : (
+                      key
+                    )}
+                    :
+                  </strong>{" "}
+                  {key === "Agency Licence" ? (
+                    <a href={value} target="_blank">
+                      {value}
+                    </a>
+                  ) : (
+                    value
+                  )}
                 </Typography>
               </Box>
             ))}
@@ -92,10 +123,7 @@ const EditableProfileBox = ({ title, data, onDataChange }) => {
   );
 };
 
-
 function AgencyProfile() {
-
-  
   const theme = createTheme({
     typography: {
       fontFamily: "'Space Grotesk', sans-serif",
@@ -117,29 +145,23 @@ function AgencyProfile() {
   // HOOKS
   const [open, setOpen] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(1);
-  const [searchBar, setSearchBar] = useState("");;
+  const [searchBar, setSearchBar] = useState("");
   const agency = useSelector((state) => state.agency);
   const { setItem, getItem } = useLocalStorage("access_token");
   const accessToken = getItem();
 
-  console.log(agency);
-
-
   const [agencyInfo, setAgencyInfo] = useState({
-    "Agency Name": agency.profile.name,
-    "Agency Mail": agency.profile.name,
-    "Phone Number": agency.profile.phoneNumber,
-    "Description": agency.profile.description,
-
+    AgencyName: agency.profile.name,
+    AgencyEmail: agency.authAgency.email,
+    PhoneNumber: agency.authAgency.contactNo,
+    Description: agency.profile.description,
   });
 
-
   const [socialMediaInfo, setSocialMediaInfo] = useState({
-    "Facebook Link": agency.profile.facebookLink,
-    "Instagram Link": agency.profile.instagramLink,
-    "Twitter Link": agency.profile.twittersLink,
-    "Website": agency.profile.websiteLink
-
+    fbLink: agency.profile.socialMediaLinks.faceBook,
+    instaLink: agency.profile.socialMediaLinks.instagram,
+    twitterLink: agency.profile.socialMediaLinks.twitter,
+    website: agency.profile.website,
   });
 
   const galleryImages = agency.profile.gallery || [];
@@ -151,11 +173,11 @@ function AgencyProfile() {
   const handleAgencyInfoChange = (newData) => {
     setAgencyInfo(newData);
   };
-  
+
   const handleSocialMediaInfoChange = (newData) => {
     setSocialMediaInfo(newData);
   };
-  
+
   useEffect(() => {
     updateAgencyProfile();
   }, [agencyInfo, socialMediaInfo]);
@@ -164,7 +186,7 @@ function AgencyProfile() {
     const updatedProfile = {
       ...agency.profile,
       ...agencyInfo,
-      ...socialMediaInfo
+      ...socialMediaInfo,
     };
 
     console.log("Updated Agency Profile", updatedProfile);
@@ -176,22 +198,57 @@ function AgencyProfile() {
         <Typography>
           <Grid container sx={{ backgroundColor: "#1F1F1F" }}>
             <Grid item lg={12}>
-              <TopBar setOpen={setOpen} setSearchBar={setSearchBar} show={false} />
-              <LeftDrawer open={open} setOpen={setOpen} handleClick={handleClick} selectedIdx={selectedIdx} />
+              <TopBar
+                setOpen={setOpen}
+                setSearchBar={setSearchBar}
+                show={false}
+              />
+              <LeftDrawer
+                open={open}
+                setOpen={setOpen}
+                handleClick={handleClick}
+                selectedIdx={selectedIdx}
+              />
             </Grid>
-            <Grid container spacing={3} padding={8} margin={8} sx={{ borderRadius: "2%", justifyContent: "center", alignItems: "center", height: "100%", backgroundColor: "#282828" }}>
-
-              <Box width={"100%"} sx={{ backgroundColor: "#4e4e4e", padding: "50px", margin: 8, borderRadius: "2%" }}>
+            <Grid
+              container
+              spacing={3}
+              padding={8}
+              margin={8}
+              sx={{
+                borderRadius: "2%",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+                backgroundColor: "#282828",
+              }}
+            >
+              <Box
+                width={"100%"}
+                sx={{
+                  backgroundColor: "#4e4e4e",
+                  padding: "50px",
+                  margin: 8,
+                  borderRadius: "2%",
+                }}
+              >
                 {/* Profile Box */}
-                <Grid container spacing={3} >
-
+                <Grid container spacing={3}>
                   {/* Agency Information */}
                   <Grid item xs={12} md={12} xl={12}>
-                    <EditableProfileBox title="Agency Information" data={agencyInfo} onDataChange={handleAgencyInfoChange} />
+                    <EditableProfileBox
+                      title="Agency Information"
+                      data={agencyInfo}
+                      onDataChange={handleAgencyInfoChange}
+                    />
                   </Grid>
                   {/* Social Media Info */}
                   <Grid item xs={12} md={12} xl={12}>
-                    <EditableProfileBox title="Social Media Info" data={socialMediaInfo} onDataChange={handleSocialMediaInfoChange} />
+                    <EditableProfileBox
+                      title="Social Media Info"
+                      data={socialMediaInfo}
+                      onDataChange={handleSocialMediaInfoChange}
+                    />
                   </Grid>
                 </Grid>
                 {/* Tours Box */}
@@ -203,14 +260,18 @@ function AgencyProfile() {
                     <Grid container spacing={3}>
                       {galleryImages.map((image, index) => (
                         <Grid item key={index}>
-                          <img src={image} alt={`Gallery Image ${index}`} style={{ maxWidth: "100%", height: "auto" }} />
+                          <Box
+                            component="img"
+                            src={image}
+                            alt={`Gallery Image ${index}`}
+                            style={{ maxWidth: "100%", height: "auto" }}
+                          />
                         </Grid>
                       ))}
                     </Grid>
                   </Box>
                 </Box>
               </Box>
-
             </Grid>
           </Grid>
         </Typography>

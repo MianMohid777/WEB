@@ -28,6 +28,9 @@ import SignUp from "./Users/Tourist/SignUp";
 import ToastMessage from "./Utils/Toast-Message";
 import Test from "./Users/Agency/Test";
 import Profile from "./Users/Tourist/Profile";
+import AgencyAnalytics from "./Users/Agency/AgencyAnalytics";
+import PastAds from "./Users/Agency/PastAds";
+import ActiveAds from "./Users/Agency/ActiveAds";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

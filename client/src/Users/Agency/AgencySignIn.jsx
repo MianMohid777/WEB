@@ -55,6 +55,7 @@ function AgencySignIn() {
                 ntn: res.ntn,
                 license: res.license,
                 address: res.address,
+                contactNo: res.contactNo,
                 access_token: accessToken,
               })
             );
@@ -174,6 +175,7 @@ function AgencySignIn() {
             ntn: response.ntn,
             license: response.license,
             address: response.address,
+            contactNo: response.contactNo,
             access_token: response.accessToken,
             refresh_token: response.refreshToken,
           })

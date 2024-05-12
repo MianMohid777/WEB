@@ -14,16 +14,15 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   useGetAgencyQuery,
   useGetAllToursQuery,
-  useUpdateStatusMutation,
   useUpdateTourStatusMutation,
+  useGetAgencyProfileQuery,
+  useUpdateAgencyProfileMutation,
 } from "../../Services/Agency/agencyApi";
-import {
-  useGetAgencyProfileQuery
-} from "../../Services/Agency/agencyApi";
+
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 import Loader from "../../Utils/Loader";
-import { addTours } from "../../Redux/Features/agencySlice";
+import { addProfile, addTours } from "../../Redux/Features/agencySlice";
 import TourPost from "../../Utils/TourPost";
 import terror from "../../Assets/terror.jpg";
 import LeftDrawer from "../../Utils/LeftDrawer";
@@ -50,9 +49,6 @@ function AgencyHome() {
   const navigate = useNavigate();
   const agency = useSelector((state) => state.agency);
   const dispatch = useDispatch();
-  const { getToursSize } = useAnalytic();
-
-
 
   // QUERY // MUTATIONS
 
@@ -61,23 +57,29 @@ function AgencyHome() {
     accessToken: accessToken,
   });
 
-
   const {
     isLoading: isAgencyLoading,
     isError: agencyError,
     refetch: currAgency,
   } = useGetAgencyQuery({ accessToken: accessToken });
 
-  const [updateTourStatus, { isLoading: updating, isError: updateErr }] =
-    useUpdateStatusMutation();
-  console.log("access token", accessToken)
-  console.log("agency.authAgency.refresh_token", agency.authAgency.refresh_token)
-    const { data: agencyProfile } = useGetAgencyProfileQuery(agency.authAgency.id, agency.authAgency.refresh_token );
+  const {
+    data: agencyProfile,
+    isLoading: profileLoading,
+    isError: profileErr,
+    isSuccess: profileSuccess,
+    refetch: profileFetch,
+  } = useGetAgencyProfileQuery({
+    id: agency.authAgency.id,
+    accessToken: accessToken,
+  });
 
-    console.log("DATA", agencyProfile, agency);
+  const [updateTourStatus, { isLoading: updating, isError: updateErr }] =
+    useUpdateTourStatusMutation();
+
+  console.log("Get Response", agencyProfile);
 
   useEffect(() => {
-  
     const checkUpdates = async () => {
       try {
         if (accessToken) {
@@ -95,12 +97,10 @@ function AgencyHome() {
       }
     };
 
-    refetch();
-    currAgency();
-    console.log(getToursSize());
     setDataState(data);
     checkUpdates();
-
+    refetch();
+    currAgency();
   }, []);
   // HANDLE MENU STATES
   const handleClick = (idx) => {
@@ -108,9 +108,11 @@ function AgencyHome() {
   };
 
   // HANDLE ERROR & SUCCESS RESPONSE
-  if (isError || agencyError || updateErr) {
+  if (isError || agencyError || updateErr || profileErr) {
     console.log("Its GET TOURS API ERROR", isError);
     console.log(agencyError);
+    console.log(profileErr);
+    setItem("");
     navigate("/agency-login", { replace: true });
   }
 
@@ -124,8 +126,17 @@ function AgencyHome() {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (profileSuccess && !profileLoading) {
+      console.log(agencyProfile.profile);
+      console.log("Dispatched Profile");
+      dispatch(addProfile(agencyProfile?.profile));
+    }
+  }, [agencyProfile]);
+
   //LOADER LOGIC
-  if (isLoading || isAgencyLoading || updating) return <Loader />;
+  if (isLoading || isAgencyLoading || updating || profileLoading)
+    return <Loader />;
 
   return (
     <>
@@ -332,8 +343,8 @@ function AgencyHome() {
                     }}
                   >
                     {dataState &&
-                      Array.isArray(dataState) &&
-                      dataState.length > 0 ? (
+                    Array.isArray(dataState) &&
+                    dataState.length > 0 ? (
                       dataState?.map((tour) => {
                         return (
                           <TourPost

@@ -20,6 +20,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
         ntn: user.companyNTN,
         license: user.license,
         address: `${user.officeAddress}, ${user.city}, ${user.province}, Pakistan`,
+        contactNo: user.contactNo,
         role: "agency",
       },
     },
@@ -131,6 +132,7 @@ const loginAgency = asyncHandler(async (req, res) => {
       ntn: req.user.ntn,
       license: req.user.license,
       address: req.user.address,
+      contactNo: req.user.contactNo,
       role: "agency",
     });
     return;
@@ -212,7 +214,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       secure: true,
     };
 
-    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(user._id);
+    const { accessToken, refToken } = await generateAccess_and_Refresh_Token(
+      user._id
+    );
 
     res
       .status(200)
@@ -228,9 +232,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     res.status(401).json({ message: err.message });
   }
 });
-
-
-
 
 //@desc Get Currently Logged In User
 //@route Post /api/agencies/current-agency
@@ -520,10 +521,9 @@ const updateTours_ActiveComplete = asyncHandler(async (req, res) => {
   }
 });
 
-
 const getAgencyProfile = asyncHandler(async (req, res) => {
   const userId = req.params.id;
-  console.log("UserId", userId)
+  console.log("UserId", userId);
 
   const agency = await agencyProfile.findOne({ agencyId: userId });
 
@@ -533,7 +533,7 @@ const getAgencyProfile = asyncHandler(async (req, res) => {
   }
   res.status(200).json({
     message: "Success",
-    agency: agency,
+    profile: agency,
   });
 });
 
@@ -559,11 +559,6 @@ const updateAgencyProfile = asyncHandler(async (req, res) => {
     agency: updatedAgency,
   });
 });
-
-
-
-
-
 
 module.exports = {
   registerAgency,
