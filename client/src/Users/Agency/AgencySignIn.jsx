@@ -28,7 +28,7 @@ import google from "../../Assets/google.svg";
 import tower from "../../Assets/tower copy.svg";
 import google2 from "../../Assets/google-hover.svg";
 import Loader from "../../Utils/Loader";
-import { addAuthAgency } from "../../Redux/Features/agencySlice";
+import { addAuthAgency, addProfile } from "../../Redux/Features/agencySlice";
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 function AgencySignIn() {
@@ -56,6 +56,20 @@ function AgencySignIn() {
                 license: res.license,
                 address: res.address,
                 access_token: accessToken,
+              })
+            );
+            dispatch(
+              addProfile({
+                name: res.name,
+                email: res.email,
+                contactNo: res.contactNo,
+                description: "",
+                fbLink: "",
+                instaLink: "",
+                twitterLink: "",
+                webseite: "",
+                profileImage: "",
+                gallery: [],
               })
             );
             navigate("/agency-home");

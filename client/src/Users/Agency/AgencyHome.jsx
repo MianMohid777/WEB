@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 
 import DP from "../../Assets/Karakoram.jpg";
+import emptyUser from "../../Assets/emptyUser.png";
 import { useSelector, useDispatch } from "react-redux";
 import {
   useGetAgencyQuery,
@@ -174,8 +175,12 @@ function AgencyHome() {
                         width: "200px",
                         borderRadius: "50%",
                         marginTop: "40%",
+                        backgroundImage: `url(${emptyUser})`,
+                        backgroundSize: "cover",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center",
                       }}
-                      src={DP}
+                      src={`http://localhost:3002/api/static/${agency.profile.profileImage}`}
                     />
                     <Box
                       component="div"

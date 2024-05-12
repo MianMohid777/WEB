@@ -23,7 +23,7 @@ const generateAccess_and_Refresh_Token = async (userId) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
-    { expiresIn: "1m" } // Expiry Duration
+    { expiresIn: "5m" } // Expiry Duration
   );
 
   const refToken = jwt.sign(
@@ -178,6 +178,7 @@ const loginAgency = asyncHandler(async (req, res) => {
         adminName: agency.adminName,
         ntn: agency.companyNTN,
         license: agency.license,
+        contactNo: agency.contactNo,
         address: `${agency.officeAddress}, ${agency.city}, ${agency.province}, Pakistan`,
       });
   } else {
