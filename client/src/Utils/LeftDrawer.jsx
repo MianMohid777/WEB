@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
   Box,
   Divider,
@@ -17,7 +18,15 @@ import StoreIcon from "@mui/icons-material/Store";
 import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 import HistoryIcon from "@mui/icons-material/History";
 import QueryStatsIcon from "@mui/icons-material/QueryStats";
-import SettingsIcon from "@mui/icons-material/Settings";
+
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import { useLocalStorage } from "./useLocalStorage-Hook";
+import {
+  addAuthAgency,
+  addProfile,
+  addTours,
+} from "../Redux/Features/agencySlice";
 
 function LeftDrawer(props) {
   const [color, setColor] = useState({
@@ -26,9 +35,14 @@ function LeftDrawer(props) {
     ads: "white",
     history: "white",
     stats: "white",
-    settings: "white",
+    manage: "white",
+    logout: "white",
   });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
 
   return (
     <Drawer
@@ -282,6 +296,7 @@ function LeftDrawer(props) {
         </List>
 
         <Divider />
+        <Divider />
         <List sx={{ width: "100%" }}>
           <ListItem sx={{ padding: "0" }}>
             <ListItemButton
@@ -303,20 +318,68 @@ function LeftDrawer(props) {
                 props.handleClick(5);
                 setColor((prevColor) => ({
                   ...prevColor,
-                  settings: "#FF4E45",
+                  manage: "#FF4E45",
                 }));
+                navigate("/current-agency/manage-ads");
               }}
               onBlur={() => {
                 setColor((prevColor) => ({
                   ...prevColor,
-                  settings: "white",
+                  manage: "white",
                 }));
               }}
             >
               <ListItemIcon>
-                <SettingsIcon sx={{ color: color.settings }} />
+                <ManageAccountsIcon sx={{ color: color.manage }} />
               </ListItemIcon>
-              <ListItemText primary="Settings"></ListItemText>
+              <ListItemText primary="Manage Ads"></ListItemText>
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List sx={{ width: "100%" }}>
+          <ListItem sx={{ padding: "0" }}>
+            <ListItemButton
+              sx={{
+                "&.Mui-selected": {
+                  backgroundColor: "black",
+                  "&:hover": {
+                    backgroundColor: "black",
+                  },
+                  color: "#FF4E45",
+                },
+                "&:hover": {
+                  backgroundColor: "black",
+                },
+                color: "white",
+              }}
+              selected={props.selectedIdx === 6}
+              onClick={() => {
+                props.handleClick(5);
+                setColor((prevColor) => ({
+                  ...prevColor,
+                  logout: "#FF4E45",
+                }));
+
+                setItem("");
+                setRefItem("");
+                dispatch(addAuthAgency({}));
+                dispatch(addProfile({}));
+                dispatch(addTours([{}]));
+
+                console.log("Logging Out");
+                navigate("/agency-login");
+              }}
+              onBlur={() => {
+                setColor((prevColor) => ({
+                  ...prevColor,
+                  logout: "white",
+                }));
+              }}
+            >
+              <ListItemIcon>
+                <ExitToAppIcon sx={{ color: color.logout }} />
+              </ListItemIcon>
+              <ListItemText primary="Logout"></ListItemText>
             </ListItemButton>
           </ListItem>
         </List>

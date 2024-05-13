@@ -1,23 +1,50 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Divider,
-  createTheme,
   Card,
   CardContent,
   CardHeader,
   CardMedia,
+  FormGroup,
+  Switch,
+  Tooltip,
 } from "@mui/material";
-import DP from "../Assets/Karakoram.jpg";
+import { Stack } from "@mui/system";
+import styled from "styled-components";
+import { useChangeTourStatusMutation } from "../Services/Agency/agencyApi";
+import Loader from "./Loader";
 function TourPost(props) {
-  //THEME
-  const theme = createTheme({
-    typography: {
-      fontFamily: "'Space Grotesk', sans-serif",
-      fontWeight: "bolder",
-    },
-  });
+  const [toggle, setToggle] = useState(props.toggle);
+  const [changeTourStatus, { isLoading, isError }] =
+    useChangeTourStatusMutation();
+
+  const navigate = useNavigate();
+  const handleToggle = async () => {
+    setToggle(!toggle);
+    try {
+      console.log(props.toggle);
+      const response = await changeTourStatus({
+        id: props.agencyId,
+        flag: !props.toggle,
+        tid: props.id,
+      }).unwrap();
+
+      if (response) {
+        console.log(response);
+        props.setData((prevData) => {
+          return !prevData;
+        });
+
+        navigate("/agency-home", { replace: true });
+      }
+    } catch (err) {
+      console.log(err);
+      navigate("/agency-home", { replace: true });
+    }
+  };
+  if (isLoading) return <Loader />;
   return (
     <Card
       variant="outlined"
@@ -52,6 +79,25 @@ function TourPost(props) {
           }}
         >
           <CardHeader title={props.locationName + " Tour"} mt={1} />
+          {props.show ? (
+            <FormGroup>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Tooltip
+                  title="Toggle Tour Status: Upcoming or Open to Register"
+                  placement="top-end"
+                  arrow
+                >
+                  <Switch
+                    checked={toggle}
+                    inputProps={{ "aria-label": "my-design" }}
+                    onChange={handleToggle}
+                  />
+                </Tooltip>
+              </Stack>
+            </FormGroup>
+          ) : (
+            <></>
+          )}
         </Box>
         <Box
           sx={{

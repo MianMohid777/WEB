@@ -139,6 +139,70 @@ const updateTourStatus = api.injectEndpoints({
     };
   },
 });
+
+const agencyProfileApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      getAgencyProfile: builder.query({
+        query: ({ id, accessToken }) => ({
+          url: `/agencies/current-agency/profile/${id}`,
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      }),
+      updateAgencyProfile: builder.mutation({
+        query: ({ id, accessToken, updatedData }) => ({
+          url: `/agencies/current-agency/profile/${id}`,
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(updatedData),
+        }),
+      }),
+    };
+  },
+});
+
+const changeTourStatusApi = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      changeTourStatus: builder.mutation({
+        query: ({ id, flag, tid }) => ({
+          url: `agencies/current-agency/tours/${id}/${flag}/${tid}`,
+          method: "PUT",
+          body: {},
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      }),
+    };
+  },
+});
+
+const createAgencyProfileAPI = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      createProfile: builder.mutation({
+        query: (payload) => ({
+          url: `agencies/current-agency/profile/${payload.agencyId}`,
+          method: "POST",
+          body: payload,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      }),
+    };
+  },
+});
+
 export const { useGetAllAgencyQuery } = agencyGetAllApi;
 export const { useGetAdminQuery } = getAdminApi;
 export const { useGetAgencyQuery } = getAgencyApi;
@@ -147,3 +211,9 @@ export const { useLogoutMutation } = logoutApi;
 export const { useDeleteApplicationMutation } = deleteApplicationApi;
 export const { useGetAllToursQuery } = getAllToursApi;
 export const { useUpdateTourStatusMutation } = updateTourStatus;
+
+export const { useGetAgencyProfileQuery, useUpdateAgencyProfileMutation } =
+  agencyProfileApi;
+
+export const { useChangeTourStatusMutation } = changeTourStatusApi;
+export const { useCreateProfileMutation } = createAgencyProfileAPI;

@@ -7,6 +7,7 @@ export const useAnalytic = () => {
   //console.log(tours);
 
   const getToursSize = () => {
+    console.log(tours.length);
     return tours.length;
   };
   const getActiveTours = () => {
@@ -23,6 +24,10 @@ export const useAnalytic = () => {
 
   const getUpcomingTours = () => {
     return tours.filter((tour) => tour.tourStatus === "Upcoming");
+  };
+
+  const getRegOpenTours = () => {
+    return tours.filter((tour) => tour.tourStatus === "Registrations-Opened");
   };
 
   const getSearchedTours = (search, status) => {
@@ -42,6 +47,15 @@ export const useAnalytic = () => {
             .toLowerCase()
             .includes(search.trim().toLowerCase())
       );
+    } else if (status === "Available") {
+      return tours.filter(
+        (tour) =>
+          (tour.tourStatus === "Upcoming" ||
+            tour.tourStatus === "Registrations-Opened") &&
+          tour.tourLocationName
+            .toLowerCase()
+            .includes(search.trim().toLowerCase())
+      );
     } else {
       return tours.filter(
         (tour) =>
@@ -52,7 +66,24 @@ export const useAnalytic = () => {
       );
     }
   };
+  const extractLocationFreq = () => {
+    const locationCounts = {};
 
+    tours.forEach((tour) => {
+      const location = tour.tourLocationName;
+      locationCounts[location] = (locationCounts[location] || 0) + 1;
+    });
+
+    const locations = Object.keys(locationCounts);
+    const counts = Object.values(locationCounts);
+
+    const seriesData = [{ data: counts }];
+
+    return {
+      xAxis: [{ scaleType: "band", data: locations }],
+      series: seriesData,
+    };
+  };
   return {
     getToursSize,
     getActiveTours,
@@ -60,5 +91,7 @@ export const useAnalytic = () => {
     getCancelledTours,
     getUpcomingTours,
     getSearchedTours,
+    getRegOpenTours,
+    extractLocationFreq,
   };
 };

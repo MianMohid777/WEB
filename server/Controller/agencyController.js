@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const agencyReg = require("../Models/agency-RegModel");
+const agencyProfile = require("../Models/agencyModel");
 const Tour = require("../Models/tourModel");
 // const agency = require("../Models/agencyModel");
 const bcrypt = require("bcrypt");
@@ -19,11 +20,12 @@ const generateAccess_and_Refresh_Token = async (userId) => {
         ntn: user.companyNTN,
         license: user.license,
         address: `${user.officeAddress}, ${user.city}, ${user.province}, Pakistan`,
+        contactNo: user.contactNo,
         role: "agency",
       },
     },
     process.env.ACCESS_TOKEN_SECRET, // Signature
-    { expiresIn: "5m" } // Expiry Duration
+    { expiresIn: "50m" } // Expiry Duration
   );
 
   const refToken = jwt.sign(
@@ -130,6 +132,7 @@ const loginAgency = asyncHandler(async (req, res) => {
       ntn: req.user.ntn,
       license: req.user.license,
       address: req.user.address,
+      contactNo: req.user.contactNo,
       role: "agency",
     });
     return;
@@ -193,15 +196,17 @@ const loginAgency = asyncHandler(async (req, res) => {
 const refreshAccessToken = asyncHandler(async (req, res) => {
   try {
     const inRefreshToken = req.cookies?.refresh_token || req.body?.refreshToken;
-    const user = await agencyReg.findById(req?.user.id);
+
+    if (!inRefreshToken) {
+      res.status(401);
+      throw new Error("Refresh token not provided");
+    }
+
+    const user = await agencyReg.findById(req?.user?.id);
 
     if (!user) {
       res.status(401);
-      throw new Error("Invalid Refresh Token");
-    }
-    if (inRefreshToken !== user?.refreshToken) {
-      res.status(401);
-      throw new Error("Refresh Token Expired or Used");
+      throw new Error("Invalid user");
     }
 
     const options = {
@@ -516,6 +521,139 @@ const updateTours_ActiveComplete = asyncHandler(async (req, res) => {
   }
 });
 
+const updateToursStatus = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const tourId = req.params.tid;
+    const flag = req.params.flag;
+
+    const agency = await agencyReg.findById(userId);
+
+    if (!agency) {
+      res.status(404);
+      throw new Error("Agency Not Found");
+    }
+
+    let updatedTour = "";
+    if (flag === "true") {
+      const tour = await Tour.updateOne(
+        {
+          tourAgencyId: userId,
+          _id: tourId,
+          tourStatus: "Upcoming",
+        },
+        { tourStatus: "Registrations-Opened" },
+        { new: true }
+      );
+      updatedTour = tour;
+    } else if (flag === "false") {
+      const tour = await Tour.updateOne(
+        {
+          tourAgencyId: userId,
+          _id: tourId,
+          tourStatus: "Registrations-Opened",
+        },
+        { tourStatus: "Upcoming" },
+        { new: true }
+      );
+      updatedTour = tour;
+    } else {
+      res.status(404);
+      throw new Error("Tour Not Found");
+    }
+    console.log(updatedTour);
+    res.status(200).json({
+      message: "Successfully, Updated",
+      Updated_Tour_Res: updatedTour,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+
+const getAgencyProfile = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  console.log("UserId", userId);
+
+  const agency = await agencyProfile.findOne({ agencyId: userId });
+
+  if (!agency) {
+    res.status(404);
+    throw new Error("Agency Profile Not Found");
+  }
+  res.status(200).json({
+    message: "Success",
+    profile: agency,
+  });
+});
+
+const createProfile = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+
+  const {
+    name,
+    phoneNumber,
+    description,
+    profilePicture,
+    gallery,
+    webiste,
+    socialMediaLinks,
+  } = req.body;
+  console.log("UserId", userId);
+
+  const agency = await agencyReg.findOne({ _id: userId });
+
+  if (!agency) {
+    res.status(404);
+    throw new Error("Agency Profile Not Found");
+  }
+  const exProfile = await agencyProfile.findOne({ agencyId: userId });
+  if (exProfile) {
+    res.status(404);
+    throw new Error("Agency Profile Already Exists");
+  }
+  const profile = await agencyProfile.create({
+    agencyId: userId,
+    name,
+    phoneNumber,
+    description,
+    profilePicture,
+    gallery,
+    webiste,
+    socialMediaLinks,
+  });
+
+  res.status(200).json({
+    message: "Success",
+    profile: profile,
+  });
+});
+const updateAgencyProfile = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+  const updatedData = req.body;
+
+  console.log("Data to update:", updatedData);
+
+  const updatedAgency = await agencyProfile.findOneAndUpdate(
+    { agencyId: userId },
+    updatedData,
+    { new: true }
+  );
+
+  console.log("Updated Agency with Data", updatedAgency);
+
+  if (!updatedAgency) {
+    res.status(404);
+    throw new Error("Agency Not Found");
+  }
+
+  res.status(200).json({
+    message: "Agency Profile Updated Successfully",
+    agency: updatedAgency,
+  });
+});
+
 module.exports = {
   registerAgency,
   loginAgency,
@@ -526,4 +664,8 @@ module.exports = {
   getSearchedTour,
   getPastTours,
   updateTours_ActiveComplete,
+  getAgencyProfile,
+  updateAgencyProfile,
+  updateToursStatus,
+  createProfile,
 };

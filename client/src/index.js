@@ -27,12 +27,17 @@ import Analytics from "./Users/Admin/Analytics";
 import SignUp from "./Users/Tourist/SignUp";
 import ToastMessage from "./Utils/Toast-Message";
 import Test from "./Users/Agency/Test";
+import Profile from "./Users/Tourist/Profile";
 import AgencyAnalytics from "./Users/Agency/AgencyAnalytics";
-import ActiveAds from "./Users/Agency/ActiveAds";
 import PastAds from "./Users/Agency/PastAds";
+<<<<<<< HEAD
 import Tours from "./Users/Tourist/Tour";
 import BookTour from "./Users/Tourist/BookTour";
 import TourInfo from "./Users/Tourist/BookTour";
+=======
+import ActiveAds from "./Users/Agency/ActiveAds";
+import ManageAds from "./Users/Agency/ManageAds";
+>>>>>>> 3079a5efd6a575b4fed434cb8b0240122a93e029
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,9 +47,7 @@ const router = createBrowserRouter(
       <Route path="/home" element={<Home />} />
       <Route path="/tourist-login" element={<TouristSignIn />} />
       <Route path="/tourist-signup" element={<SignUp />} />
-      <Route path="/tours" element={<Tours />} />
-      <Route path="/tour-info/:id" element={<TourInfo />} />
-      <Route path="/book-tour" element={<BookTour />} />
+      <Route path="/tourist-profile" element={<Profile />} />
 
       {/* Admin Routes */}
       <Route path="/admin-login" element={<AdminSignIn />} />
@@ -56,6 +59,7 @@ const router = createBrowserRouter(
       <Route path="/current-agency/analytics" element={<AgencyAnalytics />} />
       <Route path="/current-agency/active-ads" element={<ActiveAds />} />
       <Route path="/current-agency/past-ads" element={<PastAds />} />
+      <Route path="/current-agency/manage-ads" element={<ManageAds />} />
       <Route path="/agency-login" element={<AgencySignIn />} />
       <Route path="/agency-registeration" element={<AgencyRegister />} />
       <Route path="/current-agency/profile" element={<AgencyProfile />} />

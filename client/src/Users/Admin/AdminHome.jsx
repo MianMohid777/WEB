@@ -149,7 +149,7 @@ function AdminHome() {
               </Toolbar>
               <Toolbar>
                 <Divider />
-                <List>
+                {/* <List>
                   <ListItem>
                     <ListItemButton
                       selected={selectedIdx === 1}
@@ -165,7 +165,7 @@ function AdminHome() {
                       <ListItemText primary="Analytics"></ListItemText>
                     </ListItemButton>
                   </ListItem>
-                </List>
+                </List> */}
               </Toolbar>
               <Toolbar>
                 <Divider />

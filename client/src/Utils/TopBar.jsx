@@ -82,7 +82,16 @@ function TopBar(props) {
             />
           </Box>
         ) : (
-          <></>
+          <Box
+            component="div"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexBasis: "100%",
+              marginLeft: "15%",
+            }}
+          ></Box>
         )}
         {props.show ? (
           <IconButton
