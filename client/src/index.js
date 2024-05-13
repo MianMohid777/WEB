@@ -32,7 +32,7 @@ import ActiveAds from "./Users/Agency/ActiveAds";
 import PastAds from "./Users/Agency/PastAds";
 import Tours from "./Users/Tourist/Tour";
 import BookTour from "./Users/Tourist/BookTour";
-import TourInfo from "./Users/Tourist/TourInfo";
+import TourInfo from "./Users/Tourist/BookTour";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
