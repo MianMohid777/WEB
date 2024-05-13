@@ -576,7 +576,8 @@ const BookTour = () => {
                                 </Box>
                             )}
                             {galleryBlock && (
-                                <Box></Box>
+                                <Box>
+                                </Box>
                             )}
                         </Box>
                         <Box

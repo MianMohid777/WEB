@@ -233,7 +233,7 @@ const Tour = () => {
                                                     handleClick(tour);
                                                 }} 
                                                 sx={{
-                                                    backgroundImage: `url(${imggg})`,
+                                                    backgroundImage: `url(api/Static/${tour.tourLocationImage})`,
                                                     backgroundSize: 'cover',
                                                     height: '25ch',
                                                     width: '100%'
