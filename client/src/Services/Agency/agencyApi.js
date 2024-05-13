@@ -156,7 +156,7 @@ const agencyProfileApi = api.injectEndpoints({
       updateAgencyProfile: builder.mutation({
         query: ({ id, accessToken, updatedData }) => ({
           url: `/agencies/current-agency/profile/${id}`,
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
@@ -186,6 +186,23 @@ const changeTourStatusApi = api.injectEndpoints({
   },
 });
 
+const createAgencyProfileAPI = api.injectEndpoints({
+  endpoints: (builder) => {
+    return {
+      createProfile: builder.mutation({
+        query: (payload) => ({
+          url: `agencies/current-agency/profile/${payload.agencyId}`,
+          method: "POST",
+          body: payload,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }),
+      }),
+    };
+  },
+});
+
 export const { useGetAllAgencyQuery } = agencyGetAllApi;
 export const { useGetAdminQuery } = getAdminApi;
 export const { useGetAgencyQuery } = getAgencyApi;
@@ -199,3 +216,4 @@ export const { useGetAgencyProfileQuery, useUpdateAgencyProfileMutation } =
   agencyProfileApi;
 
 export const { useChangeTourStatusMutation } = changeTourStatusApi;
+export const { useCreateProfileMutation } = createAgencyProfileAPI;

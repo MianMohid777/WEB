@@ -16,18 +16,21 @@ import {
   useGetAllToursQuery,
   useUpdateTourStatusMutation,
   useGetAgencyProfileQuery,
-  useUpdateAgencyProfileMutation,
+  useCreateProfileMutation,
 } from "../../Services/Agency/agencyApi";
 
 import { useLocalStorage } from "../../Utils/useLocalStorage-Hook";
 
 import Loader from "../../Utils/Loader";
-import { addProfile, addTours } from "../../Redux/Features/agencySlice";
+import {
+  addAuthAgency,
+  addProfile,
+  addTours,
+} from "../../Redux/Features/agencySlice";
 import TourPost from "../../Utils/TourPost";
 import terror from "../../Assets/terror.jpg";
 import LeftDrawer from "../../Utils/LeftDrawer";
 import TopBar from "../../Utils/TopBar";
-import { useAnalytic } from "../../Utils/analyticCalc-Hook";
 
 function AgencyHome() {
   const theme = createTheme({
@@ -38,6 +41,8 @@ function AgencyHome() {
 
   //Hooks
   const { setItem, getItem } = useLocalStorage("access_token");
+  const { setItem: setRefItem, getItem: getRefItem } =
+    useLocalStorage("refresh_token");
   const [dataState, setDataState] = useState([]);
 
   const accessToken = getItem();
@@ -77,6 +82,9 @@ function AgencyHome() {
   const [updateTourStatus, { isLoading: updating, isError: updateErr }] =
     useUpdateTourStatusMutation();
 
+  const [createProfile, { isLoading: createLoading }] =
+    useCreateProfileMutation();
+
   console.log("Get Response", agencyProfile);
 
   useEffect(() => {
@@ -108,13 +116,53 @@ function AgencyHome() {
   };
 
   // HANDLE ERROR & SUCCESS RESPONSE
-  if (isError || agencyError || updateErr || profileErr) {
+  if (isError || agencyError) {
     console.log("Its GET TOURS API ERROR", isError);
     console.log(agencyError);
     console.log(profileErr);
     setItem("");
+    setRefItem("");
+    dispatch(addAuthAgency({}));
+    dispatch(addProfile({}));
+    dispatch(addTours([{}]));
+
+    console.log("Logging Out");
     navigate("/agency-login", { replace: true });
   }
+
+  const handleAgencyError = async () => {
+    const payload = {
+      agencyId: agency.authAgency.id,
+      name: agency.authAgency.name,
+      phoneNumber: agency.authAgency.contactNo,
+      description: "Hi, We are........................",
+      profilePicture: "Space.jpg",
+      gallery: [],
+      webiste: "www.myAgency.com",
+      socialMediaLinks: {
+        faceBook: "fb.com",
+        instagram: "insta.com",
+        twitter: "twitter.com",
+      },
+    };
+    console.log(payload);
+    try {
+      const response = await createProfile(payload).unwrap();
+
+      if (response) {
+        console.log(response);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (profileErr) {
+      handleAgencyError();
+      profileFetch();
+    }
+  }, [profileErr]);
 
   useEffect(() => {
     if (isSuccess && !isLoading) {
@@ -135,7 +183,13 @@ function AgencyHome() {
   }, [agencyProfile]);
 
   //LOADER LOGIC
-  if (isLoading || isAgencyLoading || updating || profileLoading)
+  if (
+    isLoading ||
+    isAgencyLoading ||
+    updating ||
+    profileLoading ||
+    createLoading
+  )
     return <Loader />;
 
   return (
@@ -204,7 +258,7 @@ function AgencyHome() {
                         backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
                       }}
-                      src={`http://localhost:3002/api/static/${agency.profile.profileImage}`}
+                      src={`http://localhost:3002/api/static/${agency.profile.profilePicture}`}
                     />
                     <Box
                       component="div"

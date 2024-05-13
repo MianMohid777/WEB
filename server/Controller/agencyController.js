@@ -580,7 +580,7 @@ const getAgencyProfile = asyncHandler(async (req, res) => {
 
   if (!agency) {
     res.status(404);
-    throw new Error("Agency Not Found");
+    throw new Error("Agency Profile Not Found");
   }
   res.status(200).json({
     message: "Success",
@@ -588,6 +588,47 @@ const getAgencyProfile = asyncHandler(async (req, res) => {
   });
 });
 
+const createProfile = asyncHandler(async (req, res) => {
+  const userId = req.params.id;
+
+  const {
+    name,
+    phoneNumber,
+    description,
+    profilePicture,
+    gallery,
+    webiste,
+    socialMediaLinks,
+  } = req.body;
+  console.log("UserId", userId);
+
+  const agency = await agencyReg.findOne({ _id: userId });
+
+  if (!agency) {
+    res.status(404);
+    throw new Error("Agency Profile Not Found");
+  }
+  const exProfile = await agencyProfile.findOne({ agencyId: userId });
+  if (exProfile) {
+    res.status(404);
+    throw new Error("Agency Profile Already Exists");
+  }
+  const profile = await agencyProfile.create({
+    agencyId: userId,
+    name,
+    phoneNumber,
+    description,
+    profilePicture,
+    gallery,
+    webiste,
+    socialMediaLinks,
+  });
+
+  res.status(200).json({
+    message: "Success",
+    profile: profile,
+  });
+});
 const updateAgencyProfile = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   const updatedData = req.body;
@@ -626,4 +667,5 @@ module.exports = {
   getAgencyProfile,
   updateAgencyProfile,
   updateToursStatus,
+  createProfile,
 };

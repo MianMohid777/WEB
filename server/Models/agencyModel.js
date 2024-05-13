@@ -21,11 +21,7 @@ const agencySchema = mongoose.Schema(
     profilePicture: {
       type: String,
     },
-    gallery: [
-      {
-        type: String,
-      },
-    ],
+    gallery: [String],
     socialMediaLinks: {
       faceBook: { type: String },
       instagram: { type: String },

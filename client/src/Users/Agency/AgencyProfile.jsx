@@ -9,6 +9,8 @@ import {
   CardContent,
   Box,
   Button,
+  ImageList,
+  ImageListItem,
 } from "@mui/material";
 import { addProfile } from "../../Redux/Features/agencySlice";
 import Loader from "../../Utils/Loader";
@@ -22,7 +24,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import { useDispatch } from "react-redux";
 import { useUpdateAgencyProfileMutation } from "../../Services/Agency/agencyApi.js";
 import { useUploadMutation } from "../../Services/UtilsApi/fileApi.js";
-import PhotoCamera from "@mui/icons-material/PhotoCamera"
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
 const EditableProfileBox = ({ title, data, onDataChange }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -156,15 +158,14 @@ function AgencyProfile() {
   const accessToken = getItem();
   const dispatch = useDispatch();
 
-
-  const [updateAgencyProfile, { isLoading: updating, isError: updateErr }] = useUpdateAgencyProfileMutation();
-  const [upload, { isLoading: uploadLoading, isError: uploadError }] = useUploadMutation();
-
-
+  const [updateAgencyProfile, { isLoading: updating, isError: updateErr }] =
+    useUpdateAgencyProfileMutation();
+  const [upload, { isLoading: uploadLoading, isError: uploadError }] =
+    useUploadMutation();
 
   const [agencyInfo, setAgencyInfo] = useState({
-    agencyName: agency.profile.name,
-    agencyEmail: agency.authAgency.email,
+    name: agency.profile.name,
+    email: agency.authAgency.email,
     phoneNumber: agency.authAgency.contactNo,
     description: agency.profile.description,
   });
@@ -176,7 +177,7 @@ function AgencyProfile() {
     website: agency.profile.website,
   });
 
-  const [gallery, setgallery] = useState([agency.profile.gallery]);
+  const [gallery, setgallery] = useState(agency.profile.gallery);
   const [locationImage, setLocationImage] = useState("");
 
   const handleImageChange = (e) => {
@@ -191,14 +192,16 @@ function AgencyProfile() {
       const response = await upload(file).unwrap();
 
       if (response) {
-        const imageUrl = response.filePath;
-        setgallery([...gallery, imageUrl]);
+        let staticPath = response.filePath.split("/");
+        let index = staticPath.length;
+        console.log(staticPath[index - 1]);
+        setgallery([...gallery, staticPath[index - 1]]);
+        updateProfile();
       }
     } catch (err) {
       console.log(err);
     }
   };
-
 
   const handleClick = (idx) => {
     setSelectedIdx(idx);
@@ -206,15 +209,15 @@ function AgencyProfile() {
 
   const handleAgencyInfoChange = (newData) => {
     setAgencyInfo(newData);
+    updateProfile();
   };
 
   const handleSocialMediaInfoChange = (newData) => {
     setSocialMediaInfo(newData);
+    updateProfile();
   };
 
-
-
-  const updateProfile = async (newProfileData) => {
+  const updateProfile = async () => {
     const updatedProfile = {
       ...agency.profile,
       ...agencyInfo,
@@ -224,8 +227,9 @@ function AgencyProfile() {
         instagram: socialMediaInfo.instagram,
         twitter: socialMediaInfo.twitter,
       },
-
     };
+
+    console.log(updatedProfile);
 
     dispatch(addProfile(updatedProfile));
 
@@ -237,7 +241,7 @@ function AgencyProfile() {
         const response = await updateAgencyProfile({
           id: agency.authAgency.id,
           accessToken: accessToken,
-          updatedData: updatedProfile
+          updatedData: updatedProfile,
         }).unwrap();
 
         if (response) {
@@ -248,12 +252,6 @@ function AgencyProfile() {
       console.log(err);
     }
   };
-
-
-  useEffect(() => {
-    updateProfile();
-  }, [agencyInfo, socialMediaInfo]);
-
 
   return (
     <>
@@ -317,24 +315,30 @@ function AgencyProfile() {
                 {/* Tours Box */}
                 <Box>
                   <Box pt={2} px={2} mt={5}>
-                    <Typography variant="h3" gutterBottom>
-                      Gallery
-                    </Typography>
                     <Box pt={2} px={2} mt={5}>
                       <Typography variant="h3" gutterBottom>
                         Gallery
                       </Typography>
                       <Grid container spacing={3}>
-                        {gallery.map((image, index) => (
-                          <Grid item key={index}>
-                            <Box
-                              component="img"
-                              src={image}
-                              alt={`Gallery Image ${index}`}
-                              style={{ maxWidth: "100%", height: "auto" }}
-                            />
-                          </Grid>
-                        ))}
+                        <Grid item>
+                          <ImageList
+                            sx={{ width: 500, height: 450 }}
+                            cols={3}
+                            rowHeight={164}
+                          >
+                            {gallery.map((image, index) => (
+                              <ImageListItem key={index}>
+                                <Box
+                                  component="img"
+                                  src={`http://localhost:3002/api/static/${image}`}
+                                  alt={`X`}
+                                  sx={{ width: "200px", height: "200px" }}
+                                  loading="lazy"
+                                />
+                              </ImageListItem>
+                            ))}
+                          </ImageList>
+                        </Grid>
                         <Grid item>
                           <input
                             type="file"
@@ -362,8 +366,6 @@ function AgencyProfile() {
                         </Grid>
                       </Grid>
                     </Box>
-
-                    
                   </Box>
                 </Box>
               </Box>

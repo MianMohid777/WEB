@@ -7,6 +7,7 @@ export const useAnalytic = () => {
   //console.log(tours);
 
   const getToursSize = () => {
+    console.log(tours.length);
     return tours.length;
   };
   const getActiveTours = () => {
@@ -65,7 +66,24 @@ export const useAnalytic = () => {
       );
     }
   };
+  const extractLocationFreq = () => {
+    const locationCounts = {};
 
+    tours.forEach((tour) => {
+      const location = tour.tourLocationName;
+      locationCounts[location] = (locationCounts[location] || 0) + 1;
+    });
+
+    const locations = Object.keys(locationCounts);
+    const counts = Object.values(locationCounts);
+
+    const seriesData = [{ data: counts }];
+
+    return {
+      xAxis: [{ scaleType: "band", data: locations }],
+      series: seriesData,
+    };
+  };
   return {
     getToursSize,
     getActiveTours,
@@ -74,5 +92,6 @@ export const useAnalytic = () => {
     getUpcomingTours,
     getSearchedTours,
     getRegOpenTours,
+    extractLocationFreq,
   };
 };

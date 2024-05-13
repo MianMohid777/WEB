@@ -15,6 +15,7 @@ const {
   getAgencyProfile,
   updateAgencyProfile,
   updateToursStatus,
+  createProfile,
 } = require("../Controller/agencyController");
 
 const stayLoggedValidator = require("../Middleware/stayLoggedIn.validation");
@@ -49,6 +50,7 @@ router
 router
   .route("/current-agency/profile/:id")
   .get(validateToken, getAgencyProfile)
-  .post(validateToken, updateAgencyProfile);
+  .put(validateToken, updateAgencyProfile)
+  .post(createProfile);
 
 module.exports = router;

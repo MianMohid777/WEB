@@ -7,12 +7,7 @@ import {
   Typography,
   createTheme,
 } from "@mui/material";
-import {
-  PieChart,
-  LineChart,
-  BarChart,
-  pieArcLabelClasses,
-} from "@mui/x-charts";
+import { PieChart, gaugeClasses, BarChart, Gauge } from "@mui/x-charts";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -58,8 +53,13 @@ function AgencyAnalytics() {
     getCancelledTours,
     getUpcomingTours,
     getSearchedTours,
+    extractLocationFreq,
   } = useAnalytic();
 
+  const percentage =
+    getToursSize() !== 0 ? (getActiveTours().length / getToursSize()) * 100 : 0;
+
+  console.log(percentage, getToursSize(), getActiveTours().length);
   // QUERY // MUTATIONS
 
   const {
@@ -149,7 +149,6 @@ function AgencyAnalytics() {
                     }}
                   >
                     <PieChart
-                      margin={{ top: 50 }}
                       slotProps={{
                         legend: {
                           direction: "column",
@@ -180,6 +179,7 @@ function AgencyAnalytics() {
                               id: 2,
                               value: getCancelledTours().length,
                               label: "Cancelled Tours",
+                              color: "red",
                             },
                           ],
                           highlightScope: {
@@ -207,86 +207,82 @@ function AgencyAnalytics() {
                       padding: "20px",
                       height: "calc(100vh - 16%)",
                       border: "2px solid white",
-                      //overflowY: "auto",
                       display: "flex",
-                      justifyContent: "center",
-                      //alignContent: "flex-start",
-                      gap: "50px",
+                      alignItems: "center",
+                      flexDirection: "column",
+                      fontSize: "20px",
                     }}
                   >
-                    <LineChart
-                      xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                      series={[
-                        {
-                          data: [2, 5.5, 2, 8.5, 1.5, 5],
+                    <Gauge
+                      //value={percentage}
+                      value={getActiveTours().length}
+                      valueMax={getToursSize()}
+                      startAngle={-110}
+                      endAngle={110}
+                      sx={{
+                        [`& .${gaugeClasses.valueText}`]: {
+                          fontSize: 40,
+                          transform: "translate(0px, 0px)",
+                          fontWeight: "bold",
+                          fill: "red",
                         },
-                      ]}
-                      width={500}
-                      height={300}
+                        [`& .${gaugeClasses.valueArc}`]: {
+                          fill: "red",
+                        },
+                        [`& .${gaugeClasses.valueText} text`]: {
+                          //fontWeight: "bold",
+                          fill: "red",
+                        },
+                      }}
+                      text={({ value, valueMax }) => `${value} / ${valueMax}`}
                     />
+
+                    <Box component="div">RUNNING TOURS</Box>
                   </Box>
                 </Grid>
 
-                <Grid item lg={3} sx={{ height: "100%" }}>
+                <Grid item lg={6} sx={{ height: "100%" }}>
                   <Box
                     sx={{
-                      marginTop: "20%",
-                      padding: "20px",
-                      height: "calc(100vh - 16%)",
+                      marginTop: "10%",
+                      height: "calc(100vh - 11%)",
                       border: "2px solid white",
-                      overflowY: "auto",
                       display: "flex",
-
                       justifyContent: "center",
-                      alignContent: "flex-start",
-                      gap: "50px",
+                      alignItems: "center",
+                      color: "white",
+                      fontSize: "20px",
                     }}
                   >
                     <BarChart
-                      xAxis={[
-                        {
-                          scaleType: "band",
-                          data: ["group A", "group B", "group C"],
+                      sx={{ color: "white" }}
+                      margin={{
+                        left: 30,
+                        right: 30,
+                        top: 10,
+                        bottom: 60,
+                      }}
+                      slotProps={{}}
+                      xAxis={extractLocationFreq().xAxis}
+                      series={extractLocationFreq().series}
+                      width={680}
+                      height={500}
+                      bottomAxis={{
+                        tickLabelStyle: {
+                          fontSize: "12px",
+                          color: "white",
+                          fill: "white",
+                          fontWeight: "bold",
                         },
-                      ]}
-                      series={[
-                        { data: [4, 3, 5] },
-                        { data: [1, 6, 3] },
-                        { data: [2, 5, 6] },
-                      ]}
-                      width={500}
-                      height={300}
-                    />
-                  </Box>
-                </Grid>
-
-                <Grid item lg={3} sx={{ height: "100%" }}>
-                  <Box
-                    sx={{
-                      marginTop: "20%",
-                      padding: "20px",
-                      height: "calc(100vh - 16%)",
-                      border: "2px solid white",
-
-                      display: "flex",
-
-                      justifyContent: "center",
-                      alignContent: "flex-start",
-                      gap: "50px",
-                    }}
-                  >
-                    <PieChart
-                      series={[
-                        {
-                          data: [
-                            { id: 0, value: 10, label: "series A" },
-                            { id: 1, value: 15, label: "series B" },
-                            { id: 2, value: 20, label: "series C" },
-                          ],
+                      }}
+                      leftAxis={{
+                        tickLabelStyle: {
+                          fontSize: "16px",
+                          color: "white",
+                          fill: "white",
+                          fontWeight: "bold",
                         },
-                      ]}
-                      width={400}
-                      height={200}
+                      }}
                     />
                   </Box>
                 </Grid>

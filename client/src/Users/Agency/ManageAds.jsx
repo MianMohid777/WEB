@@ -22,7 +22,11 @@ import terror from "../../Assets/terror.jpg";
 import LeftDrawer from "../../Utils/LeftDrawer";
 import TopBar from "../../Utils/TopBar";
 import { useAnalytic } from "../../Utils/analyticCalc-Hook";
-import { addTours } from "../../Redux/Features/agencySlice";
+import {
+  addAuthAgency,
+  addProfile,
+  addTours,
+} from "../../Redux/Features/agencySlice";
 
 function ManageAds() {
   const theme = createTheme({
@@ -87,6 +91,12 @@ function ManageAds() {
   if (agencyError) {
     console.log(agencyError);
     setItem("");
+    setRefItem("");
+    dispatch(addAuthAgency({}));
+    dispatch(addProfile({}));
+    dispatch(addTours([{}]));
+
+    console.log("Logging Out");
     navigate("/agency-login", { replace: true });
   }
 
