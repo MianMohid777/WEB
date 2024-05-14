@@ -9,7 +9,7 @@ const {
   currentTourist,
 } = require("../Controller/TouristController");
 
-const { allTours } = require("../Controller/tourController");
+const { allTours, tourByID } = require("../Controller/tourController");
 
 const stayLoggedValidator = require("../Middleware/stayLoggedIn.validation");
 const validateToken = require("../Middleware/validateToken");
@@ -17,6 +17,7 @@ const validateToken = require("../Middleware/validateToken");
 router.route("/login").post(stayLoggedValidator, loginTourist);
 router.route("/register").post(registerTourist);
 router.route("/current-home/all-tours").get(allTours);
+router.route("/current-home/tour/:id").get(tourByID);
 
 // Protected Routes //
 
